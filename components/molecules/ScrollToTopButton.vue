@@ -9,7 +9,7 @@ const backToTopImg: string = back_to_top
 const smoother = useState<ScrollSmoother>('smoother')
 const scrollTo = (target: string): void =>
 {
-    smoother.value.scrollTo(target, true);
+    smoother.value.scrollTo(target, false);
 }
 </script>
 
