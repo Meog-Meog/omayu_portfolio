@@ -6,31 +6,43 @@
       <div class="banners__horizontal-line" :style="horizontalLine1Style" />
       <div class="banners__horizontal-line" :style="horizontalLine2Style" />
       <div class="banners__title-container">
-        <img src="~/assets/image/textimg/top/Banner.svg?url" class="banners__title js-is-in-view-target" alt="Banner" />
+        <img :src="titleImg" class="banners__title js-is-in-view-target" alt="Banner" />
       </div>
-      <div v-for="(row, rowIndex) in chunkedItems" class="banners__row" :key="'row-' + rowIndex">
+      <div v-for="(row, rowIndex) in chunkedItemsToShow" class="banners__row" :key="'row-' + rowIndex">
         <img v-for="(item, itemIndex) in row" :alt="item.alt" :src="item.image"
           class="banners__item js-is-in-view-target clickable" :key="'item-' + rowIndex + '-' + itemIndex" />
       </div>
     </div>
-    <button class="clickable" :class="{ 'text--dark': dark }" type="button" style="cursor: none;">
-      View All
+    <button class="clickable" :class="{ 'text--dark': dark }" type="button" style="cursor: none;" @click="toggle">
+      <span v-if="isExpand">Hide</span>
+      <span v-else>View All</span>
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
-import { useResize } from '@/composables/useResize';
-
 import { chunk } from "lodash";
-import items from "assets/data/bannerItems.js";
+
+import titleImg from '@/assets/image/textimg/top/Banner.svg?url';
+import items from "@/assets/data/bannerItems.js";
+
 
 const dark = useState('dark', () => false)
 const containerHeightPx = ref(0)
 const titleContainerHeightPx = ref(0)
+const isExpand = ref(false)
 
-const chunkedItems = chunk(items.slice(0, 9), 3);
+const chunkedItems = chunk(items, 3);
+
+const chunkedItemsToShow = computed(() =>
+{
+  return isExpand.value ? chunkedItems : chunkedItems.slice(0, 3)
+})
+
+const toggle = () =>
+{
+  // isExpand.value = !isExpand.value
+}
 
 const updateContainerHeight = () =>
 {

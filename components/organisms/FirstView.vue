@@ -21,7 +21,6 @@ import ScrollingHint from '@/components/molecules/ScrollingHint.vue';
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 58px;
   }
 
   &__name {

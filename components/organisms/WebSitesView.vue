@@ -20,18 +20,19 @@ $img-margin-y: 100px;
 
 .web-sites {
   &__container {
-    padding: 100px 100px 250px 100px;
+    padding: 100px 100px 220px 100px;
     text-align: center;
   }
 
   &__title {
-    margin: 130px 0;
+    margin: 100px 0;
     text-align: center;
   }
 
   &__row {
     display: flex;
     justify-content: space-between;
+    margin: 30px 0;
   }
 
   &__row:nth-of-type(1) img:nth-of-type(1) {
