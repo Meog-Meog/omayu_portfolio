@@ -1,14 +1,13 @@
 <template>
-  <div id="mouse-stalker" :class="{'disable-mix-blend-mode': mouseStalkerText}">
+  <div id="mouse-stalker" :class="{ 'disable-mix-blend-mode': mouseStalkerText }">
     <div
-        :class="{'mouse-stalker--clickable': mouseStalkerText, 'mouse-stalker--clickable--dark': mouseStalkerText && (dark || isMouseStalkerTextDark)}"
-        class="mouse-stalker"
-    >
+      :class="{ 'mouse-stalker--clickable': mouseStalkerText, 'mouse-stalker--clickable--dark': mouseStalkerText && (dark || isMouseStalkerTextDark) }"
+      class="mouse-stalker">
       <span>
         {{ mouseStalkerTextToShow }}
       </span>
     </div>
-    <div :class="{'mouse-stalker__dot--clickable': mouseStalkerText}" class="mouse-stalker__dot"/>
+    <div :class="{ 'mouse-stalker__dot--clickable': mouseStalkerText }" class="mouse-stalker__dot" />
   </div>
 </template>
 
@@ -19,22 +18,27 @@ export default {
 </script>
 
 <script setup>
-import {onMounted} from "vue";
-import {useState} from "nuxt/app";
+import { onMounted } from "vue";
+import { useState } from "nuxt/app";
 
 const dark = useState('dark', () => false)
 const mouseStalkerText = useState('mouseStalkerText', () => '')
-const mouseStalkerTextToShow = computed(() => {
+const mouseStalkerTextToShow = computed(() =>
+{
   return mouseStalkerText.value.replace(/--dark/g, '')
 })
-const isMouseStalkerTextDark = computed(() => {
+const isMouseStalkerTextDark = computed(() =>
+{
   return mouseStalkerText.value.endsWith('--dark')
 })
 
-onMounted(() => {
-  if (process.client) {
+onMounted(() =>
+{
+  if (process.client)
+  {
     const stalker = window.document.getElementById('mouse-stalker')
-    window.document.addEventListener('mousemove', function (e) {
+    window.document.addEventListener('mousemove', function (e)
+    {
       stalker.style.transform = 'translate(' + e.clientX + 'px, ' + e.clientY + 'px)'
     })
   }
@@ -64,6 +68,7 @@ onMounted(() => {
   top: 30px;
   left: 30px;
   position: absolute;
+  transition: all 0.3s;
 }
 
 .mouse-stalker--clickable {
@@ -74,7 +79,6 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s;
   top: 0;
   left: 0;
   border-color: #000;
@@ -108,5 +112,4 @@ onMounted(() => {
 .mouse-stalker--clickable--dark span {
   color: #000;
 }
-
 </style>
