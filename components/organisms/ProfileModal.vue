@@ -1,20 +1,14 @@
 <template>
   <nav :class="{ 'profile-modal--open': showModal }" class="profile-modal">
     <div class="profile-modal__contents">
-      <ul class="profile-modal__nav-menu">
-        <li>
-          <img src="~/assets/image/textimg/hb/web_site.svg?url" class="js-is-in-view-target" alt="Web Site"
-            @click="hideModalAndScrollTo('#web-page')" />
-        </li>
-        <li>
-          <img src="~/assets/image/textimg/hb/Banner.svg?url" class="js-is-in-view-target" alt="Banner"
-            @click="hideModalAndScrollTo('#banner')" />
-        </li>
-        <li>
-          <img src="~/assets/image/textimg/hb/Illustration.svg?url" class="js-is-in-view-target" alt="Illustration"
-            @click="hideModalAndScrollTo('#illustration')" />
-        </li>
-      </ul>
+      <div class="profile-modal__nav-menu">
+        <img :src="WebSiteImg" class="profile-modal__nav-menu-item js-is-in-view-target" alt="Web Site"
+          @click="hideModalAndScrollTo('#web-page')" />
+        <img :src="BannerImg" class="profile-modal__nav-menu-item js-is-in-view-target" alt="Banner"
+          @click="hideModalAndScrollTo('#banner')" />
+        <img :src="IllustrationImg" class="profile-modal__nav-menu-item js-is-in-view-target" alt="Illustration"
+          @click="hideModalAndScrollTo('#illustration')" />
+      </div>
       <hr>
       <profile />
     </div>
@@ -22,6 +16,9 @@
 </template>
 
 <script setup lang="ts">
+import WebSiteImg from '@/assets/image/textimg/hb/web_site.svg?url';
+import BannerImg from '@/assets/image/textimg/hb/Banner.svg?url';
+import IllustrationImg from '@/assets/image/textimg/hb/Illustration.svg?url';
 const showModal = useState('showModal', () => false)
 const dark = useState('dark', () => false)
 const smoother = useState<ScrollSmoother>('smoother')
@@ -64,10 +61,8 @@ const hideModalAndScrollTo = (target: string) =>
   }
 
   &__contents {
-    padding: 100px 90px;
-
     hr {
-      margin-bottom: 100px;
+      margin: 0;
       background-color: #3B3B3B;
       height: 0.5px;
       border: none;
@@ -75,22 +70,21 @@ const hideModalAndScrollTo = (target: string) =>
   }
 
   &__nav-menu {
-    margin-bottom: 50px;
+    padding: 100px 100px;
+    margin: 0;
 
-    li {
-      margin-bottom: 50px;
-      font-size: 170px;
-      line-height: 1em;
-      font-family: Valery, serif;
-      color: #5A5A5A;
-    }
-
-    li img {
+    &-item {
+      display: block;
       transition-duration: .5s;
-    }
 
-    li img:hover {
-      opacity: 0.4;
+      &:hover {
+        opacity: 0.4;
+      }
+
+      &:not(:last-child) {
+        margin-bottom: 50px;
+      }
+
     }
   }
 }

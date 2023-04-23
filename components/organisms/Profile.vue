@@ -30,7 +30,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 60px 30px 60px;
+    padding: 100px 150px 130px 150px;
 
     div {
       width: auto;
