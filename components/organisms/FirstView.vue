@@ -1,6 +1,6 @@
 <template>
   <div id="first-view" class="first-view__container">
-    <MayuTeramoto />
+    <img :src="MayuTeramotoImg" alt="Mayu Teramoto" class="first-view__name" />
     <div class="first-view__scrolling-hint-container">
       <ScrollingHint />
     </div>
@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import MayuTeramoto from '@/assets/image/mayu_teramoto.svg';
+import MayuTeramotoImg from '@/assets/image/mayu_teramoto.svg?url';
 import ScrollingHint from '@/components/molecules/ScrollingHint.vue';
 </script>
 
@@ -22,6 +22,10 @@ import ScrollingHint from '@/components/molecules/ScrollingHint.vue';
     align-items: center;
     justify-content: center;
     margin-bottom: 58px;
+  }
+
+  &__name {
+    width: 100%;
   }
 
   &__scrolling-hint-container {
