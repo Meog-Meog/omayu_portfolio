@@ -50,12 +50,6 @@ const updateTitleContainerHeight = () =>
   }
 }
 
-useResize((width: number, height: number) =>
-{
-  updateContainerHeight();
-  updateTitleContainerHeight();
-});
-
 const horizontalLineStyle = computed(() =>
 {
   return {
@@ -81,13 +75,22 @@ const horizontalLine2Style = computed(() =>
   }
 })
 
+useResize((width: number, height: number) =>
+{
+  updateContainerHeight();
+  updateTitleContainerHeight();
+});
+
 onMounted(() =>
 {
-  if (process.client)
-  {
-    updateContainerHeight();
-    updateTitleContainerHeight();
-  }
+  updateContainerHeight();
+  updateTitleContainerHeight();
+})
+
+onUpdated(() =>
+{
+  updateContainerHeight();
+  updateTitleContainerHeight();
 })
 </script>
 
