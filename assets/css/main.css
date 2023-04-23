@@ -1,0 +1,151 @@
+@font-face {
+  font-family: 'ZenKakuGothicNew';
+  src: url('../font/ZenKakuGothicNew-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('../font/Roboto-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Valery';
+  src: url('../font/Valery.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Valery-Regular';
+  src: url('../font/Valery.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'A1GothicStd';
+  src: url('../font/AP-OTF-A1GothicStd-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'HurmeGeometricSans4';
+  src: url('../font/HurmeGeometricSans4Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'HurmeGeometricSans4';
+  src: url('../font/HurmeGeometricSans4Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'HurmeGeometricSans4';
+  src: url('../font/HurmeGeometricSans4SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'HurmeGeometricSans4';
+  src: url('../font/HurmeGeometricSans4.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'HurmeGeometricSans4';
+  src: url('../font/HurmeGeometricSans4Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'HurmeGeometricSans4';
+  src: url('../font/HurmeGeometricSans4Hairline.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+body {
+  margin: 0;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  appearance: none;
+}
+
+ul {
+  list-style: none;
+}
+
+h2 {
+  margin: 0;
+}
+
+.background-color--light {
+  background-color: #fff !important;
+}
+
+.background-color--dark {
+  background-color: #0f0f0f !important;
+}
+
+.section-title {
+  font-size: 170px;
+  font-weight: normal;
+  line-height: 1em;
+  font-family: Valery, serif;
+}
+
+.section-title--outlined {
+  -webkit-text-stroke-color: #000;
+  -webkit-text-stroke-width: 1px;
+  color: transparent;
+}
+
+/*
+ * 要素が画面に入ったらフワッと表示するアニメーション用class
+ */
+.js-is-in-view-target {
+  opacity: 0;
+  transform: translateY(5rem);
+}
+
+.is-in-view {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 2.25s, transform 1.5s cubic-bezier(0.4, 0, 0, 1);
+}
+
+/*
+* {
+  cursor: url('../assets/image/cursor.png'), auto;
+}
+ */
+
+/*
+ * テキストリンクのホバーエフェクトの設定
+ */
+.text-link {
+  font: normal normal normal 16px/24px ZenKakuGothicNew;
+  letter-spacing: 0.64px;
+  line-height: 1em;
+  transition-duration: 0.5s;
+  cursor: none;
+}
+.text-link:hover {
+  opacity: 0.3;
+}

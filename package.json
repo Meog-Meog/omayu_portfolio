@@ -1,0 +1,39 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "lint": "eslint --fix ."
+  },
+  "devDependencies": {
+    "@nuxt/eslint-config": "^0.1.1",
+    "@nuxtjs/eslint-config-typescript": "^12.0.0",
+    "@types/lodash": "^4.14.194",
+    "@typescript-eslint/eslint-plugin": "^5.59.0",
+    "@typescript-eslint/parser": "^5.59.0",
+    "@vue/eslint-config-prettier": "^7.1.0",
+    "eslint": "^8.39.0",
+    "eslint-config-standard-with-typescript": "^34.0.1",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-vue": "^9.11.0",
+    "firebase-admin": "^11.7.0",
+    "firebase-functions": "^3.21.0",
+    "nuxt": "3.4.2",
+    "prettier": "^2.8.7",
+    "sass": "^1.62.0",
+    "typescript": "5.0.4",
+    "vite-svg-loader": "^4.0.0"
+  },
+  "dependencies": {
+    "@gsap/shockingly": "^3.11.5",
+    "@nuxt/types": "^2.16.3",
+    "firebase": "^9.20.0",
+    "gsap": "npm:@gsap/shockingly",
+    "lodash": "^4.17.21"
+  }
+}
