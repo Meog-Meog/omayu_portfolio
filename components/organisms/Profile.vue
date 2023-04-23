@@ -10,7 +10,7 @@
         <a class="text-link" href="https://twitter.com/myttt33" rel="noopener" target="_blank">
           <img src="~/assets/image/profile/icon_twitter.svg?url" />
         </a>
-        <a class="text-link" href="https://www.instagram.com/asage.mmeog/" rel="noopener" target="_blank">
+        <a class="text-link" href="https://www.instagram.com/asage_ttt/" rel="noopener" target="_blank">
           <img src="~/assets/image/profile/icon_instagram.svg?url" />
         </a>
       </div>
@@ -30,7 +30,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 60px 30px 60px;
+    padding: 100px 150px 130px 150px;
 
     div {
       width: auto;

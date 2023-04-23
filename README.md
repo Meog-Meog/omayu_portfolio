@@ -1,42 +1,7 @@
-# Nuxt 3 Minimal Starter
+# Mayu Teramoto's Portfolio
 
-Look at the [nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
+## Links
 
-## Setup
-
-Make sure to install the dependencies:
-
-```bash
-# yarn
-yarn install
-
-# npm
-npm install
-
-# pnpm
-pnpm install --shamefully-hoist
-```
-
-## Development Server
-
-Start the development server on http://localhost:3000
-
-```bash
-npm run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-npm run build
-```
-
-Locally preview production build:
-
-```bash
-npm run preview
-```
-
-Checkout the [deployment documentation](https://v3.nuxtjs.org/docs/deployment) for more information.
+- [GitHub Pages](https://ke3en.github.io/omayu_portfolio/)
+- [Netlify](https://app.netlify.com/sites/omayu-portfolio/overview)
+- [Adobe XD](https://xd.adobe.com/view/024d7cca-e254-4836-b43a-d300b5a1e919-571e/specs/)

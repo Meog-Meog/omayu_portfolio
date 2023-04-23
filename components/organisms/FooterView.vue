@@ -1,7 +1,6 @@
 <template>
   <div class="footer">
-    <img src="~/assets/image/textimg/top/thank_you_for_visiting.svg?url" alt="Thank you for visiting"
-      class="footer__ty" />
+    <img :src="ThankYouForVisitingImg" alt="Thank you for visiting" class="footer__ty" />
     <div class="footer__menu">
       <scroll-to-top-button />
       <p class="text-link"><a @click="scrollTo('#web-page')">Web Site</a></p>
@@ -15,6 +14,7 @@
 </template>
 
 <script setup lang="ts">
+import ThankYouForVisitingImg from '@/assets/image/textimg/top/thank_you_for_visiting.svg?url'
 import ScrollToTopButton from '@/components/molecules/ScrollToTopButton.vue';
 const smoother = useState<ScrollSmoother>('smoother')
 const scrollTo = (target: string): void =>
@@ -37,7 +37,8 @@ const year: number = new Date().getFullYear();
     align-items: center;
 
     .text-link {
-      margin-right: 26px;
+      margin-right: 25px;
+      font: normal normal normal 16px/24px ZenKakuGothicNew;
     }
   }
 
