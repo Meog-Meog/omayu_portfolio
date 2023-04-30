@@ -8,7 +8,7 @@
         <first-view />
         <web-sites-view />
         <competitions-view />
-        <banners-view class="js-target-darken" />
+        <banners-view />
         <illustrations-view />
         <footer-view />
       </div>
@@ -49,6 +49,27 @@ onMounted(() =>
         onLeaveBack: self => dark.value = false
       })
     })
+    const resizeObserver = new ResizeObserver(entries =>
+    {
+      for (const entry of entries)
+      {
+        if (entry.target.classList.contains('js-target-darken'))
+        {
+          ScrollTrigger.refresh();
+        }
+      }
+    });
+    document.querySelectorAll('.js-target-darken').forEach(el =>
+    {
+      resizeObserver.observe(el);
+    });
+    onUnmounted(() =>
+    {
+      document.querySelectorAll('.js-target-darken').forEach(el =>
+      {
+        resizeObserver.unobserve(el);
+      });
+    });
 
     // 画面に映ったら要素をフワッと表示させるアニメーションの設定
     document.querySelectorAll('.js-is-in-view-target').forEach((el, idx) =>

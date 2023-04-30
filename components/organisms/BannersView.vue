@@ -1,5 +1,5 @@
 <template>
-  <div id="banner">
+  <div id="banner" class="js-target-darken">
     <div class="banners__container">
       <div class="banners__vertical-line" :style="horizontalLineStyle" />
       <div class="banners__vertical-line" :style="horizontalLineStyle" />
@@ -8,12 +8,19 @@
       <div class="banners__title-container">
         <img :src="titleImg" class="banners__title js-is-in-view-target" alt="Banner" />
       </div>
-      <div v-for="(row, rowIndex) in chunkedItemsToShow" class="banners__row" :key="'row-' + rowIndex">
-        <img v-for="(item, itemIndex) in row" :alt="item.alt" :src="item.image"
-          class="banners__item js-is-in-view-target clickable" :key="'item-' + rowIndex + '-' + itemIndex" />
+      <div class="banners__grid">
+        <div v-for="(item, idx) in items.slice(0, 9)" :key="idx">
+          <img :alt="item.alt" :src="item.image" class="js-is-in-view-target clickable" />
+        </div>
       </div>
     </div>
-    <button class="clickable" :class="{ 'text--dark': dark }" type="button" style="cursor: none;" @click="toggle">
+    <div class="banners__grid banners__additional" :class="{ 'banners__additional--show': isExpand }">
+      <div v-for="(item, idx) in items.slice(0, 9)" :key="idx">
+        <img :alt="item.alt" :src="item.image" class="js-is-in-view-target clickable" />
+      </div>
+    </div>
+    <button v-if="!isExpand" class="clickable" :class="{ 'text--dark': dark }" type="button" style="cursor: none;"
+      @click="toggle">
       <span v-if="isExpand">Hide</span>
       <span v-else>View All</span>
     </button>
@@ -32,16 +39,9 @@ const containerHeightPx = ref(0)
 const titleContainerHeightPx = ref(0)
 const isExpand = ref(false)
 
-const chunkedItems = chunk(items, 3);
-
-const chunkedItemsToShow = computed(() =>
-{
-  return isExpand.value ? chunkedItems : chunkedItems.slice(0, 3)
-})
-
 const toggle = () =>
 {
-  // isExpand.value = !isExpand.value
+  isExpand.value = !isExpand.value
 }
 
 const updateContainerHeight = () =>
@@ -107,6 +107,8 @@ onUpdated(() =>
 </script>
 
 <style lang="scss" scoped>
+$line-color: #707070;
+
 .banners {
   &__container {
     position: relative;
@@ -125,14 +127,17 @@ onUpdated(() =>
     }
   }
 
-  &__row {
-    display: flex;
-    justify-content: space-between;
-  }
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
 
-  &__item {
-    margin: 70px 100px;
-    width: calc((100vw - 600px) / 3);
+    div {
+      padding: 70px 100px;
+
+      img {
+        max-width: 100%;
+      }
+    }
   }
 
   &__vertical-line {
@@ -156,6 +161,30 @@ onUpdated(() =>
     width: 100%;
     height: 1px;
     background-color: #707070;
+  }
+
+  &__additional {
+    position: relative;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 1s;
+
+    &--show {
+      max-height: 1600px;
+      border-bottom: solid 1px $line-color;
+    }
+
+    div {
+      border-top: solid 1px $line-color;
+      border-left: solid 1px $line-color;
+
+      &:nth-child(3n + 1) // 3列の場合
+
+        {
+        border-left: none;
+      }
+
+    }
   }
 }
 
