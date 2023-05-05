@@ -82,6 +82,16 @@ onMounted(() =>
         once: true
       })
     })
+    document.querySelectorAll('.js-is-in-view-target--lazy').forEach((el, idx) =>
+    {
+      ScrollTrigger.create({
+        trigger: el,
+        id: idx.toString(),
+        start: 'top 80%',
+        toggleClass: { targets: el, className: 'is-in-view--lazy' },
+        once: true
+      })
+    })
 
     // クリック可能要素上にホバーした際の処理を設定
     for (const clickable of document.getElementsByClassName('clickable'))

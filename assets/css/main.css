@@ -123,11 +123,19 @@ h2 {
   opacity: 0;
   transform: translateY(5rem);
 }
-
 .is-in-view {
   opacity: 1;
   transform: translateY(0);
   transition: opacity 2.25s, transform 1.5s cubic-bezier(0.4, 0, 0, 1);
+}
+.js-is-in-view-target--lazy {
+  opacity: 0;
+  transform: translateY(5rem);
+}
+.is-in-view--lazy {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 2.25s 0.5s, transform 1.5s 0.5s cubic-bezier(0.4, 0, 0, 1);
 }
 
 /*
