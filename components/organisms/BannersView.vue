@@ -9,14 +9,14 @@
         <img :src="titleImg" class="banners__title js-is-in-view-target" alt="Banner" />
       </div>
       <div class="banners__grid">
-        <div v-for="(item, idx) in items.slice(0, 9)" :key="idx">
+        <div v-for="(item, idx) in itemsToShow.slice(0, 9)" :key="idx">
           <img :alt="item.alt" :src="item.image" class="js-is-in-view-target clickable" />
         </div>
       </div>
     </div>
     <div class="banners__grid banners__additional" :class="{ 'banners__additional--show': isExpand }">
-      <div v-for="(item, idx) in items.slice(0, 9)" :key="idx">
-        <img :alt="item.alt" :src="item.image" class="js-is-in-view-target clickable" />
+      <div v-for="(item, idx) in itemsToShow.slice(9)" :key="idx">
+        <img v-if="!item.isDummy" :alt="item.alt" :src="item.image" class="js-is-in-view-target clickable" />
       </div>
     </div>
     <button v-if="!isExpand" class="clickable" :class="{ 'text--dark': dark }" type="button" style="cursor: none;"
@@ -38,6 +38,8 @@ const dark = useState('dark', () => false)
 const containerHeightPx = ref(0)
 const titleContainerHeightPx = ref(0)
 const isExpand = ref(false)
+
+const itemsToShow = [...items, ...Array(items.length % 3 !== 0 ? 3 - (items.length % 3) : 0).fill({ isDummy: true })]
 
 const toggle = () =>
 {
