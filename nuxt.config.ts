@@ -14,6 +14,13 @@ export default defineNuxtConfig({
         svgo: false,
       }),
     ],
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: '@import "@/assets/css/_mixin.scss";',
+        },
+      },
+    },
   },
   build: {
     transpile: ['gsap'],
