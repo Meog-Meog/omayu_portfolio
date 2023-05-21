@@ -1,7 +1,7 @@
 <template>
   <section id="illustration" class="illustrations__section">
     <div class="illustrations__container">
-      <img src="~/assets/image/textimg/top/Illustration.svg?url" class="illustrations__title js-is-in-view-target"
+      <img src="~/assets/image/illustration/Illustration.svg?url" class="illustrations__title js-is-in-view-target"
         alt="Illustration" />
       <div class="illustrations__showcase-wrapper js-is-in-view-target--lazy">
         <illustration-showcase style="margin-bottom: -86px;" />

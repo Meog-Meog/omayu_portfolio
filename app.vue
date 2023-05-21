@@ -2,9 +2,10 @@
   <div>
     <mouse-stalker />
     <hamburger-button class="float-button-container" />
+    <menu-modal />
     <profile-modal />
     <div id="smooth-wrapper" :class="{ dark: dark, light: !dark }" class="body">
-      <div id="smooth-content">
+      <div id="smooth-content" :class="{ hide: showModal || showProfileModal }">
         <first-view />
         <web-sites-view />
         <competitions-view />
@@ -17,15 +18,14 @@
 </template>
 
 <script setup lang="ts">
-import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ScrollSmoother } from 'gsap/ScrollSmoother'
+const showProfileModal = useState('showProfileModal', () => false)
+const showModal = useState('showModal', () => false)
 
 useHead({
   title: 'MAYU TERAMOTO\'s Portfolio',
 })
-
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother)
 
 const dark = useState('dark', () => false)
 const mouseStalkerText = useState('mouseStalkerText', () => '')
@@ -35,6 +35,12 @@ onMounted(() =>
 {
   if (process.client)
   {
+    // 慣性スクロールの設定
+    smoother.value = ScrollSmoother.create({
+      smooth: 2,
+      effects: true
+    })
+
     // ダークモード切り替えの設定
     document.querySelectorAll('.js-target-darken').forEach((el, idx) =>
     {
@@ -105,6 +111,17 @@ onMounted(() =>
         mouseStalkerText.value = ''
       }, false)
     }
+    for (const clickable of document.getElementsByClassName('clickable-view'))
+    {
+      clickable.addEventListener('mouseover', () =>
+      {
+        mouseStalkerText.value = 'View'
+      }, false)
+      clickable.addEventListener('mouseout', () =>
+      {
+        mouseStalkerText.value = ''
+      }, false)
+    }
     for (const clickable of document.getElementsByClassName('clickable-next'))
     {
       clickable.addEventListener('mouseover', () =>
@@ -140,10 +157,6 @@ onMounted(() =>
         mouseStalkerText.value = ''
       }, false)
     }
-    // 慣性スクロールの設定
-    smoother.value = ScrollSmoother.create({
-      smooth: 2
-    })
   }
 })
 </script>
@@ -164,13 +177,41 @@ onMounted(() =>
 }
 
 .dark {
+  position: relative;
   background-color: #0F0F0F;
   color: #5A5A5A;
+}
+
+.body::after {
+  content: "";
+  background: url('~/assets/image/banner/bgimg.png') 0% 0% no-repeat padding-box;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  opacity: 0;
+  mix-blend-mode: overlay;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+  transition: opacity 0.5s ease-in;
+}
+
+.dark.body::after {
+  opacity: 1;
 }
 
 .float-button-container {
   position: fixed;
   top: 30px;
   right: 45px;
+}
+
+.hide {
+  opacity: 0;
+  animation: 2.25s cubic-bezier(0.4, 0, 0, 1) 1s forwards fade-out;
 }
 </style>

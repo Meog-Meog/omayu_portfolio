@@ -161,24 +161,23 @@ $animation-prop: cubic-bezier(0.17, 0.87, 1, 1);
             padding-top: 70px;
             font: normal normal 300 16px/20px Roboto;
             letter-spacing: 0.8px;
-            color: #000000;
             opacity: 1;
             line-height: 1em;
             margin-left: auto;
 
             div:nth-of-type(1) {
-                color: #000;
+                color: #101010;
             }
 
             div:nth-of-type(3) {
-                color: #a3a3a3;
+                color: #909090;
             }
         }
 
         &-separator {
             width: 0.5px;
             height: 10px;
-            background: #a3a3a3 0% 0% no-repeat padding-box;
+            background: #909090 0% 0% no-repeat padding-box;
             margin: 0 15px;
         }
     }

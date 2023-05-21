@@ -1,7 +1,9 @@
 <template>
   <section class="competitions__container js-horizontal-scroll-trigger">
-    <div class="competitions__wrapper js-is-in-view-target">
-      <img :src="title" class="web-competitions__title js-is-in-view-target" alt="Competition" />
+    <div class="competitions__wrapper">
+      <div class="competitions__title">
+        <img src="~/assets/image/competition/competition.svg?url" alt="Competition" />
+      </div>
       <div class="competitions__items-wrapper">
         <ul class="competitions__items">
           <li v-for="(item, i) in items" :key="i" class="competitions__item">
@@ -14,20 +16,48 @@
 </template>
 
 <script setup lang="ts">
-import { gsap } from 'gsap';
 import { onMounted } from "vue";
 import items from '@/assets/data/competitionItems.js';
-import title from '@/assets/image/textimg/top/Competition.svg?url'
 
 onMounted(() =>
 {
   if (process.client)
   {
+    const { $gsap } = useNuxtApp();
+
+    const container = document.querySelector('.competitions__container');
+    const title = document.querySelector('.competitions__title');
+    if (title != null)
+      $gsap.to(title, {
+        scrollTrigger: {
+          trigger: title,
+          start: 'top 70%',
+          endTrigger: container,
+          end: 'bottom top',
+          onEnter: () => title.classList.add('slide-in'),
+          once: true,
+          //markers: true
+        }
+      });
+    const items = document.querySelector('.competitions__items-wrapper');
+    if (items != null)
+      $gsap.to(items, {
+        scrollTrigger: {
+          trigger: items,
+          start: 'top 50%',
+          endTrigger: container,
+          end: 'bottom top',
+          onEnter: () => items.classList.add('slide-in'),
+          once: true,
+          //markers: true
+        }
+      });
+
     // 横スクロールの設定
     const listWrapperEl = document.querySelector('.competitions__items-wrapper');
     const listEl = document.querySelector('.competitions__items');
     if (listWrapperEl == null || listEl == null) return;
-    gsap.to(listEl, {
+    $gsap.to(listEl, {
       x: () => -(listEl.clientWidth - listWrapperEl.clientWidth),
       ease: 'none',
       scrollTrigger: {
@@ -38,6 +68,7 @@ onMounted(() =>
         pin: true,
         anticipatePin: 1,
         invalidateOnRefresh: true,
+        //markers: true
       },
     });
   }
@@ -56,7 +87,7 @@ ul {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 250px;
+    margin-bottom: 100vh;
   }
 
   &__wrapper {
@@ -64,7 +95,25 @@ ul {
   }
 
   &__title {
-    margin-bottom: -45px;
+    margin-bottom: -55px;
+
+    img {
+      opacity: 0;
+      transform: translateY(5rem);
+      transition: all 1.5s cubic-bezier(0.4, 0, 0, 1);
+    }
+
+    &.slide-in {
+      img {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    &.slide-out {
+      opacity: 0;
+      transform: translateY(-5rem);
+    }
   }
 
   &__items {
@@ -78,6 +127,20 @@ ul {
       position: relative;
       width: 100%;
       height: 228px;
+
+      opacity: 0;
+      transform: translateY(5rem);
+      transition: all 1.5s cubic-bezier(0.4, 0, 0, 1);
+
+      &.slide-in {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      &.slide-out {
+        opacity: 0;
+        transform: translateY(-5rem);
+      }
     }
   }
 
@@ -87,15 +150,15 @@ ul {
     justify-content: center;
 
     &:first-of-type {
-      margin-left: 468px;
+      margin-left: 150px;
     }
 
     &:last-of-type {
-      margin-right: 100px;
+      margin-right: 170px;
     }
 
     img {
-      height: 228px;
+      width: calc((100vw - 300px)/2);
     }
   }
 }

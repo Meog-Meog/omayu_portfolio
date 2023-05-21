@@ -1,60 +1,130 @@
 <template>
   <div class="footer">
-    <img :src="ThankYouForVisitingImg" alt="Thank you for visiting" class="footer__ty" />
-    <div class="footer__menu">
-      <scroll-to-top-button />
-      <p class="text-link"><a @click="scrollTo('#web-page')">Web Site</a></p>
-      <p class="text-link"><a @click="scrollTo('#banner')">Banner</a></p>
-      <p class="text-link"><a @click="scrollTo('#illustration')">Illustration</a></p>
+    <div class="footer__main-container">
+      <div class="footer__main-contents">
+        <ScrollToTopButton2 style="margin-top: 91px;" />
+        <div class="footer__menu">
+          <div class="footer__menu-item" style="margin-right: 70px;">
+            <p class="text-link"><a @click="scrollToWebsite">Web Site</a></p>
+            <p class="text-link"><a>Sugoyose</a></p>
+            <p class="text-link"><a>Spring Campaign</a></p>
+            <p class="text-link"><a>Oshikatsu Campaign</a></p>
+            <p class="text-link"><a>Hagoromo Academy</a></p>
+          </div>
+          <div class="footer__menu-item" style="margin-right: 50px;">
+            <p class="text-link"><a @click="scrollToCompetition">Competition</a></p>
+            <p class="text-link"><a>COVERMARK</a></p>
+            <p class="text-link"><a>CO.nnect</a></p>
+            <p class="text-link"><a>Matsushita Hospital</a></p>
+          </div>
+          <div class="footer__menu-item" style="margin-right: 80px;">
+            <p class="text-link"><a @click="scrollToBanner">Banner</a></p>
+          </div>
+          <div class="footer__menu-item" style="margin-right: 114px;">
+            <p class="text-link"><a @click="scrollToIllustration">Illustration</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="footer__copy-right">
+        © {{ year }} Mayu Teramoto’s Portfolio
+      </div>
     </div>
-    <div class="footer__copy-right">
-      © {{ year }} Mayu Teramoto’s Portfolio
+    <div class="footer__about-me">
+      <AboutMeMenu />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import ThankYouForVisitingImg from '@/assets/image/textimg/top/thank_you_for_visiting.svg?url'
-import ScrollToTopButton from '@/components/molecules/ScrollToTopButton.vue';
 const smoother = useState<ScrollSmoother>('smoother')
-const scrollTo = (target: string): void =>
+const scrollToWebsite = (): void =>
 {
-  smoother.value.scrollTo(target, true);
+  smoother.value.scrollTo('.web-sites__title', false, "top top");
+}
+const scrollToCompetition = (): void =>
+{
+  smoother.value.scrollTo('.competitions__title', false, "top 70%");
+}
+const scrollToBanner = (): void =>
+{
+  smoother.value.scrollTo('#banner', false, "top top");
+}
+const scrollToIllustration = (): void =>
+{
+  smoother.value.scrollTo('#illustration', false, "top top");
 }
 const year: number = new Date().getFullYear();
 </script>
 
 <style lang="scss" scoped>
+p {
+  margin: 0;
+}
+
 .footer {
   position: relative;
-  background: #0F0F0F 0% 0% no-repeat padding-box;
-  color: #FFFFFF;
-  overflow: hidden;
+  color: #101010;
+  font: normal normal normal 16px/24px ZenKakuGothicNew;
+  letter-spacing: 0.64px;
+  width: 100vw;
+  height: calc(100vh - 110px);
+  border-top: #cccccc 1px solid;
+  display: flex;
+  // padding-left: 100px;
+  // padding-right: 19px;
+
+  &__main {
+
+    &-container {
+      width: auto;
+      flex: 1;
+      padding-bottom: 41px;
+      padding-left: 100px;
+      border-right: #cccccc 1px solid;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    &-contents {
+      display: flex;
+      justify-content: space-between;
+    }
+
+  }
+
 
   &__menu {
-    margin: 65px 0 238px 100px;
+    padding-top: 101px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: flex-end;
 
-    .text-link {
-      margin-right: 25px;
-      font: normal normal normal 16px/24px ZenKakuGothicNew;
+    &-item {
+      div {
+        margin: 0;
+      }
+
+      >:first-child {
+        margin-bottom: 30px;
+      }
+
+      >*:not(:first-child) {
+        margin-bottom: 25px;
+        color: #9F9F9F;
+      }
     }
   }
 
-  &__ty {
-    position: absolute;
-    bottom: 0;
-    left: 0;
+  &__copy-right {
+    font: normal normal normal 13px/19px ZenKakuGothicNew;
+    letter-spacing: 0.52px;
+    color: #101010;
   }
 
-  &__copy-right {
-    margin-right: 50px;
-    margin-bottom: 40px;
-    text-align: end;
-    font: normal normal normal 12px/17px ZenKakuGothicNew;
-    letter-spacing: 0.6px;
-    line-height: 1em;
+  &__about-me {
+    padding-top: 101px;
+    padding-right: 19px;
   }
 }
 </style>

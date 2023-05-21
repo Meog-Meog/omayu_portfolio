@@ -61,7 +61,7 @@ onMounted(() =>
 }
 
 .mouse-stalker {
-  border: 1px solid #ffffff55;
+  border: 1px solid #efefef;
   border-radius: 50%;
   width: 60px;
   height: 60px;
@@ -90,7 +90,7 @@ onMounted(() =>
 }
 
 .mouse-stalker__dot {
-  background-color: #fff;
+  background-color: #efefef;
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -106,10 +106,10 @@ onMounted(() =>
 .mouse-stalker--clickable span {
   font: normal normal normal 16px/24px A1GothicStd;
   letter-spacing: 0.64px;
-  color: #fff;
+  color: #eee;
 }
 
 .mouse-stalker--clickable--dark span {
-  color: #000;
+  color: #101010;
 }
 </style>

@@ -1,98 +1,162 @@
 <template>
   <div id="web-page" class="web-sites__container">
-    <div class="web-sites__row">
-      <img v-for="item of items.slice(0, 2)" :alt="item.alt" :src="item.image" class="js-is-in-view-target clickable" />
+    <div class="web-sites__title">
+      <img src="~/assets/image/website/website.svg?url" alt="Web Site" />
     </div>
-    <div class="web-sites__title js-is-in-view-target">
-      <img src="~/assets/image/textimg/top/web_site.svg?url" alt="Web Site" />
-    </div>
-    <div class="web-sites__row">
-      <img v-for="item of items.slice(2, 4)" :alt="item.alt" :src="item.image" class="js-is-in-view-target clickable" />
+    <div class="web-sites__thumbnails">
+      <div class="web-sites__row">
+        <div v-for="item of items.slice(0, 2)" class="web-sites__thumbnail web-sites__thumbnail--first clickable-view">
+          <img :alt="item.alt" :src="item.image" />
+        </div>
+      </div>
+      <div class="web-sites__row">
+        <div v-for="item of items.slice(2, 4)" class="web-sites__thumbnail web-sites__thumbnail--second clickable-view">
+          <img :alt="item.alt" :src="item.image" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import items from "@/assets/data/webSiteItems.js";
+const { $gsap } = useNuxtApp();
+
+onMounted(() =>
+{
+  if (process.client)
+  {
+    const title = document.querySelector('.web-sites__title');
+    const container = document.querySelector('.web-sites__container');
+    $gsap.to(title, {
+      scrollTrigger: {
+        trigger: title,
+        start: 'top top',
+        endTrigger: container,
+        end: 'bottom top',
+        pin: title,
+        toggleClass: { targets: title, className: 'slide-in' },
+        //markers: true
+      }
+    });
+    document.querySelectorAll('.web-sites__thumbnail--first').forEach((el, idx) =>
+    {
+      $gsap.to(el, {
+        scrollTrigger: {
+          trigger: el,
+          start: 'center 70%',
+          toggleClass: { targets: el, className: 'slide-in' },
+          //markers: true
+        }
+      });
+    });
+    document.querySelectorAll('.web-sites__thumbnail--second').forEach((el, idx) =>
+    {
+      $gsap.to(el, {
+        scrollTrigger: {
+          trigger: el,
+          start: 'center 80%',
+          toggleClass: { targets: el, className: 'slide-in' },
+          // markers: true
+        }
+      });
+    });
+  }
+})
 </script>
 
 <style lang="scss" scoped>
 .web-sites {
   &__container {
-    padding: 100px 25px 220px 25px;
-
-    @include mq(md) {
-      padding: 100px 75px 220px 75px;
-    }
-
-    @include mq(xl) {
-      padding: 100px 100px 220px 100px;
-    }
-
+    padding: 50vh 100px 0 100px;
+    margin-bottom: 150vh;
+    position: relative;
     text-align: center;
   }
 
   &__title {
     width: 100%;
-    padding: 40px 0;
     text-align: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding-top: 50vh;
+    z-index: 1;
 
-    @include mq(md) {
-      padding: 75px 0;
-    }
-
-    @include mq(xl) {
-      padding: 100px 0;
+    &.slide-in {
+      img {
+        opacity: 1;
+        transform: translateY(-50%);
+      }
     }
 
     img {
       width: 100%;
       max-width: 726px;
       height: auto;
+      opacity: 0;
+      transform: translateY(calc(-50% + 5rem));
+      transition: all 1.5s cubic-bezier(0.4, 0, 0, 1);
     }
+  }
+
+  &__thumbnails {
+    position: relative;
+    z-index: 2;
+    padding-top: 30vh;
   }
 
   &__row {
     display: flex;
-    justify-content: space-between;
     margin: 30px 0;
+    position: relative;
+    z-index: 2;
 
-    img {
-      width: calc(50vw - 20px * 2);
+    .web-sites__thumbnail {
+      width: 50%;
 
-      @include mq(md) {
-        width: calc(50vw - 50px * 2);
+      img {
+        opacity: 0;
+        transform: translateY(5rem);
+        width: 100%;
+        height: auto;
+        transition: all 1.5s cubic-bezier(0.4, 0, 0, 1);
       }
 
-      @include mq(xl) {
-        width: calc(50vw - 75px * 2);
+      &.slide-in {
+        img {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
     }
-  }
 
-  &__row:nth-of-type(1) img:nth-of-type(1),
-  &__row:nth-of-type(3) img:nth-of-type(2) {
-    margin-bottom: 50px;
+    &:nth-of-type(1) {
+      margin-bottom: 228px;
 
-    @include mq(md) {
-      margin-bottom: 75px;
+      .web-sites__thumbnail:nth-of-type(1) {
+        margin-bottom: 100px;
+        margin-right: 50px;
+      }
+
+      .web-sites__thumbnail:nth-of-type(2) {
+        margin-top: 100px;
+        margin-left: 50px;
+      }
     }
 
-    @include mq(xl) {
-      margin-bottom: 100px;
-    }
-  }
+    &:nth-of-type(2) {
+      .web-sites__thumbnail:nth-of-type(1) {
+        margin-top: 100px;
+        margin-right: 50px;
+      }
 
-  &__row:nth-of-type(1) img:nth-of-type(2),
-  &__row:nth-of-type(3) img:nth-of-type(1) {
-    margin-top: 50px;
+      .web-sites__thumbnail:nth-of-type(2) {
+        margin-bottom: 100px;
+        margin-left: 50px;
 
-    @include mq(md) {
-      margin-top: 75px;
-    }
-
-    @include mq(xl) {
-      margin-top: 100px;
+      }
     }
   }
 

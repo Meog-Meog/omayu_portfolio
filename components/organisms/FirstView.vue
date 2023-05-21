@@ -1,14 +1,13 @@
 <template>
   <div id="first-view" class="first-view__container">
-    <img :src="MayuTeramotoImg" alt="Mayu Teramoto" class="first-view__name" />
-    <div class="first-view__scrolling-hint-container">
+    <img src="~/assets/image/kv/mayuteramoto.svg?url" alt="Mayu Teramoto" class="first-view__name fade-in" />
+    <div class="first-view__scrolling-hint-container fade-in">
       <ScrollingHint />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import MayuTeramotoImg from '@/assets/image/mayu_teramoto.svg?url';
 import ScrollingHint from '@/components/molecules/ScrollingHint.vue';
 </script>
 
@@ -25,6 +24,11 @@ import ScrollingHint from '@/components/molecules/ScrollingHint.vue';
 
   &__name {
     width: 100%;
+
+    &.fade-in {
+      opacity: 0;
+      animation: 2.25s cubic-bezier(0.4, 0, 0, 1) 0.5s forwards fade-in;
+    }
   }
 
   &__scrolling-hint-container {
@@ -33,6 +37,12 @@ import ScrollingHint from '@/components/molecules/ScrollingHint.vue';
     width: 100%;
     display: flex;
     justify-content: center;
+
+    &.fade-in {
+      opacity: 0;
+      animation: 2.25s cubic-bezier(0.4, 0, 0, 1) 1.5s forwards fade-in;
+    }
   }
+
 }
 </style>

@@ -1,33 +1,13 @@
 <template>
-  <nav :class="{ 'profile-modal--open': showModal }" class="profile-modal">
+  <nav :class="{ 'profile-modal--open': showProfileModal }" class="profile-modal">
     <div class="profile-modal__contents">
-      <div class="profile-modal__nav-menu">
-        <img :src="WebSiteImg" class="profile-modal__nav-menu-item js-is-in-view-target" alt="Web Site"
-          @click="hideModalAndScrollTo('#web-page')" />
-        <img :src="BannerImg" class="profile-modal__nav-menu-item js-is-in-view-target" alt="Banner"
-          @click="hideModalAndScrollTo('#banner')" />
-        <img :src="IllustrationImg" class="profile-modal__nav-menu-item js-is-in-view-target" alt="Illustration"
-          @click="hideModalAndScrollTo('#illustration')" />
-      </div>
-      <hr>
       <profile />
     </div>
   </nav>
 </template>
 
 <script setup lang="ts">
-import WebSiteImg from '@/assets/image/textimg/hb/web_site.svg?url';
-import BannerImg from '@/assets/image/textimg/hb/Banner.svg?url';
-import IllustrationImg from '@/assets/image/textimg/hb/Illustration.svg?url';
-const showModal = useState('showModal', () => false)
-const dark = useState('dark', () => false)
-const smoother = useState<ScrollSmoother>('smoother')
-const hideModalAndScrollTo = (target: string) =>
-{
-  showModal.value = false
-  dark.value = false
-  smoother.value.scrollTo(target, false);
-}
+const showProfileModal = useState('showProfileModal', () => false)
 </script>
 
 <style lang="scss" scoped>
@@ -43,12 +23,11 @@ const hideModalAndScrollTo = (target: string) =>
   margin: 0;
   z-index: 10;
   -webkit-overflow-scrolling: touch;
-  background-color: #000;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
   opacity: 0;
   overflow: scroll;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &--open {
     pointer-events: auto;
@@ -57,34 +36,6 @@ const hideModalAndScrollTo = (target: string) =>
     .profile-modal__contents {
       opacity: 1;
       filter: blur(0);
-    }
-  }
-
-  &__contents {
-    hr {
-      margin: 0;
-      background-color: #3B3B3B;
-      height: 0.5px;
-      border: none;
-    }
-  }
-
-  &__nav-menu {
-    padding: 100px 100px;
-    margin: 0;
-
-    &-item {
-      display: block;
-      transition-duration: .5s;
-
-      &:hover {
-        opacity: 0.4;
-      }
-
-      &:not(:last-child) {
-        margin-bottom: 50px;
-      }
-
     }
   }
 }
