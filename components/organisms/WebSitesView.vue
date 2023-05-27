@@ -5,7 +5,8 @@
     </div>
     <div class="web-sites__thumbnails">
       <div class="web-sites__row">
-        <div v-for="item of items.slice(0, 2)" class="web-sites__thumbnail web-sites__thumbnail--first clickable-view">
+        <div v-for="item of items.slice(0, 2)" class="web-sites__thumbnail web-sites__thumbnail--first clickable-view"
+          @click="router.push('/' + item.id)">
           <img :alt="item.alt" :src="item.image" />
         </div>
       </div>
@@ -21,6 +22,7 @@
 <script setup lang="ts">
 import items from "@/assets/data/webSiteItems.js";
 const { $gsap } = useNuxtApp();
+const router = useRouter();
 
 onMounted(() =>
 {
@@ -36,6 +38,7 @@ onMounted(() =>
         end: 'bottom top',
         pin: title,
         toggleClass: { targets: title, className: 'slide-in' },
+        // once: true,
         //markers: true
       }
     });
@@ -46,6 +49,7 @@ onMounted(() =>
           trigger: el,
           start: 'center 70%',
           toggleClass: { targets: el, className: 'slide-in' },
+          once: true,
           //markers: true
         }
       });
@@ -57,6 +61,7 @@ onMounted(() =>
           trigger: el,
           start: 'center 80%',
           toggleClass: { targets: el, className: 'slide-in' },
+          once: true,
           // markers: true
         }
       });
