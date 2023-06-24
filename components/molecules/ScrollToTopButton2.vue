@@ -24,7 +24,7 @@ onMounted(() =>
         {
             clickable.addEventListener('mouseover', () =>
             {
-                mouseStalkerText.value = 'Top'
+                mouseStalkerText.value = 'Home'
             }, false)
             clickable.addEventListener('mouseout', () =>
             {
