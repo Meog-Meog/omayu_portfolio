@@ -8,7 +8,7 @@
             <div class="bg-normal" />
             <div class="bg-dark" :class="{ dark: dark && !darkGrad }" />
             <div class="bg-dark--grad" :class="{ dark: darkGrad }" />
-            <div id="smooth-content" :class="{ hide: showModal }">
+            <div id="smooth-content" :class="{ hide: showModal || showProfileModal }">
                 <slot />
                 <footer-view />
             </div>
@@ -66,6 +66,23 @@ watch(route, value =>
     mouseStalkerText.value = ''
     showProfileModal.value = false
 }, { deep: true, immediate: true })
+
+watch(showModal, value =>
+{
+    function disableScroll(event: Event)
+    {
+        event.preventDefault();
+    }
+    if (value)
+    {
+        document.body.classList.add('overflow-hidden');
+    }
+    else
+    {
+        document.body.classList.remove('overflow-hidden');
+    }
+})
+
 </script>
 
 <style scoped>

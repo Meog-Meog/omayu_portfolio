@@ -24,7 +24,6 @@ const showProfileModal = useState('showProfileModal', () => false)
   z-index: 10;
   -webkit-overflow-scrolling: touch;
   opacity: 0;
-  overflow: scroll;
   display: flex;
   justify-content: center;
   align-items: center;
