@@ -3,11 +3,16 @@
 </template>
 
 <script setup lang="ts">
+const router = useRouter()
 const mouseStalkerText = useState('mouseStalkerText', () => '')
 
 const smoother = useState<ScrollSmoother>('smoother')
-const scrollTo = () =>
+const scrollTo = async () =>
 {
+    if (router.currentRoute.value.path !== "/")
+    {
+        await router.push({ path: "/" });
+    }
     smoother.value.scrollTop(0);
 }
 
