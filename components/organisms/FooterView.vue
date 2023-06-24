@@ -4,29 +4,18 @@
       <div class="footer__main-contents">
         <ScrollToTopButton2 style="margin-top: 91px;" />
         <div class="footer__menu">
-          <div class="footer__menu-item" style="margin-right: 60px;">
-            <p class="text-link"><a @click="scrollToWebsite">Web Site</a></p>
-            <p class="text-link"><a>Sugoyose</a></p>
-            <p class="text-link"><a>Spring Campaign</a></p>
-            <p class="text-link"><a>Oshikatsu</a></p>
-            <p class="text-link"><a>Hagoromo Academy</a></p>
-          </div>
-          <div class="footer__menu-item" style="margin-right: 50px;">
-            <p class="text-link"><a @click="scrollToCompetition">Competition</a></p>
-            <p class="text-link"><a>COVERMARK</a></p>
-            <p class="text-link"><a>CO.nnect</a></p>
-            <p class="text-link"><a>Matsushita Hospital</a></p>
-          </div>
-          <div class="footer__menu-item" style="margin-right: 80px;">
-            <p class="text-link"><a @click="scrollToBanner">Banner</a></p>
-          </div>
-          <div class="footer__menu-item" style="margin-right: 114px;">
-            <p class="text-link"><a @click="scrollToIllustration">Illustration</a></p>
-          </div>
+          <link-menu-column style="margin-right: 60px;" :heading="webSite.heading" :contents="webSite.contents"
+            :scrollTo="webSite.scrollTo" />
+          <link-menu-column style="margin-right: 50px;" :heading="competition.heading" :contents="competition.contents"
+            :scrollTo="competition.scrollTo" />
+          <link-menu-column style="margin-right: 80px;" :heading="banner.heading" :contents="banner.contents"
+            :scrollTo="banner.scrollTo" />
+          <link-menu-column style="margin-right: 114px;" :heading="illustration.heading" :contents="illustration.contents"
+            :scrollTo="illustration.scrollTo" />
         </div>
       </div>
       <div class="footer__copy-right">
-        © {{ year }} Mayu Teramoto’s Portfolio
+        © {{ year }} Mayu Teramoto.
       </div>
     </div>
     <div class="footer__about-me">
@@ -36,29 +25,105 @@
 </template>
 
 <script setup lang="ts">
+const router = useRouter()
 const smoother = useState<ScrollSmoother>('smoother')
-const scrollToWebsite = (): void =>
-{
-  smoother.value.scrollTo('.web-sites__title', false, "top top");
-}
-const scrollToCompetition = (): void =>
-{
-  smoother.value.scrollTo('.competitions__title', false, "top 70%");
-}
-const scrollToBanner = (): void =>
-{
-  smoother.value.scrollTo('#banner', false, "top top");
-}
-const scrollToIllustration = (): void =>
-{
-  smoother.value.scrollTo('#illustration', false, "top top");
-}
 const year: number = new Date().getFullYear();
+
+const webSite = {
+  heading: "Web Site",
+  contents: [
+    {
+      label: "Sugoyose",
+      url: "/sugoyose"
+    },
+    {
+      label: "Spring Campaign",
+      url: "/sugoyose-springcp"
+    },
+    {
+      label: "Oshikatsu",
+      url: "/sugoyose-oshikatsucp"
+    },
+    {
+      label: "Hagoromo Academy",
+      url: "/hagoromo-gakuen"
+    }
+  ],
+  scrollTo: async (payload: MouseEvent) =>
+  {
+    if (router.currentRoute.value.path !== "/")
+    {
+      await router.push({ path: "/", hash: "#web-page" });
+    }
+    nextTick(() =>
+    {
+      smoother.value.scrollTo('.web-sites__title', false, "top top");
+    });
+  }
+}
+
+const competition = {
+  heading: "Competition",
+  contents: [
+    {
+      label: "COVERMARK",
+      url: "/covermark"
+    },
+    {
+      label: "CO.nnect",
+      url: "/connect"
+    },
+    {
+      label: "Matsushita Hospital",
+      url: "/matsushita"
+    }
+  ],
+  scrollTo: async (payload: MouseEvent) =>
+  {
+    if (router.currentRoute.value.path !== "/")
+    {
+      await router.push({ path: "/", hash: "#competition" });
+    }
+    smoother.value.scrollTo('.competitions__title', false, "top 70%");
+  }
+}
+
+const banner = {
+  heading: "Banner",
+  contents: [],
+  scrollTo: async (payload: MouseEvent) =>
+  {
+    if (router.currentRoute.value.path !== "/")
+    {
+      await router.push({ path: "/", hash: "#banner" });
+    }
+    smoother.value.scrollTo('#banner', false, "top top");
+  }
+}
+
+const illustration = {
+  heading: "Illustration",
+  contents: [],
+  scrollTo: async (payload: MouseEvent) =>
+  {
+    if (router.currentRoute.value.path !== "/")
+    {
+      await router.push({ path: "/", hash: "#illustration" });
+    }
+    smoother.value.scrollTo('#illustration', false, "top top");
+  }
+}
+
 </script>
 
 <style lang="scss" scoped>
 p {
   margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: #9F9F9F;
 }
 
 .footer {

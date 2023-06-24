@@ -1,5 +1,5 @@
 <template>
-  <section class="competitions__container js-horizontal-scroll-trigger">
+  <section id="competition" class="competitions__container js-horizontal-scroll-trigger">
     <div class="competitions__wrapper">
       <div class="competitions__title">
         <img src="~/assets/image/competition/competition.svg?url" alt="Competition" />
