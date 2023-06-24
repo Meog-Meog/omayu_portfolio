@@ -5,7 +5,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "lint": "eslint --fix ."
+    "lint": "eslint --fix .",
+    "nuxt-upgrade": "nuxt upgrade --force"
   },
   "devDependencies": {
     "@nuxt/eslint-config": "^0.1.1",
@@ -22,7 +23,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-vue": "^9.11.0",
-    "nuxt": "3.4.3",
+    "nuxt": "^3.6.0",
     "prettier": "^2.8.7",
     "sass": "^1.62.1",
     "typescript": "5.0.4",
