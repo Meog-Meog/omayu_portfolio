@@ -27,8 +27,6 @@ const showProfileModal = useState('showProfileModal', () => false)
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  overflow-y: hidden;
 
   &--open {
     pointer-events: auto;
@@ -39,9 +37,5 @@ const showProfileModal = useState('showProfileModal', () => false)
       filter: blur(0);
     }
   }
-}
-
-.profile-modal__contents {
-  padding: 90px 150px;
 }
 </style>
