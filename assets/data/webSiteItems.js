@@ -5,18 +5,22 @@ import website_sugoyose_springcp from 'assets/image/website/website_sugoyose_spr
 
 export default [
   {
+    id: 'sugoyose',
     alt: 'スゴヨセ',
     image: website_sugoyose,
   },
   {
+    id: 'sugoyose-springcp',
     alt: 'スゴヨセ 卒業・送別支援キャンペーン',
     image: website_sugoyose_springcp,
   },
   {
+    id: 'hagoromo-gakuen',
     alt: '羽衣学園 中学校・高等学校',
     image: website_hagoromogakuen,
   },
   {
+    id: 'sugoyose-oshikatsucp',
     alt: 'スゴヨセ 推し活応援キャンペーン',
     image: website_sugoyose_oshikatsucp,
   },

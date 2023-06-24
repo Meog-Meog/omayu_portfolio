@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="10.8" height="18.8" viewBox="0 0 10.8 18.8">
+  <g id="icon_phone" transform="translate(0.4 0.4)">
+    <g id="icon_phone-2" data-name="icon_phone" transform="translate(36.5 -2) rotate(90)">
+      <rect id="長方形_70" data-name="長方形 70" width="10" height="18" rx="1.5" transform="translate(2 36.5) rotate(-90)" fill="none" stroke="#6a6a6a" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.8"/>
+      <path id="パス_19" data-name="パス 19" d="M1.5,22.5v-.9c0-.166.224-.3.5-.3H2c.552,0,1-.269,1-.6V18.3c0-.331-.448-.6-1-.6H2c-.276,0-.5-.134-.5-.3v-.9" transform="translate(0.5 12)" fill="none" stroke="#6a6a6a" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.8"/>
+    </g>
+  </g>
+</svg>

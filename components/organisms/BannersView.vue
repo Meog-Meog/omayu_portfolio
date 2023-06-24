@@ -1,22 +1,22 @@
 <template>
   <div id="banner" class="js-target-darken">
     <div class="banners__container">
-      <div class="banners__vertical-line" :style="horizontalLineStyle" />
-      <div class="banners__vertical-line" :style="horizontalLineStyle" />
-      <div class="banners__horizontal-line" :style="horizontalLine1Style" />
-      <div class="banners__horizontal-line" :style="horizontalLine2Style" />
       <div class="banners__title-container">
         <img :src="titleImg" class="banners__title js-is-in-view-target" alt="Banner" />
       </div>
-      <div class="banners__grid">
-        <div v-for="(item, idx) in itemsToShow.slice(0, 9)" :key="idx">
-          <img :alt="item.alt" :src="item.image" class="js-is-in-view-target clickable" />
+      <div class="banners__contents">
+        <div class="banners__vertical-line" :style="horizontalLineStyle" />
+        <div class="banners__vertical-line" :style="horizontalLineStyle" />
+        <div class="banners__grid" style="padding-top: 50px;">
+          <div v-for="(item, idx) in itemsToShow.slice(0, 9)" :key="idx">
+            <img :alt="item.alt" :src="item.image" class="js-is-in-view-target" />
+          </div>
         </div>
       </div>
     </div>
     <div class="banners__grid banners__additional" :class="{ 'banners__additional--show': isExpand }">
       <div v-for="(item, idx) in itemsToShow.slice(9)" :key="idx">
-        <img v-if="!item.isDummy" :alt="item.alt" :src="item.image" class="js-is-in-view-target clickable" />
+        <img v-if="!item.isDummy" :alt="item.alt" :src="item.image" class="js-is-in-view-target" />
       </div>
     </div>
     <button v-if="!isExpand" class="clickable" :class="{ 'text--dark': dark }" type="button" style="cursor: none;"
@@ -48,7 +48,7 @@ const toggle = () =>
 
 const updateContainerHeight = () =>
 {
-  const container = document.querySelector('.banners__container')
+  const container = document.querySelector('.banners__contents')
   if (container)
   {
     containerHeightPx.value = container.getBoundingClientRect().height
@@ -76,7 +76,7 @@ const horizontalLine1Style = computed(() =>
   const ratio = (titleContainerHeightPx.value + (containerHeightPx.value - titleContainerHeightPx.value) / 3) / containerHeightPx.value
   return {
     top: String(ratio * 100) + '%',
-    opacity: ratio
+    // opacity: ratio
   }
 })
 
@@ -109,7 +109,7 @@ onUpdated(() =>
 </script>
 
 <style lang="scss" scoped>
-$line-color: #707070;
+$line-color: #2c2c2c;
 
 .banners {
   &__container {
@@ -117,7 +117,6 @@ $line-color: #707070;
   }
 
   &__title {
-    margin-bottom: 50px;
     font-size: 170px;
     text-align: center;
     line-height: 1em;
@@ -129,12 +128,17 @@ $line-color: #707070;
     }
   }
 
+  &__contents {
+    position: relative;
+  }
+
   &__grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
 
     div {
       padding: 70px 100px;
+      border-bottom: #2c2c2c solid 1px;
 
       img {
         max-width: 100%;
@@ -146,7 +150,7 @@ $line-color: #707070;
     position: absolute;
     top: 0;
     width: 1px;
-    background: linear-gradient(180deg, #70707000, #707070ff);
+    background: linear-gradient(#1a1a1a, #2c2c2c);
   }
 
   &__vertical-line:nth-of-type(1) {
@@ -162,7 +166,8 @@ $line-color: #707070;
     left: 0;
     width: 100%;
     height: 1px;
-    background-color: #707070;
+    // background-color: #707070;
+    background-color: #2c2c2c;
   }
 
   &__additional {
@@ -173,7 +178,6 @@ $line-color: #707070;
 
     &--show {
       max-height: 1600px;
-      border-bottom: solid 1px $line-color;
     }
 
     div {
@@ -198,8 +202,7 @@ button {
   letter-spacing: 0.64px;
   color: #000;
   opacity: 1;
-  border-top: 1px solid #707070;
-  border-bottom: 1px solid #707070;
+  border-bottom: 1px solid #2c2c2c;
 }
 
 .text--dark {
