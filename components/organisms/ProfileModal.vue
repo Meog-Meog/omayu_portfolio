@@ -24,10 +24,11 @@ const showProfileModal = useState('showProfileModal', () => false)
   z-index: 10;
   -webkit-overflow-scrolling: touch;
   opacity: 0;
-  overflow: scroll;
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
+  overflow-y: hidden;
 
   &--open {
     pointer-events: auto;
@@ -38,5 +39,9 @@ const showProfileModal = useState('showProfileModal', () => false)
       filter: blur(0);
     }
   }
+}
+
+.profile-modal__contents {
+  padding: 90px 150px;
 }
 </style>

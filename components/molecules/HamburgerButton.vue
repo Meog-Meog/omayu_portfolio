@@ -14,15 +14,18 @@ const showProfileModal = useState('showProfileModal', () => false)
 const showModal = useState('showModal', () => false)
 const dark = useState('dark', () => false)
 
-const toggle = (e) =>
+let beforeDark = false
+
+const toggle = (_) =>
 {
-  if (dark.value)
+  if (showModal.value || showProfileModal.value)
   {
     showModal.value = false
     showProfileModal.value = false
-    dark.value = false
+    dark.value = beforeDark
   } else
   {
+    beforeDark = dark.value
     showModal.value = true
     dark.value = true
   }

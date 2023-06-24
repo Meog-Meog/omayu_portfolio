@@ -123,6 +123,10 @@ h2 {
   opacity: 0.3;
 }
 
+.overflow-hidden {
+  overflow: hidden;
+}
+
 @keyframes fade-in {
   0% {
     opacity: 0;
