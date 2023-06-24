@@ -164,22 +164,6 @@ const illustration = {
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-
-    &-item {
-      div {
-        margin: 0;
-      }
-
-      >:first-child {
-        margin-bottom: 30px;
-        color: #EEEEEE;
-      }
-
-      >*:not(:first-child) {
-        margin-bottom: 25px;
-        color: #6A6A6A;
-      }
-    }
   }
 
 }
