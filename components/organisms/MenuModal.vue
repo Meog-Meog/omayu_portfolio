@@ -4,11 +4,11 @@
       <img alt="Created by Meog Meog" src="~/assets/image/kv/logo_hb.svg?url" />
       <hr />
       <div class="menu-modal__menu">
-        <div class="menu-modal__menu-item" style="margin-right: 120px;">
+        <div class="menu-modal__menu-item" style="margin-right: 100px;">
           <p class="text-link"><a @click="hideModalAndScrollToWebsite">Web Site</a></p>
           <p class="text-link"><a>Sugoyose</a></p>
           <p class="text-link"><a>Spring Campaign</a></p>
-          <p class="text-link"><a>Oshikatsu Campaign</a></p>
+          <p class="text-link"><a>Oshikatsu</a></p>
           <p class="text-link"><a>Hagoromo Academy</a></p>
         </div>
         <div class="menu-modal__menu-item" style="margin-right: 100px;">

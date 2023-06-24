@@ -10,3 +10,8 @@ $breakpoints: (
     @content;
   }
 }
+
+@mixin xd-line-height($line-height) {
+  margin-top: -($line-height);
+  margin-bottom: $line-height;
+}

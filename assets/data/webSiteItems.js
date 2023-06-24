@@ -10,17 +10,17 @@ export default [
     image: website_sugoyose,
   },
   {
-    id: 'sugoyose',
+    id: 'sugoyose-springcp',
     alt: 'スゴヨセ 卒業・送別支援キャンペーン',
     image: website_sugoyose_springcp,
   },
   {
-    id: 'sugoyose',
+    id: 'hagoromo-gakuen',
     alt: '羽衣学園 中学校・高等学校',
     image: website_hagoromogakuen,
   },
   {
-    id: 'sugoyose',
+    id: 'sugoyose-oshikatsucp',
     alt: 'スゴヨセ 推し活応援キャンペーン',
     image: website_sugoyose_oshikatsucp,
   },

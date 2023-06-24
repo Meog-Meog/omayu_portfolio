@@ -4,10 +4,11 @@
         <div class="illustration-showcase__next clickable-next" @click="next" />
         <div class="illustration-showcase__display">
             <div style="position: relative; width: 100%; aspect-ratio: 1;">
-                <img v-for="(item, i) of itemsWithSlotIdx" :key="i" :alt="item.alt" :src="item.image"
-                    class="illustration-showcase__item"
+                <div v-for="(item, i) of itemsWithSlotIdx" :key="i" class="illustration-showcase__item"
                     :class="{ 'illustration-showcase__slot--show': show(i), 'illustration-showcase__slot0': item.slotIdx === 0, 'illustration-showcase__slot1': item.slotIdx === 1, 'illustration-showcase__slot2': item.slotIdx === 2 }"
-                    :style="{ 'z-index': itemsWithSlotIdx.length - decrement(i + 1, idx) }" />
+                    :style="{ 'z-index': itemsWithSlotIdx.length - decrement(i + 1, idx) }">
+                    <img v-if="show(i)" :alt="item.alt" :src="item.image" style="width: 100%;" />
+                </div>
             </div>
             <div class="illustration-showcase__item-number-container">
                 <div>0{{ idx + 1 }}</div>

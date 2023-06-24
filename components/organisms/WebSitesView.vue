@@ -11,7 +11,8 @@
         </div>
       </div>
       <div class="web-sites__row">
-        <div v-for="item of items.slice(2, 4)" class="web-sites__thumbnail web-sites__thumbnail--second clickable-view">
+        <div v-for="item of items.slice(2, 4)" class="web-sites__thumbnail web-sites__thumbnail--second clickable-view"
+          @click="router.push('/' + item.id)">
           <img :alt="item.alt" :src="item.image" />
         </div>
       </div>

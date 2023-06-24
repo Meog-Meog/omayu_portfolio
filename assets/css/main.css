@@ -5,6 +5,12 @@
   font-style: normal;
 }
 @font-face {
+  font-family: 'ZenKakuGothicNew';
+  src: url('../font/ZenKakuGothicNew-Bold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: bold;
+}
+@font-face {
   font-family: 'Roboto';
   src: url('../font/Roboto-Light.ttf') format('truetype');
   font-weight: 300;
@@ -155,6 +161,14 @@ h2 {
   cursor: none;
 }
 .text-link:hover {
+  opacity: 0.3;
+}
+
+.clickable-text {
+  transition-duration: 0.5s;
+  cursor: none;
+}
+.clickable-text:hover {
   opacity: 0.3;
 }
 

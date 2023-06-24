@@ -1,72 +1,57 @@
 <template>
-    <div>
-        <div id="smooth-wrapper" :class="{ dark: dark, light: !dark }" class="body">
-            <div id="smooth-content" :class="{ hide: showModal }">
-                <WebsiteDetailView />
-                <footer-view />
-            </div>
-        </div>
-    </div>
+    <WebsiteDetailView :text-img="textImg" :mock-img="mockImg" :captures="captures" :contents="contents" />
 </template>
 
 <script setup lang="ts">
-const showModal = useState('showModal', () => false)
+const textImg = "/image/website/sugoyose_text_2c2c2c.svg"
+const mockImg = "/image/mock/sugoyose_mock.webp"
+const captures = [
+    {
+        label: "マイページ",
+        cap: {
+            pc: ["/image/cap/01_sugoyose/sugoyose_mypage_pc.png"],
+            sp: ["/image/cap/01_sugoyose/sugoyose_mypage_sp.png"]
+        }
+    },
+    {
+        label: "配送説明",
+        cap: {
+            pc: ["/image/cap/01_sugoyose/sugoyose_delivery_pc.png"],
+            sp: ["/image/cap/01_sugoyose/sugoyose_delivery_sp.png"]
 
-const dark = useState('dark', () => false)
-const mouseStalkerText = useState('mouseStalkerText', () => '')
+        }
+    },
+    {
+        label: "デザイン一覧",
+        cap: {
+            pc: [],
+            sp: ["/image/cap/01_sugoyose/sugoyose_designlist01.png", "/image/cap/01_sugoyose/sugoyose_designlist02.png"]
+        }
+    },
+    {
+        label: "スゴヨセ編集トップ",
+        cap: {
+            pc: ["/image/cap/01_sugoyose/sugoyose_edit.png"],
+            sp: []
+        }
+    },
+]
+const contents = {
+    title: "スゴヨセ",
+    url: "https://sugoyose.jp/",
+    period: "2021~2023年",
+    area: "UIデザイン(ほぼ全ての下層ページ), 仕様提案など",
+    overview: "オンライン上で寄せ書きブックの作成・注文ができる",
+    design: "全ての画面において「無駄のない直感的なUI」を意識して設計。\n また、競合との差別化を図るため、ブックのビジュアルデザインにも力を入れている。",
+    awards: [
+        {
+            name: "2022年度グッドデザイン賞 受賞",
+            url: "https://www.g-mark.org/award/describe/52580?token=8Z3X6Q1Q"
+        },
+        {
+            name: "Webデザインギャラリー・リンク集「SANKOU!」掲載",
+            url: "https://www.g-mark.org/award/describe/52580?token=8Z3X6Q1Q"
+        }
+    ]
+}
 </script>
-
-<style scoped>
-* {
-    cursor: none;
-}
-
-.body {
-    transition-timing-function: ease-out;
-    transition-duration: 0.3s;
-}
-
-.light {
-    background-color: #fff;
-    color: #000;
-}
-
-.dark {
-    position: relative;
-    background-color: #0F0F0F;
-    color: #5A5A5A;
-}
-
-.body::after {
-    content: "";
-    background: url('~/assets/image/banner/bgimg.png') 0% 0% no-repeat padding-box;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    opacity: 0;
-    mix-blend-mode: overlay;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    position: absolute;
-    z-index: -1;
-    transition: opacity 0.5s ease-in;
-}
-
-.dark.body::after {
-    opacity: 1;
-}
-
-.float-button-container {
-    position: fixed;
-    top: 30px;
-    right: 45px;
-}
-
-.hide {
-    opacity: 0;
-    animation: 2.25s cubic-bezier(0.4, 0, 0, 1) 1s forwards fade-out;
-}
-</style>

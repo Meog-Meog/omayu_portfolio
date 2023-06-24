@@ -4,11 +4,11 @@
       <div class="footer__main-contents">
         <ScrollToTopButton2 style="margin-top: 91px;" />
         <div class="footer__menu">
-          <div class="footer__menu-item" style="margin-right: 70px;">
+          <div class="footer__menu-item" style="margin-right: 60px;">
             <p class="text-link"><a @click="scrollToWebsite">Web Site</a></p>
             <p class="text-link"><a>Sugoyose</a></p>
             <p class="text-link"><a>Spring Campaign</a></p>
-            <p class="text-link"><a>Oshikatsu Campaign</a></p>
+            <p class="text-link"><a>Oshikatsu</a></p>
             <p class="text-link"><a>Hagoromo Academy</a></p>
           </div>
           <div class="footer__menu-item" style="margin-right: 50px;">

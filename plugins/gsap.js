@@ -9,6 +9,7 @@ export default defineNuxtPlugin(() => {
     provide: {
       gsap: gsap,
       ScrollTrigger,
+      ScrollSmoother,
     },
   }
 })
