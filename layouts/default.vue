@@ -17,6 +17,7 @@
 </template>
 
 <script setup lang="ts">
+const route = useRoute()
 const showProfileModal = useState('showProfileModal', () => false)
 const showModal = useState('showModal', () => false)
 const dark = useState('dark', () => false)
@@ -56,6 +57,15 @@ onMounted(() =>
         }
     })
 })
+
+watch(route, value =>
+{
+    showModal.value = false
+    dark.value = false
+    darkGrad.value = false
+    mouseStalkerText.value = ''
+    showProfileModal.value = false
+}, { deep: true, immediate: true })
 </script>
 
 <style scoped>
