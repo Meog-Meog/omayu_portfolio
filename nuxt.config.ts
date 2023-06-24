@@ -30,7 +30,6 @@ export default defineNuxtConfig({
     { path: '~/components/molecules' },
   ],
   css: ['@/assets/css/main.css'],
-  modules: ['@nuxt/image'],
   vite: {
     plugins: [
       svgLoader({

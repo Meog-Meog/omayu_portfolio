@@ -1,19 +1,16 @@
 <template>
     <div>
         <div style="position: relative">
-            <nuxt-img preload data-speed="0.1" class="web-site__text fade-in" :src="textImg" @load="onTextImgLoad" />
-            <nuxt-img preload class="web-site__mock slide-in" :src="mockImg" @load="onMockImgLoad" />
+            <img data-speed="0.1" class="web-site__text fade-in" :src="textImg" @load="onTextImgLoad" />
+            <img class="web-site__mock slide-in" :src="mockImg" @load="onMockImgLoad" />
             <div class="web-site__body">
                 <div class="web-site__design">
                     <template v-if="capUrls.length === 1">
-                        <nuxt-img preload :key="capUrls[0]" class="web-site__design--pc" :src="capUrls[0]"
-                            @load="onCapImgLoad" />
+                        <img :key="capUrls[0]" class="web-site__design--pc" :src="capUrls[0]" @load="onCapImgLoad" />
                     </template>
                     <template v-if="capUrls.length === 2">
-                        <nuxt-img preload :key="capUrls[0]" class="web-site__design--sp" :src="capUrls[0]"
-                            @load="onCapImgLoad" />
-                        <nuxt-img preload :key="capUrls[1]" class="web-site__design--sp" :src="capUrls[1]"
-                            @load="onCapImgLoad" />
+                        <img :key="capUrls[0]" class="web-site__design--sp" :src="capUrls[0]" @load="onCapImgLoad" />
+                        <img :key="capUrls[1]" class="web-site__design--sp" :src="capUrls[1]" @load="onCapImgLoad" />
                     </template>
                 </div>
                 <div class="web-site__desc-container">

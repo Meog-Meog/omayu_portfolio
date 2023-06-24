@@ -3,7 +3,7 @@
         <hr />
         <template v-for="(item, i) of items">
             <div class="row">
-                <nuxt-img preload :src="item.img" @click="router.push('/' + item.id)" />
+                <img :src="item.img" @click="router.push('/' + item.id)" />
             </div>
             <hr />
         </template>
