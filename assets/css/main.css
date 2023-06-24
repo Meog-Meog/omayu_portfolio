@@ -25,58 +25,9 @@
 }
 
 @font-face {
-  font-family: 'Valery-Regular';
-  src: url('../font/Valery.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
   font-family: 'A1GothicStd';
   src: url('../font/AP-OTF-A1GothicStd-Light.otf') format('opentype');
   font-weight: 300;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'HurmeGeometricSans4';
-  src: url('../font/HurmeGeometricSans4Black.otf') format('opentype');
-  font-weight: 900;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'HurmeGeometricSans4';
-  src: url('../font/HurmeGeometricSans4Bold.otf') format('opentype');
-  font-weight: 700;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'HurmeGeometricSans4';
-  src: url('../font/HurmeGeometricSans4SemiBold.otf') format('opentype');
-  font-weight: 600;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'HurmeGeometricSans4';
-  src: url('../font/HurmeGeometricSans4.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'HurmeGeometricSans4';
-  src: url('../font/HurmeGeometricSans4Light.otf') format('opentype');
-  font-weight: 300;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'HurmeGeometricSans4';
-  src: url('../font/HurmeGeometricSans4Hairline.otf') format('opentype');
-  font-weight: 100;
   font-style: normal;
 }
 
