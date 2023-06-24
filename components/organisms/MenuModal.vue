@@ -4,25 +4,14 @@
       <img alt="Created by Meog Meog" src="~/assets/image/kv/logo_hb.svg?url" />
       <hr />
       <div class="menu-modal__menu">
-        <div class="menu-modal__menu-item" style="margin-right: 100px;">
-          <p class="text-link"><a @click="hideModalAndScrollToWebsite">Web Site</a></p>
-          <p class="text-link"><a>Sugoyose</a></p>
-          <p class="text-link"><a>Spring Campaign</a></p>
-          <p class="text-link"><a>Oshikatsu</a></p>
-          <p class="text-link"><a>Hagoromo Academy</a></p>
-        </div>
-        <div class="menu-modal__menu-item" style="margin-right: 100px;">
-          <p class="text-link"><a @click="hideModalAndScrollToCompetition">Competition</a></p>
-          <p class="text-link"><a>COVERMARK</a></p>
-          <p class="text-link"><a>CO.nnect</a></p>
-          <p class="text-link"><a>Matsushita Hospital</a></p>
-        </div>
-        <div class="menu-modal__menu-item" style="margin-right: 130px;">
-          <p class="text-link"><a @click="hideModalAndScrollToBanner">Banner</a></p>
-        </div>
-        <div class="menu-modal__menu-item">
-          <p class="text-link"><a @click="hideModalAndScrollToIllustration">Illustration</a></p>
-        </div>
+        <link-menu-column style="margin-right: 104px;" :heading="webSite.heading" :contents="webSite.contents"
+          :scrollTo="webSite.scrollTo" dark />
+        <link-menu-column style="margin-right: 100px;" :heading="competition.heading" :contents="competition.contents"
+          :scrollTo="competition.scrollTo" dark />
+        <link-menu-column style="margin-right: 130px;" :heading="banner.heading" :contents="banner.contents"
+          :scrollTo="banner.scrollTo" dark />
+        <link-menu-column :heading="illustration.heading" :contents="illustration.contents"
+          :scrollTo="illustration.scrollTo" dark />
       </div>
     </div>
 
@@ -30,31 +19,107 @@
 </template>
 
 <script setup lang="ts">
+const router = useRouter()
 const showModal = useState('showModal', () => false)
 const dark = useState('dark', () => false)
+const darkGrad = useState('darkGrad', () => false)
 const smoother = useState<ScrollSmoother>('smoother')
-const hideModalAndScrollToWebsite = (): void =>
-{
-  showModal.value = false
-  dark.value = false
-  smoother.value.scrollTo('.web-sites__title', false, "top top");
+
+const webSite = {
+  heading: "Web Site",
+  contents: [
+    {
+      label: "Sugoyose",
+      url: "/sugoyose"
+    },
+    {
+      label: "Spring Campaign",
+      url: "/sugoyose-springcp"
+    },
+    {
+      label: "Oshikatsu",
+      url: "/sugoyose-oshikatsucp"
+    },
+    {
+      label: "Hagoromo Academy",
+      url: "/hagoromo-gakuen"
+    }
+  ],
+  scrollTo: async (payload: MouseEvent) =>
+  {
+    showModal.value = false
+    dark.value = false
+    darkGrad.value = false
+    if (router.currentRoute.value.path !== "/")
+    {
+      await router.push({ path: "/", hash: "#web-page" });
+    }
+    nextTick(() =>
+    {
+      smoother.value.scrollTo('.web-sites__title', false, "top top");
+    });
+  }
 }
-const hideModalAndScrollToCompetition = (): void =>
-{
-  showModal.value = false
-  dark.value = false
-  smoother.value.scrollTo('.competitions__title', false, "top 70%");
+
+const competition = {
+  heading: "Competition",
+  contents: [
+    {
+      label: "COVERMARK",
+      url: "/covermark"
+    },
+    {
+      label: "CO.nnect",
+      url: "/connect"
+    },
+    {
+      label: "Matsushita Hospital",
+      url: "/matsushita"
+    }
+  ],
+  scrollTo: async (payload: MouseEvent) =>
+  {
+    showModal.value = false
+    dark.value = false
+    darkGrad.value = false
+    if (router.currentRoute.value.path !== "/")
+    {
+      await router.push({ path: "/", hash: "#competition" });
+    }
+    smoother.value.scrollTo('.competitions__title', false, "top 70%");
+  }
 }
-const hideModalAndScrollToBanner = (): void =>
-{
-  showModal.value = false
-  smoother.value.scrollTo('#banner', false, "top top");
+
+const banner = {
+  heading: "Banner",
+  contents: [],
+  scrollTo: async (payload: MouseEvent) =>
+  {
+    showModal.value = false
+    dark.value = false
+    darkGrad.value = false
+    if (router.currentRoute.value.path !== "/")
+    {
+      await router.push({ path: "/", hash: "#banner" });
+    }
+    smoother.value.scrollTo('#banner', false, "top top");
+  }
 }
-const hideModalAndScrollToIllustration = (): void =>
-{
-  showModal.value = false
-  dark.value = false
-  smoother.value.scrollTo('#illustration', false, "top top");
+
+const illustration = {
+  heading: "Illustration",
+  contents: [],
+  scrollTo: async (payload: MouseEvent) =>
+  {
+    showModal.value = false
+    dark.value = false
+    darkGrad.value = false
+    if (router.currentRoute.value.path !== "/")
+    {
+      await router.push({ path: "/", hash: "#illustration" });
+    }
+    smoother.value.scrollTo('#illustration', false, "top top");
+  }
 }
 </script>
 
@@ -99,22 +164,6 @@ const hideModalAndScrollToIllustration = (): void =>
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-
-    &-item {
-      div {
-        margin: 0;
-      }
-
-      >:first-child {
-        margin-bottom: 30px;
-        color: #EEEEEE;
-      }
-
-      >*:not(:first-child) {
-        margin-bottom: 25px;
-        color: #6A6A6A;
-      }
-    }
   }
 
 }

@@ -1,8 +1,8 @@
 <template>
     <div class="link-menu-column">
-        <p class="text-link"><a @click="scrollTo">{{ heading }}</a></p>
+        <p class="text-link"><a :class="{ dark: dark }" @click="scrollTo">{{ heading }}</a></p>
         <p v-for="item of contents" class="text-link">
-            <NuxtLink :to="item.url">
+            <NuxtLink :class="{ dark: dark }" :to="item.url">
                 {{ item.label }}
             </NuxtLink>
         </p>
