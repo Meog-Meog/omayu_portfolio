@@ -6,7 +6,8 @@
       </div>
       <div class="competitions__items-wrapper">
         <ul class="competitions__items">
-          <li v-for="(item, i) in items" :key="i" class="competitions__item">
+          <li v-for="(item, i) in items" :key="i" class="competitions__item clickable-view"
+            @click="router.push('/' + item.id)">
             <img :alt="item.alt" :src="item.image" />
           </li>
         </ul>
@@ -16,6 +17,7 @@
 </template>
 
 <script setup lang="ts">
+const router = useRouter();
 import { onMounted } from "vue";
 import items from '@/assets/data/competitionItems.js';
 
