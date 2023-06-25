@@ -13,7 +13,7 @@ export default defineNuxtConfig({
         { property: 'og:site_name', content: 'Mayu Teramoto' },
         {
           property: 'og:image',
-          content: 'https://mayuteramoto.netlify.app/images/ogp.png',
+          content: 'https://mayuteramoto.netlify.app/image/ogp.png',
         },
       ],
       link: [
@@ -28,6 +28,7 @@ export default defineNuxtConfig({
   components: [
     { path: '~/components/organisms' },
     { path: '~/components/molecules' },
+    { path: '~/components/atoms' },
   ],
   css: ['@/assets/css/main.css'],
   vite: {

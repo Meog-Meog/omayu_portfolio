@@ -1,9 +1,6 @@
 <template>
     <div>
-        <h1>
-            {{ contents.title }}
-            <img v-if="contents.url" style="margin-left: 0px;" src="~/assets/image/icon/icon_tab_l.svg?url" />
-        </h1>
+        <external-text-link style="margin-bottom: 30px;" :label="contents.title" :url="contents.url" large />
         <div class="item">
             <h2 style="margin-bottom: 7px;">
                 制作期間
@@ -40,11 +37,7 @@
             <h2 style="margin-bottom: 10px;">
                 受賞歴・掲載歴
             </h2>
-            <a v-for="(award, i) of contents.awards" :key="i" class="clickable-text"
-                style="display: flex; align-self: center; text-decoration: none;" :href="award.url" target="_blank">
-                <p>{{ award.name }}</p>
-                <img style="margin-left: 10px;" src="~/assets/image/icon/icon_tab_s.svg?url" />
-            </a>
+            <external-text-link v-for="(award, i) of contents.awards" :key="i" :label="award.name" :url="award.url" />
         </div>
         <template v-if="showDeviceLink || showPageLink">
             <hr />
@@ -52,21 +45,23 @@
                 <p>
                     ページ切り替え
                 </p>
-                <button v-if="captures[pageIdx].cap['pc'].length"
-                    :class="{ active: device === 'pc', 'clickable-text': device !== 'pc' }" @click="changeDevice('pc')">
+                <button v-if="captures[pageIdx].cap['pc'].length" class="icon-btn"
+                    :class="{ 'icon-btn--active': device === 'pc' }" @click="changeDevice('pc')">
                     <img v-if="device === 'pc'" src="~/assets/image/icon/icon_desktop_eee.svg?url" />
                     <img v-else src="~/assets/image/icon/icon_desktop_6a6a6a.svg?url" />
                 </button>
-                <button v-if="captures[pageIdx].cap['sp'].length"
-                    :class="{ active: device === 'sp', 'clickable-text': device !== 'sp' }" @click="changeDevice('sp')">
+                <button v-if="captures[pageIdx].cap['sp'].length" class="icon-btn"
+                    :class="{ 'icon-btn--active': device === 'sp' }" @click="changeDevice('sp')">
                     <img v-if="device === 'sp'" src="~/assets/image/icon/icon_phone_eee.svg?url" />
                     <img v-else src="~/assets/image/icon/icon_phone_6a6a6a.svg?url" />
                 </button>
             </div>
             <div v-if="showPageLink" class="page-link">
                 <span v-for="(page, i) of captures" :key="i">
-                    <button :class="{ active: i === pageIdx, 'clickable-text': i !== pageIdx }" @click="changePage(i)">
-                        {{ page.label }}
+                    <button class="text-btn" :class="{ 'text-btn--active': i === pageIdx }" @click="changePage(i)">
+                        <span>
+                            {{ page.label }}
+                        </span>
                     </button>
                 </span>
             </div>
@@ -151,7 +146,10 @@ onMounted(() =>
 const changeCaps = () =>
 {
     capUrls.value = Props.captures[pageIdx.value].cap[device.value === 'pc' ? 'pc' : 'sp']
-    smoother.value.scrollTo('.web-site__desc', false, "center center");
+    if (smoother.value)
+    {
+        smoother.value.scrollTo('.web-site__desc', false, "center center");
+    }
     nextTick(() =>
     {
         $ScrollTrigger.refresh()
