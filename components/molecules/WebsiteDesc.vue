@@ -151,7 +151,10 @@ onMounted(() =>
 const changeCaps = () =>
 {
     capUrls.value = Props.captures[pageIdx.value].cap[device.value === 'pc' ? 'pc' : 'sp']
-    smoother.value.scrollTo('.web-site__desc', false, "center center");
+    if (smoother.value)
+    {
+        smoother.value.scrollTo('.web-site__desc', false, "center center");
+    }
     nextTick(() =>
     {
         $ScrollTrigger.refresh()
