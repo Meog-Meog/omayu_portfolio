@@ -1,24 +1,22 @@
 <template>
-    <div>
-        <div style="position: relative">
-            <img data-speed="0.1" class="web-site__text fade-in" :src="textImg" @load="onTextImgLoad" />
-            <img class="web-site__mock slide-in" :src="mockImg" @load="onMockImgLoad" />
-            <div class="web-site__body">
-                <div class="web-site__design">
-                    <img v-for="url of capUrls" :key="url"
-                        :class="{ 'web-site__design--pc': device === 'pc', 'web-site__design--sp': device === 'sp' }"
-                        :src="url" @load="onCapImgLoad" />
-                </div>
-                <div class="web-site__desc-container">
-                    <div class="web-site__desc">
-                        <WebsiteDesc :captures="captures" :contents="contents" />
-                    </div>
+    <div class="web-site__container">
+        <img data-speed="0.1" class="web-site__text fade-in" :src="textImg" @load="onTextImgLoad" />
+        <img class="web-site__mock slide-in" :src="mockImg" @load="onMockImgLoad" />
+        <div class="web-site__body">
+            <div class="web-site__design">
+                <img v-for="url of capUrls" :key="url"
+                    :class="{ 'web-site__design--pc': device === 'pc', 'web-site__design--sp': device === 'sp' }" :src="url"
+                    @load="onCapImgLoad" />
+            </div>
+            <div class="web-site__desc-container">
+                <div class="web-site__desc">
+                    <WebsiteDesc :captures="captures" :contents="contents" />
                 </div>
             </div>
         </div>
-        <div class="web-site__link">
-            <WebsiteLinks :page-id="pageId" />
-        </div>
+    </div>
+    <div class="web-site__link">
+        <WebsiteLinks :page-id="pageId" />
     </div>
 </template>
 
@@ -233,10 +231,7 @@ onUnmounted(() =>
 
 <style lang="scss" scoped>
 .web-site__container {
-    padding: 50vh 100px 0 100px;
-    margin-bottom: 150vh;
     position: relative;
-    text-align: center;
 }
 
 .web-site__text {
