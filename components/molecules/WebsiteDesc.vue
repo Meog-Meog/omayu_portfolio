@@ -65,8 +65,7 @@
             </div>
             <div v-if="showPageLink" class="page-link">
                 <span v-for="(page, i) of captures" :key="i">
-                    <button v-if="page.cap[device === 'pc' ? 'pc' : 'sp'].length"
-                        :class="{ active: i === pageIdx, 'clickable-text': i !== pageIdx }" @click="changePage(i)">
+                    <button :class="{ active: i === pageIdx, 'clickable-text': i !== pageIdx }" @click="changePage(i)">
                         {{ page.label }}
                     </button>
                 </span>
@@ -129,6 +128,7 @@ const Props = withDefaults(defineProps<Props>(), {
 
 const { $ScrollSmoother, $ScrollTrigger } = useNuxtApp();
 
+const smoother = useState<ScrollSmoother>('smoother')
 const device = useState('device', () => 'pc')
 const pageIdx = useState('pageIdx', () => 0)
 const capUrls = useState<String[]>('capUrls', () => [])
@@ -151,6 +151,7 @@ onMounted(() =>
 const changeCaps = () =>
 {
     capUrls.value = Props.captures[pageIdx.value].cap[device.value === 'pc' ? 'pc' : 'sp']
+    smoother.value.scrollTo('.web-site__desc', false, "center center");
     nextTick(() =>
     {
         $ScrollTrigger.refresh()
@@ -163,6 +164,13 @@ const changeDevice = (d: string) =>
 }
 const changePage = (idx: number) =>
 {
+    if (device.value === 'pc' && Props.captures[idx].cap.pc.length === 0)
+    {
+        device.value = 'sp'
+    } else if (device.value === 'sp' && Props.captures[idx].cap.sp.length === 0)
+    {
+        device.value = 'pc'
+    }
     pageIdx.value = idx
     changeCaps()
 }

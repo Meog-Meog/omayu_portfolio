@@ -111,6 +111,11 @@ h2 {
   transition-duration: 0.5s;
   cursor: none;
 }
+.text-link a {
+  padding: 10px;
+  margin: -10px;
+  cursor: none;
+}
 .text-link:hover {
   opacity: 0.3;
 }
