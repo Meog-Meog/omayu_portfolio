@@ -5,13 +5,9 @@
             <img class="web-site__mock slide-in" :src="mockImg" @load="onMockImgLoad" />
             <div class="web-site__body">
                 <div class="web-site__design">
-                    <template v-if="capUrls.length === 1">
-                        <img :key="capUrls[0]" class="web-site__design--pc" :src="capUrls[0]" @load="onCapImgLoad" />
-                    </template>
-                    <template v-if="capUrls.length === 2">
-                        <img :key="capUrls[0]" class="web-site__design--sp" :src="capUrls[0]" @load="onCapImgLoad" />
-                        <img :key="capUrls[1]" class="web-site__design--sp" :src="capUrls[1]" @load="onCapImgLoad" />
-                    </template>
+                    <img v-for="url of capUrls" :key="url"
+                        :class="{ 'web-site__design--pc': device === 'pc', 'web-site__design--sp': device === 'sp' }"
+                        :src="url" @load="onCapImgLoad" />
                 </div>
                 <div class="web-site__desc-container">
                     <div class="web-site__desc">
@@ -31,11 +27,6 @@ interface Award
 {
     name: string;
     url: string;
-}
-interface Content
-{
-    title: string;
-    text: string;
 }
 interface Contents
 {
@@ -94,6 +85,7 @@ const { $gsap, $ScrollSmoother, $ScrollTrigger } = useNuxtApp();
 const dark = useState('dark')
 const darkGrad = useState('darkGrad')
 const capUrls = useState('capUrls', () => [])
+const device = useState('device', () => 'pc')
 const imageLoadCounter = ref(0)
 
 
@@ -240,90 +232,88 @@ onUnmounted(() =>
 </script>
 
 <style lang="scss" scoped>
-.web-site {
-    &__container {
-        padding: 50vh 100px 0 100px;
-        margin-bottom: 150vh;
-        position: relative;
-        text-align: center;
+.web-site__container {
+    padding: 50vh 100px 0 100px;
+    margin-bottom: 150vh;
+    position: relative;
+    text-align: center;
+}
+
+.web-site__text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+
+    &.fade-in {
+        animation: 2s cubic-bezier(0.4, 0, 0, 1) 0.5s forwards fade-in;
     }
 
-    &__text {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
+    &.fade-out {
+        animation: 1s cubic-bezier(0.4, 0, 0, 1) forwards fade-out;
+    }
+}
+
+.web-site__mock {
+    width: 100%;
+    margin-bottom: 230px;
+
+    &.slide-in {
         opacity: 0;
-
-        &.fade-in {
-            animation: 2s cubic-bezier(0.4, 0, 0, 1) 0.5s forwards fade-in;
-        }
-
-        &.fade-out {
-            animation: 1s cubic-bezier(0.4, 0, 0, 1) forwards fade-out;
-        }
+        transform: translateY(3rem);
+        animation: 1s cubic-bezier(0.4, 0, 0, 1) forwards slide-in;
     }
+}
 
-    &__mock {
-        width: 100%;
-        margin-bottom: 230px;
+.web-site__body {
+    display: flex;
+    padding: 0 100px;
+    margin-bottom: 300px;
+    opacity: 0;
 
-        &.slide-in {
-            opacity: 0;
-            transform: translateY(3rem);
-            animation: 1s cubic-bezier(0.4, 0, 0, 1) forwards slide-in;
-        }
+    &.fade-in {
+        animation: 1s cubic-bezier(0.4, 0, 0, 1) forwards fade-in;
     }
+}
 
-    &__body {
-        display: flex;
-        padding: 0 100px;
-        margin-bottom: 300px;
-        opacity: 0;
+.web-site__design {
+    margin-right: 60px;
+    z-index: 1;
+    min-width: 683px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
 
-        &.fade-in {
-            animation: 1s cubic-bezier(0.4, 0, 0, 1) forwards fade-in;
-        }
-    }
-
-    &__design {
-        margin-right: 60px;
-        z-index: 1;
-        min-width: 683px;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-
-        img.web-site__design--pc {
-            width: 100%;
-        }
-
-        img.web-site__design--sp {
-            width: 213px;
-        }
-
-        img.web-site__design--sp:not(:last-child) {
-            margin-right: 40px;
-        }
-    }
-
-    &__desc-container {
-        position: relative;
+    img.web-site__design--pc {
         width: 100%;
     }
 
-    &__desc {
-        position: absolute;
-        width: 100%;
+    img.web-site__design--sp {
+        width: 213px;
     }
 
-    &__link {
-        opacity: 0;
+    img.web-site__design--sp:not(:last-child) {
+        margin-right: 40px;
+    }
+}
 
-        &.fade-in {
-            animation: 1s cubic-bezier(0.4, 0, 0, 1) forwards fade-in;
-        }
+.web-site__desc-container {
+    position: relative;
+    width: 100%;
+}
+
+.web-site__desc {
+    position: absolute;
+    width: 100%;
+}
+
+.web-site__link {
+    opacity: 0;
+
+    &.fade-in {
+        animation: 1s cubic-bezier(0.4, 0, 0, 1) forwards fade-in;
     }
 }
 
