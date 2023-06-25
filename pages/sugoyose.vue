@@ -50,7 +50,7 @@ const contents = {
         },
         {
             name: "Webデザインギャラリー・リンク集「SANKOU!」掲載",
-            url: "https://www.g-mark.org/award/describe/52580?token=8Z3X6Q1Q"
+            url: "https://sankoudesign.com/web/sugoyose/"
         }
     ]
 }
