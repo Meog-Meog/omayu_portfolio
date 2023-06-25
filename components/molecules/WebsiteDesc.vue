@@ -65,8 +65,7 @@
             </div>
             <div v-if="showPageLink" class="page-link">
                 <span v-for="(page, i) of captures" :key="i">
-                    <button v-if="page.cap[device === 'pc' ? 'pc' : 'sp'].length"
-                        :class="{ active: i === pageIdx, 'clickable-text': i !== pageIdx }" @click="changePage(i)">
+                    <button :class="{ active: i === pageIdx, 'clickable-text': i !== pageIdx }" @click="changePage(i)">
                         {{ page.label }}
                     </button>
                 </span>
@@ -165,6 +164,13 @@ const changeDevice = (d: string) =>
 }
 const changePage = (idx: number) =>
 {
+    if (device.value === 'pc' && Props.captures[idx].cap.pc.length === 0)
+    {
+        device.value = 'sp'
+    } else if (device.value === 'sp' && Props.captures[idx].cap.sp.length === 0)
+    {
+        device.value = 'pc'
+    }
     pageIdx.value = idx
     changeCaps()
 }
