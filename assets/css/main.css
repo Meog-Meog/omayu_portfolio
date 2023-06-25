@@ -120,6 +120,40 @@ h2 {
   opacity: 0.3;
 }
 
+.text-btn {
+  cursor: none;
+}
+.text-btn span {
+  transition-duration: 0.5s;
+}
+.text-btn:hover span {
+  opacity: 0.3;
+}
+.text-btn--active span {
+  color: #eeeeee;
+  opacity: 1 !important;
+}
+.text-btn span {
+  padding: 10px;
+  margin: -10px;
+}
+
+.icon-btn {
+  transition-duration: 0.5s;
+  cursor: none;
+}
+.icon-btn:hover {
+  opacity: 0.3;
+}
+.icon-btn--active {
+  color: #eeeeee;
+  opacity: 1 !important;
+}
+.icon-btn img {
+  padding: 10px;
+  margin: -10px;
+}
+
 .clickable-text {
   transition-duration: 0.5s;
   cursor: none;

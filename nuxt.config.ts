@@ -28,6 +28,7 @@ export default defineNuxtConfig({
   components: [
     { path: '~/components/organisms' },
     { path: '~/components/molecules' },
+    { path: '~/components/atoms' },
   ],
   css: ['@/assets/css/main.css'],
   vite: {
