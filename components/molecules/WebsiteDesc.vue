@@ -129,6 +129,7 @@ const Props = withDefaults(defineProps<Props>(), {
 
 const { $ScrollSmoother, $ScrollTrigger } = useNuxtApp();
 
+const smoother = useState<ScrollSmoother>('smoother')
 const device = useState('device', () => 'pc')
 const pageIdx = useState('pageIdx', () => 0)
 const capUrls = useState<String[]>('capUrls', () => [])
@@ -151,6 +152,7 @@ onMounted(() =>
 const changeCaps = () =>
 {
     capUrls.value = Props.captures[pageIdx.value].cap[device.value === 'pc' ? 'pc' : 'sp']
+    smoother.value.scrollTo('.web-site__desc', false, "center center");
     nextTick(() =>
     {
         $ScrollTrigger.refresh()
