@@ -1,15 +1,17 @@
 <template>
     <div class="about-me__container">
         <div class="about-me__text text-link" @click="show">
-            About Me
+            <a>
+                About Me
+            </a>
         </div>
-        <div class="about-me__link">
-            <a class="text-link" href="https://twitter.com/myttt33" rel="noopener" target="_blank">
+        <div class="about-me__link text-link">
+            <a href="https://twitter.com/myttt33" rel="noopener" target="_blank">
                 <img src="~/assets/image/footer/twitter_ft.webp" />
             </a>
         </div>
-        <div class="about-me__link">
-            <a class="text-link" href="https://www.instagram.com/asage_ttt/" rel="noopener" target="_blank">
+        <div class="about-me__link text-link">
+            <a href="https://www.instagram.com/asage_ttt/" rel="noopener" target="_blank">
                 <img src="~/assets/image/footer/instagram_ft.webp" />
             </a>
         </div>
