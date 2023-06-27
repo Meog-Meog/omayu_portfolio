@@ -61,7 +61,7 @@ onMounted(() =>
 }
 
 .mouse-stalker {
-  border: 1px solid #efefef;
+  border: 1px solid #efefef66;
   border-radius: 50%;
   width: 60px;
   height: 60px;

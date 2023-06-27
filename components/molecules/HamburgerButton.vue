@@ -48,7 +48,7 @@ const toggle = (_) =>
   }
 
   &--active &__line {
-    background-color: #707070;
+    background-color: #eee;
   }
 
   &--active &__line:nth-of-type(1) {
@@ -70,7 +70,7 @@ const toggle = (_) =>
   &__line {
     width: 100%;
     height: 1px;
-    background-color: #eee;
+    background-color: #eeeeee55;
     margin: 0 auto 5px auto;
     transition: all .4s;
   }
