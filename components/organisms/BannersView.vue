@@ -33,7 +33,7 @@ import { chunk } from "lodash";
 import titleImg from '@/assets/image/textimg/top/Banner.svg?url';
 import items from "@/assets/data/bannerItems.js";
 
-
+const mouseStalkerText = useState('mouseStalkerText', () => '')
 const dark = useState('dark', () => false)
 const containerHeightPx = ref(0)
 const titleContainerHeightPx = ref(0)
@@ -44,6 +44,7 @@ const itemsToShow = [...items, ...Array(items.length % 3 !== 0 ? 3 - (items.leng
 const toggle = () =>
 {
   isExpand.value = !isExpand.value
+  mouseStalkerText.value = ''
 }
 
 const updateContainerHeight = () =>

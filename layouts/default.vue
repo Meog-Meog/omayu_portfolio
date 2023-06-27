@@ -34,7 +34,7 @@ onMounted(() =>
         {
             $ScrollTrigger.normalizeScroll(true)
             smoother.value = $ScrollSmoother.create({
-                smooth: 2,
+                smooth: 1,
                 effects: true,
             })
         })
@@ -50,7 +50,7 @@ onMounted(() =>
                 $ScrollSmoother.refresh()
                 if (smoother.value) smoother.value.kill();
                 smoother.value = $ScrollSmoother.create({
-                    smooth: 2,
+                    smooth: 1.5,
                     effects: true,
                 })
             })
