@@ -48,10 +48,10 @@ onMounted(() =>
 #mouse-stalker {
   pointer-events: none;
   position: fixed;
-  top: -60px;
-  left: -60px;
-  width: 120px;
-  height: 120px;
+  top: -40px;
+  left: -40px;
+  width: 80px;
+  height: 80px;
   z-index: 100;
   mix-blend-mode: difference;
 }
@@ -63,10 +63,10 @@ onMounted(() =>
 .mouse-stalker {
   border: 1px solid #efefef66;
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  top: 30px;
-  left: 30px;
+  width: 40px;
+  height: 40px;
+  top: 20px;
+  left: 20px;
   position: absolute;
   transition: all 0.3s;
 }
@@ -79,8 +79,8 @@ onMounted(() =>
   display: flex;
   align-items: center;
   justify-content: center;
-  top: 0;
-  left: 0;
+  top: -20px;
+  left: -20px;
   border-color: #000;
 }
 
@@ -94,8 +94,8 @@ onMounted(() =>
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  top: 58px;
-  left: 58px;
+  top: 38px;
+  left: 38px;
   position: absolute;
 }
 
