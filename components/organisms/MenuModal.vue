@@ -1,7 +1,8 @@
 <template>
   <nav :class="{ 'menu-modal--open': showModal }" class="menu-modal">
     <div class="menu-modal__contents">
-      <img alt="Created by Meog Meog" src="~/assets/image/kv/logo_hb.svg?url" />
+      <img class="scroll-to-top-btn" alt="Created by Meog Meog" src="~/assets/image/kv/logo_hb.svg?url"
+        @click.native="scrollToTop" />
       <hr />
       <div class="menu-modal__menu">
         <link-menu-column style="margin-right: 104px;" :heading="webSite.heading" :contents="webSite.contents"
@@ -24,6 +25,19 @@ const showModal = useState('showModal', () => false)
 const dark = useState('dark', () => false)
 const darkGrad = useState('darkGrad', () => false)
 const smoother = useState<ScrollSmoother>('smoother')
+const mouseStalkerText = useState('mouseStalkerText', () => '')
+
+const scrollToTop = async () =>
+{
+  dark.value = false
+  darkGrad.value = false
+  showModal.value = false
+  if (router.currentRoute.value.path !== "/")
+  {
+    await router.push({ path: "/" });
+  }
+  smoother.value.scrollTop(0);
+}
 
 const webSite = {
   heading: "Web Site",
@@ -121,6 +135,24 @@ const illustration = {
     smoother.value.scrollTo('#illustration', false, "top top");
   }
 }
+
+onMounted(() =>
+{
+  if (process.client)
+  {
+    for (const clickable of document.getElementsByClassName('scroll-to-top-btn'))
+    {
+      clickable.addEventListener('mouseover', () =>
+      {
+        mouseStalkerText.value = 'Home'
+      }, false)
+      clickable.addEventListener('mouseout', () =>
+      {
+        mouseStalkerText.value = ''
+      }, false)
+    }
+  }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -131,7 +163,6 @@ const illustration = {
   bottom: 0;
   left: 0;
   pointer-events: none;
-  transition: .8s ease-out;
   width: 100%;
   margin: 0;
   z-index: 10;
@@ -140,6 +171,7 @@ const illustration = {
   overflow: scroll;
 
   &--open {
+    transition: .8s ease-out;
     pointer-events: auto;
     opacity: 1;
 

@@ -18,7 +18,6 @@ const showProfileModal = useState('showProfileModal', () => false)
   bottom: 0;
   left: 0;
   pointer-events: none;
-  transition: .8s ease-out;
   width: 100%;
   margin: 0;
   z-index: 10;
@@ -29,6 +28,7 @@ const showProfileModal = useState('showProfileModal', () => false)
   align-items: center;
 
   &--open {
+    transition: .8s ease-out;
     pointer-events: auto;
     opacity: 1;
 
