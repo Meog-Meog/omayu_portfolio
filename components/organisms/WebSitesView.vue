@@ -38,8 +38,18 @@ onMounted(() =>
         endTrigger: container,
         end: 'bottom top',
         pin: title,
-        toggleClass: { targets: title, className: 'slide-in' },
         // once: true,
+        //markers: true
+      }
+    });
+    $gsap.to(title, {
+      scrollTrigger: {
+        trigger: title,
+        start: 'top top',
+        endTrigger: container,
+        end: 'bottom top',
+        toggleClass: { targets: title, className: 'slide-in' },
+        once: true,
         //markers: true
       }
     });
