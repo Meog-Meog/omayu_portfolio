@@ -1,17 +1,17 @@
 <template>
     <div class="container">
-        <img src="image/sp_img/sorryforthetroubleofaccessing.svg?url" alt="Sorry for the trouble of accessing"
+        <img src="~/assets/image/sp_img/sorryforthetroubleofaccessing.svg?url" alt="Sorry for the trouble of accessing"
             class="sorry" />
         <div class="btn-wrapper">
             <a class="btn" href="https://www.instagram.com/asage_ttt/" rel="noopener" target="_blank"
                 style="margin-right: 11.66%;">
-                <img src="image/sp_img/icon_insta.svg?url" alt="Instagram" />
+                <img src="~/assets/image/sp_img/icon_insta.svg?url" alt="Instagram" />
             </a>
             <a class="btn" href="https://twitter.com/myttt33" rel="noopener" target="_blank">
-                <img src="image/sp_img/icon_tw.svg?url" alt="Twitter" />
+                <img src="~/assets/image/sp_img/icon_tw.svg?url" alt="Twitter" />
             </a>
         </div>
-        <img src="image/sp_img/at2023mayuteramoto.svg?url" alt="@2023 Mayu Teramoto." class="sorry" />
+        <img src="~/assets/image/sp_img/at2023mayuteramoto.svg?url" alt="@2023 Mayu Teramoto." class="sorry" />
     </div>
 </template>
 
