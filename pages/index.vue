@@ -15,6 +15,8 @@ const showModal = useState('showModal')
 const dark = useState('dark')
 const darkGrad = useState('darkGrad')
 const mouseStalkerText = useState('mouseStalkerText')
+const route = useRoute()
+const smoother = useState<ScrollSmoother>('smoother')
 
 useHead({
     title: 'MAYU TERAMOTO\'s Portfolio'
@@ -145,6 +147,22 @@ onMounted(() =>
             {
                 mouseStalkerText.value = ''
             }, false)
+        }
+
+        if (route.hash === '#web-site')
+        {
+            smoother.value?.scrollTo('.web-sites__title', false, "top top");
+        }
+        if (route.hash === '#competition')
+        {
+            smoother.value?.scrollTo('.competitions__title', false, "top 70%");
+        }
+        if (route.hash === '#banner')
+        {
+            nextTick(() =>
+            {
+                smoother.value?.scrollTo('.banners__title-container', false, "top top");
+            })
         }
     }
 })
