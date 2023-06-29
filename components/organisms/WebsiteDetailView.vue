@@ -163,7 +163,7 @@ const createFixDescTrigger = () =>
             endTrigger: '.web-site__design',
             end: "bottom bottom",
             pin: '.web-site__desc',
-            markers: true
+            // markers: true
         });
 }
 
