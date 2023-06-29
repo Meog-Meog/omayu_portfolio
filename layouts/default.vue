@@ -17,6 +17,7 @@
 </template>
 
 <script setup lang="ts">
+const router = useRouter()
 const route = useRoute()
 const showProfileModal = useState('showProfileModal', () => false)
 const showModal = useState('showModal', () => false)
@@ -28,6 +29,10 @@ const { $ScrollTrigger, $ScrollSmoother } = useNuxtApp();
 
 onMounted(() =>
 {
+    if (window.innerWidth < 1133)
+    {
+        router.replace('/sorry')
+    }
     if (process.client)
     {
         nextTick(() =>
@@ -40,7 +45,6 @@ onMounted(() =>
         })
 
     }
-    const router = useRouter()
     router.afterEach(() =>
     {
         if (process.client)
