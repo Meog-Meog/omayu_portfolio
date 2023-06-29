@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-const textImg = "/image/website/sugoyose_text_2c2c2c.svg"
+const textImg = "/image/cap/06_connect/connect_text_2c2c2c.svg"
 const mockImg = "/image/mock/connect_mock.webp"
 const captures = [
     {

@@ -1,11 +1,17 @@
 <template>
-    <a class="external-text-link" :class="{ 'external-text-link--large': large }" :href="url" target="_blank">
+    <a v-if="url" class="external-text-link clickable" :class="{ 'external-text-link--large': large }" :href="url"
+        target="_blank">
         <div>
             <span class="external-text-link__label">{{ label }}</span>
             <img v-if="large" class="external-text__icon" src="~/assets/image/icon/icon_tab_l.svg?url" />
             <img v-else class="external-text__icon" src="~/assets/image/icon/icon_tab_s.svg?url" />
         </div>
     </a>
+    <div v-else class="external-text-link" :class="{ 'external-text-link--large': large }">
+        <div>
+            <span class="external-text-link__label">{{ label }}</span>
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -30,10 +36,6 @@ const Props = withDefaults(defineProps<Props>(), {
     transition-duration: 0.5s;
     cursor: none;
 
-    &:hover {
-        opacity: 0.3;
-    }
-
     div {
         padding: 10px;
         margin: -10px;
@@ -50,6 +52,10 @@ const Props = withDefaults(defineProps<Props>(), {
             letter-spacing: 0.88px;
         }
     }
+}
+
+.clickable:hover {
+    opacity: 0.3;
 }
 
 .external-text__icon {

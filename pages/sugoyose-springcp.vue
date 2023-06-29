@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-const textImg = "/image/website/sugoyose_text_2c2c2c.svg"
+const textImg = "/image/cap/02_springcampaign/springcp_text_2c2c2c.svg"
 const mockImg = "/image/mock/springcampaign_mock.webp"
 const captures = [
     {
