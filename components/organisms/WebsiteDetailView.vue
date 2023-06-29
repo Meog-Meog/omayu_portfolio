@@ -246,7 +246,7 @@ onUnmounted(() =>
     }
 
     &.fade-out {
-        animation: 1s cubic-bezier(0.4, 0, 0, 1) forwards fade-out;
+        animation: 0.1s cubic-bezier(0.4, 0, 0, 1) forwards fade-out;
     }
 }
 
