@@ -53,12 +53,15 @@ const webSite = {
   {
     if (router.currentRoute.value.path !== "/")
     {
-      await router.push({ path: "/", hash: "#web-page" });
+      await router.push({ path: "/", hash: "#web-site" });
     }
-    nextTick(() =>
+    else
     {
-      smoother.value.scrollTo('.web-sites__title', false, "top top");
-    });
+      nextTick(() =>
+      {
+        smoother.value.scrollTo('.web-sites__title', false, "top top");
+      });
+    }
   }
 }
 
@@ -84,7 +87,13 @@ const competition = {
     {
       await router.push({ path: "/", hash: "#competition" });
     }
-    smoother.value.scrollTo('.competitions__title', false, "top 70%");
+    else
+    {
+      nextTick(() =>
+      {
+        smoother.value.scrollTo('.competitions__title', false, "top 70%");
+      });
+    }
   }
 }
 
@@ -96,8 +105,13 @@ const banner = {
     if (router.currentRoute.value.path !== "/")
     {
       await router.push({ path: "/", hash: "#banner" });
+    } else
+    {
+      nextTick(() =>
+      {
+        smoother.value.scrollTo('#banner', false, "top top");
+      });
     }
-    smoother.value.scrollTo('#banner', false, "top top");
   }
 }
 
@@ -110,7 +124,10 @@ const illustration = {
     {
       await router.push({ path: "/", hash: "#illustration" });
     }
-    smoother.value.scrollTo('#illustration', false, "top top");
+    nextTick(() =>
+    {
+      smoother.value.scrollTo('#illustration', false, "top top");
+    });
   }
 }
 
