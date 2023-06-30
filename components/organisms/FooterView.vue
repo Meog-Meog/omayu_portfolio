@@ -147,6 +147,7 @@ a {
   position: relative;
   color: #101010;
   font: normal normal normal 16px/24px ZenKakuGothicNew;
+  @include xd-line-height(16px, 24px);
   letter-spacing: 0.64px;
   width: 100vw;
   height: calc(100vh - 110px);
@@ -200,6 +201,7 @@ a {
 
   &__copy-right {
     font: normal normal normal 13px/19px ZenKakuGothicNew;
+    @include xd-line-height(13px, 19px);
     letter-spacing: 0.52px;
     color: #101010;
   }

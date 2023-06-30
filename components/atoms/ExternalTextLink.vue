@@ -50,6 +50,7 @@ const Props = withDefaults(defineProps<Props>(), {
         div span.external-text-link__label {
             font: normal normal bold 22px/36px ZenKakuGothicNew;
             letter-spacing: 0.88px;
+            @include xd-line-height(22px, 36px);
         }
     }
 }
@@ -66,5 +67,6 @@ const Props = withDefaults(defineProps<Props>(), {
     font: normal normal normal 13px/26px ZenKakuGothicNew;
     letter-spacing: 0px;
     color: #EEEEEE;
+    @include xd-line-height(13px, 26px);
 }
 </style>
