@@ -1,46 +1,37 @@
 <template>
     <div>
-        <external-text-link style="margin-bottom: 30px;" :label="contents.title" :url="contents.url" large />
-        <div class="item">
-            <h2 style="margin-bottom: 7px;">
-                制作期間
-            </h2>
-            <p>
-                {{ contents.period }}
-            </p>
-        </div>
-        <div class="item">
-            <h2 style="margin-bottom: 10px;">
-                担当領域
-            </h2>
-            <p>
-                {{ contents.area }}
-            </p>
-        </div>
-        <div class="item">
-            <h2 style="margin-bottom: 10px;">
-                サービス概要
-            </h2>
+        <external-text-link :style="{ 'margin-bottom': contents.overview ? '35px' : '30px' }" :label="contents.title"
+            :url="contents.url" large />
+        <div v-if="contents.overview" style="margin-bottom: 35px;">
             <p>
                 {{ contents.overview }}
             </p>
         </div>
-        <div class="item">
-            <h2 style="margin-bottom: 12px;">
-                施策・デザイン説明
-            </h2>
+        <hr style="margin-bottom: 30px;" />
+        <div style="margin-bottom: 15px;">
             <p>
-                {{ contents.design }}
+                {{ contents.period }}
             </p>
         </div>
-        <div v-if="contents.awards.length > 0" class="item">
-            <h2 style="margin-bottom: 10px;">
-                受賞歴・掲載歴
-            </h2>
-            <external-text-link v-for="(award, i) of contents.awards" :key="i" :label="award.name" :url="award.url" />
+        <div style="margin-bottom: 35px;">
+            <p>
+                {{ contents.area }}
+            </p>
+        </div>
+        <div :style="{ 'margin-bottom': contents.awards.length > 0 ? '35px' : '30px' }">
+            <p>
+                <template v-for="d of contents.design">
+                    {{ d }}
+                    <br>
+                </template>
+            </p>
+        </div>
+        <div v-if="contents.awards.length > 0" style="margin-bottom: 35px;">
+            <external-text-link v-for="(award, i) of contents.awards" :key="i" :label="award.name" :url="award.url"
+                style="margin-bottom: 15px;" />
         </div>
         <template v-if="showDeviceLink || showPageLink">
-            <hr />
+            <hr style="margin-bottom: 35px;" />
             <div class="device-link">
                 <p>
                     ページ切り替え
@@ -84,7 +75,7 @@ interface Contents
     period: string,
     area: string,
     overview: string,
-    design: string,
+    design: Array<string>,
     awards: Array<Award>
 }
 interface CaptureImg
@@ -117,7 +108,7 @@ const Props = withDefaults(defineProps<Props>(), {
             period: "",
             area: "",
             overview: "",
-            design: "",
+            design: [""],
             awards: []
         }
     }
@@ -190,10 +181,6 @@ h1 {
     color: #EEEEEE;
 }
 
-.item {
-    margin-bottom: 24px;
-}
-
 h2 {
     font: normal normal bold 13px/26px ZenKakuGothicNew;
     @include xd-line-height(13px, 26px);
@@ -223,7 +210,6 @@ button.active {
 }
 
 hr {
-    margin: 30px 0;
     background-color: #2c2c2c;
     height: 1px;
     border: none;

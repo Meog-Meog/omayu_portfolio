@@ -40,13 +40,16 @@ const contents = {
     title: "スゴヨセ",
     url: "https://sugoyose.jp/",
     period: "2021~2023年",
-    area: "UIデザイン(ほぼ全ての下層ページ), 仕様提案など",
+    area: "UIデザイン, 仕様提案などを担当",
     overview: "オンライン上で寄せ書きブックの作成・注文ができる",
-    design: "全ての画面において「無駄のない直感的なUI」を意識して設計。\n また、競合との差別化を図るため、ブックのビジュアルデザインにも力を入れている。",
+    design: [
+        "全ての画面において「無駄のない直感的なUI」を意識して設計。",
+        "また、競合との差別化を図るため、ブックのビジュアルデザインにも力を入れている。"
+    ],
     awards: [
         {
             name: "2022年度グッドデザイン賞 受賞",
-            url: "https://www.g-mark.org/award/describe/52580?token=8Z3X6Q1Q"
+            url: "https://www.g-mark.org/award/describe/54423"
         },
         {
             name: "Webデザインギャラリー・リンク集「SANKOU!」掲載",
