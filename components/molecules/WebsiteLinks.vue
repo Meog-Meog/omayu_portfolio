@@ -2,10 +2,12 @@
     <div id="website-links" style="padding: 0 100px; margin-bottom: 150px;">
         <hr />
         <template v-for="(item, i) of items">
-            <div class="row">
-                <img :src="item.img" @click="router.push('/' + item.id)" />
+            <div class="row-with-hr" @click="router.push('/' + item.id)">
+                <div class="row">
+                    <img :src="item.img" style="margin: 10px 0" />
+                </div>
+                <hr />
             </div>
-            <hr />
         </template>
     </div>
 </template>
@@ -58,7 +60,7 @@ onMounted(() =>
 {
     if (process.client)
     {
-        for (const clickable of document.getElementsByClassName('row'))
+        for (const clickable of document.getElementsByClassName('row-with-hr'))
         {
             clickable.addEventListener('mouseover', () =>
             {
@@ -85,7 +87,6 @@ hr {
     display: flex;
     justify-content: center;
     align-self: center;
-    margin: 10px 0;
 }
 
 img {
