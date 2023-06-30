@@ -41,20 +41,22 @@
         </div>
         <template v-if="showDeviceLink || showPageLink">
             <hr />
-            <div v-if="showDeviceLink" class="device-link">
+            <div class="device-link">
                 <p>
                     ページ切り替え
                 </p>
-                <button v-if="captures[pageIdx].cap['pc'].length" class="icon-btn"
-                    :class="{ 'icon-btn--active': device === 'pc' }" @click="changeDevice('pc')">
-                    <img v-if="device === 'pc'" src="~/assets/image/icon/icon_desktop_eee.svg?url" />
-                    <img v-else src="~/assets/image/icon/icon_desktop_6a6a6a.svg?url" />
-                </button>
-                <button v-if="captures[pageIdx].cap['sp'].length" class="icon-btn"
-                    :class="{ 'icon-btn--active': device === 'sp' }" @click="changeDevice('sp')">
-                    <img v-if="device === 'sp'" src="~/assets/image/icon/icon_phone_eee.svg?url" />
-                    <img v-else src="~/assets/image/icon/icon_phone_6a6a6a.svg?url" />
-                </button>
+                <template v-if="showDeviceLink">
+                    <button v-if="captures[pageIdx].cap['pc'].length" class="icon-btn"
+                        :class="{ 'icon-btn--active': device === 'pc' }" @click="changeDevice('pc')">
+                        <img v-if="device === 'pc'" src="~/assets/image/icon/icon_desktop_eee.svg?url" />
+                        <img v-else src="~/assets/image/icon/icon_desktop_6a6a6a.svg?url" />
+                    </button>
+                    <button v-if="captures[pageIdx].cap['sp'].length" class="icon-btn"
+                        :class="{ 'icon-btn--active': device === 'sp' }" @click="changeDevice('sp')">
+                        <img v-if="device === 'sp'" src="~/assets/image/icon/icon_phone_eee.svg?url" />
+                        <img v-else src="~/assets/image/icon/icon_phone_6a6a6a.svg?url" />
+                    </button>
+                </template>
             </div>
             <div v-if="showPageLink" class="page-link">
                 <span v-for="(page, i) of captures" :key="i">
@@ -131,7 +133,7 @@ const capUrls = useState<String[]>('capUrls', () => [])
 const showPageLink = Props.captures.length > 1
 const hasPcPage = Props.captures.some(c => c.cap.pc.length > 0)
 const hasSpPage = Props.captures.some(c => c.cap.sp.length > 0)
-const showDeviceLink = showPageLink || (hasPcPage && hasSpPage)
+const showDeviceLink = hasPcPage && hasSpPage
 
 onMounted(() =>
 {
