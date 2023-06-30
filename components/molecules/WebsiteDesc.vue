@@ -183,6 +183,7 @@ const changePage = (idx: number) =>
 h1 {
     margin-bottom: 30px;
     font: normal normal bold 22px/36px ZenKakuGothicNew;
+    @include xd-line-height(22px, 36px);
     letter-spacing: 0.88px;
     color: #EEEEEE;
 }
@@ -193,18 +194,21 @@ h1 {
 
 h2 {
     font: normal normal bold 13px/26px ZenKakuGothicNew;
+    @include xd-line-height(13px, 26px);
     letter-spacing: 0px;
     color: #EEEEEE;
 }
 
 p {
     font: normal normal normal 13px/26px ZenKakuGothicNew;
+    @include xd-line-height(13px, 26px);
     letter-spacing: 0px;
     color: #EEEEEE;
 }
 
 button {
     font: normal normal normal 13px/26px ZenKakuGothicNew;
+    @include xd-line-height(13px, 26px);
     letter-spacing: 0px;
     color: #6A6A6A;
     display: flex;

@@ -44,7 +44,7 @@ onMounted(() =>
   }
 })
 </script>
-<style scoped>
+<style lang="scss" scoped>
 #mouse-stalker {
   pointer-events: none;
   position: fixed;
@@ -105,6 +105,7 @@ onMounted(() =>
 
 .mouse-stalker--clickable span {
   font: normal normal normal 16px/24px A1GothicStd;
+  @include xd-line-height(16px, 24px);
   letter-spacing: 0.64px;
   color: #eee;
 }

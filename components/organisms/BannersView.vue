@@ -118,10 +118,7 @@ $line-color: #2c2c2c;
   }
 
   &__title {
-    font-size: 170px;
     text-align: center;
-    line-height: 1em;
-    font-family: Valery, serif;
 
     &-container {
       padding-top: 60px;
@@ -200,6 +197,7 @@ button {
   height: 70px;
   text-align: center;
   font: normal normal normal 16px/35px ZenKakuGothicNew;
+  @include xd-line-height(16px, 35px);
   letter-spacing: 0.64px;
   color: #000;
   opacity: 1;

@@ -161,9 +161,9 @@ $animation-prop: cubic-bezier(0.17, 0.87, 1, 1);
             justify-content: end;
             padding-top: 70px;
             font: normal normal 300 16px/20px Roboto;
+            @include xd-line-height(16px, 20px);
             letter-spacing: 0.8px;
             opacity: 1;
-            line-height: 1em;
             margin-left: auto;
 
             div:nth-of-type(1) {

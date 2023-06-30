@@ -52,11 +52,10 @@ const year: number = new Date().getFullYear();
     align-items: center;
 
     span {
-      margin-right: 23px;
       text-align: left;
-      font: normal normal normal 14px/26px ZenKakuGothicNew;
+      font: normal normal normal 14px ZenKakuGothicNew;
       letter-spacing: 0;
-      line-height: 1em;
+      @include xd-line-height(14px, 26px);
     }
 
     a {
@@ -68,9 +67,10 @@ const year: number = new Date().getFullYear();
 
   &__text {
     text-align: left;
-    font: normal normal normal 14px/26px ZenKakuGothicNew;
+    font: normal normal normal 14px ZenKakuGothicNew;
     letter-spacing: 0;
     width: 100%;
+    @include xd-line-height(14px, 26px);
   }
 
   &__picture {
