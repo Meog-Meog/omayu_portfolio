@@ -22,6 +22,16 @@ import { onMounted } from "vue";
 import items from '@/assets/data/competitionItems.js';
 const smoother = useState<ScrollSmoother>('smoother')
 
+onUnmounted(() =>
+{
+  console.log('unmount');
+  if (process.client)
+  {
+    const { $gsap } = useNuxtApp();
+    $gsap.getById('title')?.kill();
+  }
+})
+
 onMounted(() =>
 {
   if (process.client)
@@ -36,6 +46,7 @@ onMounted(() =>
     if (title != null)
     {
       $gsap.to(title, {
+        id: 'title',
         scrollTrigger: {
           trigger: '.js-horizontal-scroll-trigger',
           start: 'center center',
@@ -43,9 +54,9 @@ onMounted(() =>
           end: 'bottom top',
           onEnter: async () =>
           {
-            smoother.value.paused(true);
+            console.log('paused');
+            // smoother.value.paused(true);
 
-            console.log('enter');
             title.classList.add('slide-in');
 
             await new Promise(res => setTimeout(async () =>

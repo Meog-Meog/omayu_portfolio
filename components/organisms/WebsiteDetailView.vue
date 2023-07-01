@@ -213,6 +213,9 @@ const onCapImgLoad = () =>
 
 onMounted(() =>
 {
+    console.log('false')
+    const smoother = useState<ScrollSmoother>('smoother')
+    smoother.value?.paused(false);
     const mouseStalkerText = useState('mouseStalkerText')
     mouseStalkerText.value = ""
 })
