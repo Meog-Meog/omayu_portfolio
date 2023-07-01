@@ -159,7 +159,7 @@ onMounted(async () =>
         if (scrollTo.value === 'competition')
         {
             await new Promise(res => setTimeout(res, 100));
-            smoother.value?.scrollTo('.competitions__title', true, "top 70%");
+            smoother.value?.scrollTo('#competition', true, "center center");
         }
         if (scrollTo.value === 'banner')
         {

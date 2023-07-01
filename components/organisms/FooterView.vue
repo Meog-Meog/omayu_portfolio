@@ -94,7 +94,7 @@ const competition = {
     {
       nextTick(() =>
       {
-        smoother.value.scrollTo('.competitions__title', false, "top 70%");
+        smoother.value?.scrollTo('#competition', true, "center center");
       });
     }
   }
