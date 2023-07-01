@@ -86,7 +86,7 @@ onMounted(() =>
 <style lang="scss" scoped>
 .web-sites__container {
   padding: 50vh 100px 0 100px;
-  margin-bottom: 150vh;
+  margin-bottom: 100vh;
   position: relative;
   text-align: center;
 }

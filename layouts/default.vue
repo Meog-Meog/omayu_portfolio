@@ -73,6 +73,7 @@ watch(route, value =>
     darkGrad.value = false
     mouseStalkerText.value = ''
     showProfileModal.value = false
+    smoother?.value?.paused(false);
 }, { deep: true, immediate: true })
 
 watch(showModal, value =>

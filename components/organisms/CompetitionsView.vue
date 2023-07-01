@@ -43,12 +43,30 @@ onMounted(() =>
           end: 'bottom top',
           onEnter: async () =>
           {
-            title.classList.add('slide-in');
-            if (items != null)
-              items.classList.add('slide-in');
             smoother.value.paused(true);
-            await new Promise(res => setTimeout(res, 1000))
-            smoother.value.paused(false);
+
+            console.log('enter');
+            title.classList.add('slide-in');
+
+            await new Promise(res => setTimeout(async () =>
+            {
+              if (items != null)
+              {
+                if (items.classList.contains('slide-in'))
+                {
+                  smoother.value.paused(false);
+                } else
+                {
+                  items.classList.add('slide-in');
+                  await new Promise(res => setTimeout(() =>
+                  {
+                    smoother.value.paused(false);
+                    res
+                  }, 1000))
+                }
+              }
+              res
+            }, 1000))
           },
           once: false,
           //markers: true
@@ -130,7 +148,7 @@ ul {
 
   opacity: 0;
   transform: translateY(5rem);
-  transition: all 1.5s 0.3s cubic-bezier(0.4, 0, 0, 1);
+  transition: all 1.5s cubic-bezier(0.4, 0, 0, 1);
 
   &.slide-in {
     opacity: 1;
