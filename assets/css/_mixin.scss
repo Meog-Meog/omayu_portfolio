@@ -11,7 +11,7 @@ $breakpoints: (
   }
 }
 
-@mixin xd-line-height($font-size, $line-height) {
-  margin-top: -($line-height - $font-size)/2 + 4px;
-  margin-bottom: -($line-height - $font-size)/2 + 3px;
+@mixin xd-line-height($font-size, $line-height, $offset-top, $offset-bottom) {
+  margin-top: -($line-height - $font-size)/2 + $offset-top;
+  margin-bottom: -($line-height - $font-size)/2 + $offset-bottom;
 }
