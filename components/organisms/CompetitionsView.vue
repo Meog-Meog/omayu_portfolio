@@ -20,6 +20,7 @@
 const router = useRouter();
 import { onMounted } from "vue";
 import items from '@/assets/data/competitionItems.js';
+const smoother = useState<ScrollSmoother>('smoother')
 
 onMounted(() =>
 {
@@ -29,35 +30,32 @@ onMounted(() =>
 
     const container = document.querySelector('.competitions__container');
     const title = document.querySelector('.competitions__title');
-    if (title != null)
-      $gsap.to(title, {
-        scrollTrigger: {
-          trigger: title,
-          start: 'top 70%',
-          endTrigger: container,
-          end: 'bottom top',
-          onEnter: () => title.classList.add('slide-in'),
-          once: true,
-          //markers: true
-        }
-      });
     const items = document.querySelector('.competitions__items-wrapper');
-    if (items != null)
-      $gsap.to(items, {
-        scrollTrigger: {
-          trigger: items,
-          start: 'top 50%',
-          endTrigger: container,
-          end: 'bottom top',
-          onEnter: () => items.classList.add('slide-in'),
-          once: true,
-          //markers: true
-        }
-      });
-
-    // 横スクロールの設定
     const listWrapperEl = document.querySelector('.competitions__items-wrapper');
     const listEl = document.querySelector('.competitions__items');
+    if (title != null)
+    {
+      $gsap.to(title, {
+        scrollTrigger: {
+          trigger: '.js-horizontal-scroll-trigger',
+          start: 'center center',
+          endTrigger: container,
+          end: 'bottom top',
+          onEnter: async () =>
+          {
+            title.classList.add('slide-in');
+            if (items != null)
+              items.classList.add('slide-in');
+            smoother.value.paused(true);
+            await new Promise(res => setTimeout(res, 1000))
+            smoother.value.paused(false);
+          },
+          once: false,
+          //markers: true
+        }
+      });
+    }
+    // 横スクロールの設定
     if (listWrapperEl == null || listEl == null) return;
     $gsap.to(listEl, {
       x: () => -(listEl.clientWidth - listWrapperEl.clientWidth),
@@ -132,7 +130,7 @@ ul {
 
   opacity: 0;
   transform: translateY(5rem);
-  transition: all 1.5s cubic-bezier(0.4, 0, 0, 1);
+  transition: all 1.5s 0.3s cubic-bezier(0.4, 0, 0, 1);
 
   &.slide-in {
     opacity: 1;
