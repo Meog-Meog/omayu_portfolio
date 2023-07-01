@@ -26,6 +26,7 @@ const dark = useState('dark', () => false)
 const darkGrad = useState('darkGrad', () => false)
 const smoother = useState<ScrollSmoother>('smoother')
 const mouseStalkerText = useState('mouseStalkerText', () => '')
+const scrollTo = useState<string>('scrollTo', () => '')
 
 const scrollToTop = async () =>
 {
@@ -66,7 +67,8 @@ const webSite = {
     darkGrad.value = false
     if (router.currentRoute.value.path !== "/")
     {
-      await router.push({ path: "/", hash: "#web-page" });
+      scrollTo.value = "web-site";
+      await router.push("/");
     }
     nextTick(() =>
     {
@@ -98,7 +100,8 @@ const competition = {
     darkGrad.value = false
     if (router.currentRoute.value.path !== "/")
     {
-      await router.push({ path: "/", hash: "#competition" });
+      scrollTo.value = "competition";
+      await router.push("/");
     }
     smoother.value.scrollTo('.competitions__title', false, "top 70%");
   }
@@ -110,13 +113,16 @@ const banner = {
   scrollTo: async (payload: MouseEvent) =>
   {
     showModal.value = false
-    dark.value = false
     darkGrad.value = false
+    scrollTo.value = "banner";
     if (router.currentRoute.value.path !== "/")
     {
-      await router.push({ path: "/", hash: "#banner" });
+      scrollTo.value = "banner";
+      await router.push("/");
+    } else
+    {
+      smoother.value?.scrollTo('.banners__title-container', false, "top top");
     }
-    smoother.value.scrollTo('#banner', false, "top top");
   }
 }
 
@@ -130,7 +136,8 @@ const illustration = {
     darkGrad.value = false
     if (router.currentRoute.value.path !== "/")
     {
-      await router.push({ path: "/", hash: "#illustration" });
+      scrollTo.value = "illustration";
+      await router.push("/");
     }
     smoother.value.scrollTo('#illustration', false, "top top");
   }

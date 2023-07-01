@@ -26,6 +26,7 @@
 
 <script setup lang="ts">
 const router = useRouter()
+const scrollTo = useState<string>('scrollTo', () => '')
 const smoother = useState<ScrollSmoother>('smoother')
 const year: number = new Date().getFullYear();
 
@@ -53,7 +54,8 @@ const webSite = {
   {
     if (router.currentRoute.value.path !== "/")
     {
-      await router.push({ path: "/", hash: "#web-site" });
+      scrollTo.value = "web-site";
+      await router.push("/");
     }
     else
     {
@@ -85,7 +87,8 @@ const competition = {
   {
     if (router.currentRoute.value.path !== "/")
     {
-      await router.push({ path: "/", hash: "#competition" });
+      scrollTo.value = "competition";
+      await router.push("/");
     }
     else
     {
@@ -104,7 +107,8 @@ const banner = {
   {
     if (router.currentRoute.value.path !== "/")
     {
-      await router.push({ path: "/", hash: "#banner" });
+      scrollTo.value = "banner";
+      await router.push("/");
     } else
     {
       nextTick(() =>
@@ -122,7 +126,8 @@ const illustration = {
   {
     if (router.currentRoute.value.path !== "/")
     {
-      await router.push({ path: "/", hash: "#illustration" });
+      scrollTo.value = "illustration";
+      await router.push("/");
     }
     nextTick(() =>
     {

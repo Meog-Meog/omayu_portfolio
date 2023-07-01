@@ -17,12 +17,13 @@ const darkGrad = useState('darkGrad')
 const mouseStalkerText = useState('mouseStalkerText')
 const route = useRoute()
 const smoother = useState<ScrollSmoother>('smoother')
+const scrollTo = useState<string>('scrollTo', () => '')
 
 useHead({
     title: 'MAYU TERAMOTO\'s Portfolio'
 })
 
-onMounted(() =>
+onMounted(async () =>
 {
     if (process.client)
     {
@@ -149,20 +150,28 @@ onMounted(() =>
             }, false)
         }
 
-        if (route.hash === '#web-site')
+
+        if (scrollTo.value === 'web-site')
         {
+            await new Promise(res => setTimeout(res, 100));
             smoother.value?.scrollTo('.web-sites__title', false, "top top");
         }
-        if (route.hash === '#competition')
+        if (scrollTo.value === 'competition')
         {
-            smoother.value?.scrollTo('.competitions__title', false, "top 70%");
+            await new Promise(res => setTimeout(res, 100));
+            smoother.value?.scrollTo('.competitions__title', true, "top 70%");
         }
-        if (route.hash === '#banner')
+        if (scrollTo.value === 'banner')
         {
-            nextTick(() =>
-            {
-                smoother.value?.scrollTo('.banners__title-container', false, "top top");
-            })
+            dark.value = true
+            await new Promise(res => setTimeout(res, 100));
+            smoother.value?.scrollTo('.banners__title-container', false, "top top");
+        }
+        if (scrollTo.value === 'illustration')
+        {
+            dark.value = true
+            await new Promise(res => setTimeout(res, 100));
+            smoother.value?.scrollTo('#illustration', false, "top top");
         }
     }
 })
