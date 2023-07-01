@@ -105,7 +105,7 @@ onMounted(() =>
 
 .mouse-stalker--clickable span {
   font: normal normal normal 16px/24px A1GothicStd;
-  @include xd-line-height(16px, 24px, 4px, 3px);
+  @include xd-line-spacing(16px, 24px, 4px, 3px);
   letter-spacing: 0.64px;
   color: #eee;
 }

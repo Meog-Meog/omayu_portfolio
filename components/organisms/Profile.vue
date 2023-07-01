@@ -55,7 +55,7 @@ const year: number = new Date().getFullYear();
       text-align: left;
       font: normal normal normal 14px ZenKakuGothicNew;
       letter-spacing: 0;
-      @include xd-line-height(14px, 26px, 4px, 3px);
+      @include xd-line-spacing(14px, 26px, 4px, 3px);
     }
 
     a {
@@ -70,7 +70,7 @@ const year: number = new Date().getFullYear();
     font: normal normal normal 14px ZenKakuGothicNew;
     letter-spacing: 0;
     width: 100%;
-    @include xd-line-height(14px, 26px, 4px, 3px);
+    @include xd-line-spacing(14px, 26px, 4px, 3px);
   }
 
   &__picture {

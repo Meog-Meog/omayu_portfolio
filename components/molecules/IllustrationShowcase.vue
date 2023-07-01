@@ -161,7 +161,7 @@ $animation-prop: cubic-bezier(0.17, 0.87, 1, 1);
             justify-content: end;
             padding-top: 70px;
             font: normal normal 300 16px/20px Roboto;
-            @include xd-line-height(16px, 20px, 4px, 3px);
+            @include xd-line-spacing(16px, 20px, 4px, 3px);
             letter-spacing: 0.8px;
             opacity: 1;
             margin-left: auto;
