@@ -55,7 +55,7 @@ onMounted(() =>
                 $ScrollSmoother.refresh()
                 if (smoother.value) smoother.value.kill();
                 smoother.value = $ScrollSmoother.create({
-                    smooth: 1.5,
+                    smooth: 1,
                     effects: true,
                 })
             })
