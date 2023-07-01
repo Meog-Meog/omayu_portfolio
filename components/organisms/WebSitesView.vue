@@ -53,6 +53,7 @@ onMounted(() =>
         //markers: true
       }
     });
+    /*
     document.querySelectorAll('.web-sites__thumbnail--first').forEach((el, idx) =>
     {
       $gsap.to(el, {
@@ -77,6 +78,7 @@ onMounted(() =>
         }
       });
     });
+    */
   }
 })
 </script>
@@ -133,7 +135,8 @@ onMounted(() =>
       width: 50%;
 
       img {
-        opacity: 0;
+        // opacity: 0;
+        opacity: 1;
         transform: translateY(5rem);
         width: 100%;
         height: auto;
