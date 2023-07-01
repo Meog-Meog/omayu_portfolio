@@ -83,33 +83,59 @@ ul {
   margin: 0;
 }
 
-.competitions {
-  &__container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 100vh;
+.competitions__container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 100vh;
+}
+
+.competitions__wrapper {
+  width: 100%;
+}
+
+.competitions__title {
+  margin-bottom: -55px;
+
+  img {
+    opacity: 0;
+    transform: translateY(5rem);
+    transition: all 1.5s cubic-bezier(0.4, 0, 0, 1);
   }
 
-  &__wrapper {
-    width: 100%;
-  }
-
-  &__title {
-    margin-bottom: -55px;
-
+  &.slide-in {
     img {
-      opacity: 0;
-      transform: translateY(5rem);
-      transition: all 1.5s cubic-bezier(0.4, 0, 0, 1);
+      opacity: 1;
+      transform: translateY(0);
     }
+  }
+
+  &.slide-out {
+    opacity: 0;
+    transform: translateY(-5rem);
+  }
+}
+
+.competitions__items {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  gap: 0 15px;
+
+  &-wrapper {
+    position: relative;
+    width: 100%;
+    height: 228px;
+
+    opacity: 0;
+    transform: translateY(5rem);
+    transition: all 1.5s cubic-bezier(0.4, 0, 0, 1);
 
     &.slide-in {
-      img {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      opacity: 1;
+      transform: translateY(0);
     }
 
     &.slide-out {
@@ -117,51 +143,23 @@ ul {
       transform: translateY(-5rem);
     }
   }
+}
 
-  &__items {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    gap: 0 15px;
+.competitions__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    &-wrapper {
-      position: relative;
-      width: 100%;
-      height: 228px;
-
-      opacity: 0;
-      transform: translateY(5rem);
-      transition: all 1.5s cubic-bezier(0.4, 0, 0, 1);
-
-      &.slide-in {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      &.slide-out {
-        opacity: 0;
-        transform: translateY(-5rem);
-      }
-    }
+  &:first-of-type {
+    margin-left: 150px;
   }
 
-  &__item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  &:last-of-type {
+    margin-right: 170px;
+  }
 
-    &:first-of-type {
-      margin-left: 150px;
-    }
-
-    &:last-of-type {
-      margin-right: 170px;
-    }
-
-    img {
-      width: calc((100vw - 300px)/2);
-    }
+  img {
+    width: calc((100vw - 300px)/2);
   }
 }
 </style>
