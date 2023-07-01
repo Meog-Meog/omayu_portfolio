@@ -1,24 +1,24 @@
 <template>
     <div>
-        <external-text-link :style="{ 'margin-bottom': contents.overview ? '35px' : '30px' }" :label="contents.title"
+        <external-text-link :style="{ 'margin-bottom': contents.overview ? '25px' : '30px' }" :label="contents.title"
             :url="contents.url" large />
-        <div v-if="contents.overview" style="margin-bottom: 35px;">
+        <div v-if="contents.overview" style="margin-bottom: 30px;">
             <p>
                 {{ contents.overview }}
             </p>
         </div>
-        <hr style="margin-bottom: 30px;" />
-        <div style="margin-bottom: 15px;">
+        <hr style="margin-bottom: 25px;" />
+        <div style="margin-bottom: 10px;">
             <p>
                 {{ contents.period }}
             </p>
         </div>
-        <div style="margin-bottom: 35px;">
+        <div style="margin-bottom: 30px;">
             <p>
                 {{ contents.area }}
             </p>
         </div>
-        <div :style="{ 'margin-bottom': contents.awards.length > 0 ? '35px' : '30px' }">
+        <div style="margin-bottom: 30px;">
             <p>
                 <template v-for="d of contents.design">
                     {{ d }}
@@ -26,9 +26,9 @@
                 </template>
             </p>
         </div>
-        <div v-if="contents.awards.length > 0" style="margin-bottom: 35px;">
+        <div v-if="contents.awards.length > 0" style="margin-bottom: 30px;">
             <external-text-link v-for="(award, i) of contents.awards" :key="i" :label="award.name" :url="award.url"
-                style="margin-bottom: 15px;" />
+                style="margin-bottom: 10px;" />
         </div>
         <template v-if="showDeviceLink || showPageLink">
             <hr style="margin-bottom: 35px;" />
