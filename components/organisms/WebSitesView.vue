@@ -120,7 +120,7 @@ onMounted(() =>
   &__thumbnails {
     position: relative;
     z-index: 2;
-    padding-top: 30vh;
+    padding-top: 50vh;
   }
 
   &__row {
