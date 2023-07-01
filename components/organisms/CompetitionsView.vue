@@ -123,25 +123,25 @@ ul {
   left: 0;
   display: flex;
   gap: 0 15px;
+}
 
-  &-wrapper {
-    position: relative;
-    width: 100%;
-    height: 228px;
+.competitions__items-wrapper {
+  position: relative;
+  width: 100%;
+  height: calc((100vw - 300px)/2 * 640 / 1066);
 
+  opacity: 0;
+  transform: translateY(5rem);
+  transition: all 1.5s cubic-bezier(0.4, 0, 0, 1);
+
+  &.slide-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &.slide-out {
     opacity: 0;
-    transform: translateY(5rem);
-    transition: all 1.5s cubic-bezier(0.4, 0, 0, 1);
-
-    &.slide-in {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    &.slide-out {
-      opacity: 0;
-      transform: translateY(-5rem);
-    }
+    transform: translateY(-5rem);
   }
 }
 
