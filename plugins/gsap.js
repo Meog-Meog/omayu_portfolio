@@ -1,8 +1,9 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ScrollSmoother } from 'gsap/ScrollSmoother'
+import { Observer } from 'gsap/Observer'
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother)
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother, Observer)
 
 export default defineNuxtPlugin(() => {
   return {
@@ -10,6 +11,7 @@ export default defineNuxtPlugin(() => {
       gsap: gsap,
       ScrollTrigger,
       ScrollSmoother,
+      Observer,
     },
   }
 })
