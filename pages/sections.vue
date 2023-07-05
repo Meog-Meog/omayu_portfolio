@@ -1,5 +1,5 @@
 <template>
-    <div id="section-group-1" class="swipe-section">
+    <div id="section-group-1" class="swipe-section" style="z-index: 2;">
         <section id="kv" class="fullscreen-panel">
             <key-visual-panel />
         </section>
@@ -10,9 +10,10 @@
             <banner-panel />
         </section>
     </div>
-    <div id="section-group-2" class="swipe-section">
-        <section id="il" class="fullscreen-panel">
+    <div id="section-group-2" class="swipe-section" style="z-index: 1; overscroll-behavior: none">
+        <section id="il" class="panel">
             <illustration-panel />
+            <footer-view v-show="showFooter" />
         </section>
     </div>
 </template>
@@ -24,6 +25,8 @@ definePageMeta({
 
 const { $gsap, $ScrollTrigger } = useNuxtApp();
 
+const showFooter = ref(false);
+
 onMounted(() =>
 {
     if (process.client)
@@ -31,9 +34,21 @@ onMounted(() =>
         let currentIndex = 0;
         let animating;
         let pinScrollTrigger1;
-        let pinScrollTrigger2;
-        let pinControllerBeforeBn;
-        let pinControllerAfterBn;
+        let transitionTriggerBeforeBn;
+        let transitionTriggerAfterBn;
+        let transitionTriggerBeforeIl;
+
+        let isCoolDownForDown = false;
+        let timerIdForDown;
+        function coolDownForDown(timeout = 100)
+        {
+            isCoolDownForDown = true;
+            clearTimeout(timerIdForDown);
+            timerIdForDown = setTimeout(() =>
+            {
+                isCoolDownForDown = false;
+            }, timeout);
+        }
 
         const defaultTsArgs = {
             duration: 0.5, ease: 'power3'
@@ -101,10 +116,14 @@ onMounted(() =>
                     .fromTo('#ws-thumbnails2', { y: 100, opacity: 0 }, { y: 0, opacity: 1, ...defaultTsArgs }),
                 leave: () => $gsap.timeline()
                     .to('#ws', { y: -100, opacity: 0, ...defaultTsArgs }),
-                //.to('.swipe-section', { y: -100, opacity: 0, ...defaultTsArgs }),
                 enterBack: () => $gsap.timeline()
                     .to('#ws-thumbnails2', { opacity: 1, duration: 0 })
-                    .fromTo('#ws', { y: -100, opacity: 0 }, { y: 0, opacity: 1, ...defaultTsArgs })
+                    .fromTo('#ws', { y: -100, opacity: 0 }, { y: 0, opacity: 1, ...defaultTsArgs }),
+                enterBackCallBack: () =>
+                {
+                    intentObserver.enable();
+                    pinScrollTrigger1.enable();
+                }
             },
             /*
             // 5: cmp(title)
@@ -139,121 +158,145 @@ onMounted(() =>
                 enterBack: () => $gsap.timeline(),
             },
             */
-            // 7: bn(top)
+            // 7: bn(head)
             {
-                id: "bn(top)",
-                leaveBack: () =>
-                {
-                    const tl = $gsap.timeline()
-                        .to('#bn', { opacity: 0, ...defaultTsArgs });
-                    tl.add(
-                        $gsap.to('#bn__title', { y: 100, opacity: 0, ...defaultTsArgs }), 0
-                    )
-                    tl.add(
-                        $gsap.to('#bn__grid-wrapper', { y: 100, opacity: 0, ...defaultTsArgs }), 0
-                    )
-                    return tl
-                },
-                leaveBackCallBack: () => { },
+                id: "bn(head)",
+                leaveBack: () => $gsap.timeline()
+                    .to('#bn', { opacity: 0, ...defaultTsArgs })
+                    .to(['#bn__title', '#bn__grid-wrapper'], { y: 100, opacity: 0, ...defaultTsArgs }, "<"),
                 enter: () => $gsap.timeline()
-                    .to('#bn', { y: 0, opacity: 0, duration: 0 })
-                    .to('#bn__title', { y: 100, opacity: 0, duration: 0 })
-                    .to('#bn__grid-wrapper', { y: 100, opacity: 0, duration: 0 })
-                    .to('#bn', {
-                        opacity: 1,
-                        ...defaultTsArgs,
-                    })
-                    .to('#bn__title', {
-                        y: 0,
-                        opacity: 1,
-                        ...defaultTsArgs,
-                    })
-                    .to('#bn__grid-wrapper', {
-                        y: 0,
-                        opacity: 1,
-                        ...defaultTsArgs,
-                    }),
-                enterCallBack: () => { },
+                    .set('#bn', { y: 0, opacity: 0 })
+                    .set(['#bn__title', '#bn__grid-wrapper'], { y: 100, opacity: 0 })
+                    .to('#bn', { opacity: 1, ...defaultTsArgs })
+                    .to('#bn__title', { y: 0, opacity: 1, ...defaultTsArgs })
+                    .to('#bn__grid-wrapper', { y: 0, opacity: 1, ...defaultTsArgs }),
+                enterCallBack: () =>
+                {
+                    pinScrollTrigger1.disable();
+                    intentObserver.enable();
+                    transitionTriggerBeforeBn.disable();
+                    transitionTriggerAfterBn.disable();
+                    transitionTriggerBeforeIl.disable();
+                },
                 leave: () => $gsap.timeline(),
-                leaveCallBack: () => { },
                 enterBack: () => $gsap.timeline(),
-                enterBackCallBack: () => { },
+                enterBackCallBack: () =>
+                {
+                    pinScrollTrigger1.disable();
+                    intentObserver.enable();
+                    transitionTriggerBeforeBn.disable();
+                    transitionTriggerAfterBn.disable();
+                    transitionTriggerBeforeIl.disable();
+                },
             },
             // 8: bn(body)
             {
                 id: "bn(body)",
                 leaveBack: () => $gsap.timeline(),
-                leaveBackCallBack: () =>
-                {
-                    pinScrollTrigger1.enable();
-                    intentObserver.enable();
-                    pinControllerBeforeBn.disable();
-                    pinControllerAfterBn.disable();
-                },
                 enter: () => $gsap.timeline(),
                 enterCallBack: () =>
                 {
                     pinScrollTrigger1.disable();
                     intentObserver.disable();
-                    pinControllerBeforeBn.enable();
-                    pinControllerAfterBn.enable();
+                    transitionTriggerBeforeBn.enable();
+                    transitionTriggerAfterBn.enable();
+                    transitionTriggerBeforeIl.disable();
                 },
-                leave: () =>
-                {
-                    pinControllerBeforeBn.disable();
-                    pinControllerAfterBn.disable();
-                    return $gsap.timeline()
-                        .to('#bn__grid-wrapper', { y: -100, opacity: 0, ...defaultTsArgs })
-                        .to('#bn', { opacity: 0, ...defaultTsArgs }, "<")
-                        .to("#section-group-1", { opacity: 0, ...defaultTsArgs }, "<")
-                },
-                leaveCallBack: () =>
-                {
-                    pinScrollTrigger1.disable();
-                },
-                enterBack: () =>
-                {
-                    const tl = $gsap.timeline()
-                        .to("#section-group-1", { opacity: 1, duration: 0 })
-                        .to('#bn', { opacity: 1, ...defaultTsArgs });
-                    tl.add($gsap.fromTo('#bn__title', { y: -100, opacity: 0 }, { y: 0, opacity: 1, ...defaultTsArgs }), 0)
-                    tl.add($gsap.fromTo('#bn__grid-wrapper', { y: -100, opacity: 0 }, { y: 0, opacity: 1, ...defaultTsArgs }), 0)
-                    return tl
-                },
+                leave: () => $gsap.timeline(),
+                enterBack: () => $gsap.timeline(),
                 enterBackCallBack: () =>
                 {
+                    pinScrollTrigger1.disable();
                     intentObserver.disable();
-                    pinControllerBeforeBn.enable();
-                    pinControllerAfterBn.enable();
+                    transitionTriggerBeforeBn.enable();
+                    transitionTriggerAfterBn.enable();
+                    transitionTriggerBeforeIl.disable();
                 },
             },
-            // 9: illustraiton
+            // 9: bn(tail)
             {
-                id: "il",
-                leaveBack: () => $gsap.timeline()
-                    .fromTo("#il__title", { y: 0, opacity: 1 }, { y: 100, opacity: 0, ...defaultTsArgs })
-                    .fromTo("#il__showcase-wrapper", { y: 0, opacity: 1 }, { y: 100, opacity: 0, ...defaultTsArgs }, "<")
-                    .to("#section-group-2", { opacity: 0, duration: 0 }, ">")
-                    .to("#il", { opacity: 0, duration: 0 }, "<"),
-                leaveBackCallBack: () =>
-                {
-                    intentObserver.disable();
-                    pinScrollTrigger2.disable();
-                },
-                enter: () => $gsap.timeline()
-                    .to("#section-group-2", { opacity: 1, duration: 0 })
-                    .to("#il", { opacity: 1, duration: 0 }, ">")
-                    .fromTo("#il__title", { y: 100, opacity: 0 }, { y: 0, opacity: 1, ...defaultTsArgs }, ">")
-                    .fromTo("#il__showcase-wrapper", { y: 100, opacity: 0 }, { y: 0, opacity: 1, ...defaultTsArgs }, ">"),
+                id: "bn(tail)",
+                leaveBack: () => $gsap.timeline(),
+                enter: () => $gsap.timeline(),
                 enterCallBack: () =>
                 {
-                    // pinScrollTrigger2.enable();
+                    coolDownForDown(500);
+                    pinScrollTrigger1.disable();
                     intentObserver.enable();
+                    transitionTriggerBeforeBn.disable();
+                    transitionTriggerAfterBn.disable();
+                    transitionTriggerBeforeIl.disable();
+                },
+                leave: () => $gsap.timeline()
+                    .to('#bn__grid-wrapper', { y: -100, opacity: 0, ...defaultTsArgs })
+                    .to('#bn', { opacity: 0, ...defaultTsArgs })
+                    .set("#section-group-1", { opacity: 0 }),
+                enterBack: () => $gsap.timeline()
+                    .set("#section-group-1", { opacity: 1 })
+                    .to('#bn', { opacity: 1, ...defaultTsArgs })
+                    .fromTo(['#bn__title', '#bn__grid-wrapper'], { y: -100, opacity: 0 }, { y: 0, opacity: 1, ...defaultTsArgs }),
+                enterBackCallBack: () =>
+                {
+                    pinScrollTrigger1.disable();
+                    intentObserver.enable();
+                    transitionTriggerBeforeBn.disable();
+                    transitionTriggerAfterBn.disable();
+                    transitionTriggerBeforeIl.disable();
+                },
+            },
+            // 10: il(head)
+            {
+                id: "il(head)",
+                leaveBack: () => $gsap.timeline()
+                    .fromTo(["#il__title", "#il__showcase-wrapper"], { y: 0, opacity: 1 }, { y: 100, opacity: 0, ...defaultTsArgs })
+                    .set(["#section-group-2", "#il"], { opacity: 1 }),
+                enter: () => $gsap.timeline()
+                    .set(["#section-group-2", "#il"], { opacity: 1 })
+                    .fromTo(["#il__title", "#il__showcase-wrapper"], { y: 100, opacity: 0 }, { y: 0, opacity: 1, ...defaultTsArgs }),
+                enterCallBack: () =>
+                {
+                    showFooter.value = false;
+                    transitionTriggerBeforeBn.disable();
+                    transitionTriggerAfterBn.disable();
+                    transitionTriggerBeforeIl.disable();
+                    intentObserver.enable();
+                },
+                leave: () => $gsap.timeline(),
+                enterBack: () => $gsap.timeline(),
+                enterBackCallBack: () =>
+                {
+                    showFooter.value = false;
+                    transitionTriggerBeforeBn.disable();
+                    transitionTriggerAfterBn.disable();
+                    transitionTriggerBeforeIl.disable();
+                    intentObserver.enable();
+                },
+            },
+            // 10: il(body)
+            {
+                id: "il(body)",
+                leaveBack: () => $gsap.timeline(),
+                leaveBackCallBack: () => { },
+                enter: () => $gsap.timeline(),
+                enterCallBack: () =>
+                {
+                    showFooter.value = true;
+                    intentObserver.disable();
+                    transitionTriggerBeforeBn.disable();
+                    transitionTriggerAfterBn.disable();
+                    transitionTriggerBeforeIl.enable();
                 },
                 leave: () => $gsap.timeline(),
                 leaveCallBack: () => { },
                 enterBack: () => $gsap.timeline(),
-                enterBackCallBack: () => { },
+                enterBackCallBack: () =>
+                {
+                    showFooter.value = true;
+                    intentObserver.disable();
+                    transitionTriggerBeforeBn.disable();
+                    transitionTriggerAfterBn.disable();
+                    transitionTriggerBeforeIl.enable();
+                },
             },
         ]
 
@@ -262,13 +305,16 @@ onMounted(() =>
             type: "wheel,touch",
             onUp: () =>
             {
-                console.log('onUp - intentObserver')
-                !animating && gotoPanel(currentIndex + 1, true)
+                if (!isCoolDownForDown)
+                {
+                    console.log('onUp - intentObserver');
+                    !animating && gotoPanel(currentIndex + 1, true);
+                }
             },
             onDown: () =>
             {
-                console.log('onDown - intentObserver')
-                !animating && gotoPanel(currentIndex - 1, false)
+                console.log('onDown - intentObserver');
+                !animating && gotoPanel(currentIndex - 1, false);
             },
             wheelSpeed: -1,
             tolerance: 10,
@@ -353,66 +399,89 @@ onMounted(() =>
             console.log("===== /gotoPanel =====")
         }
 
-        // Bannerセクションの入口でpinScrollTrigger1をON/OFFするためのトリガー
-        pinControllerBeforeBn = $ScrollTrigger.create({
-            id: "pinControllerBeforeBn",
+        // Bannerセクションの入口でintentObserverをON/OFFするためのトリガー
+        transitionTriggerBeforeBn = $ScrollTrigger.create({
+            id: "transitionTriggerBeforeBn",
             trigger: "#bn",
             start: "top top-=1",
             end: "top top+=1",
             onLeaveBack: () =>
             {
-                console.log(`pinControllerBeforeBn: onLeaveBack`)
-                intentObserver.enable();
+                console.log(`transitionTriggerBeforeBn: onLeaveBack`)
+                // intentObserver.enable();
             },
             onEnter: () =>
             {
-                console.log(`pinControllerBeforeBn: onEnter`)
-                intentObserver.enable();
+                console.log(`transitionTriggerBeforeBn: onEnter`)
+                // intentObserver.enable();
             },
             onLeave: () =>
             {
-                console.log(`pinControllerBeforeBn: onLeave`)
-                intentObserver.disable();
+                console.log(`transitionTriggerBeforeBn: onLeave`)
+                // intentObserver.disable();
             },
             onEnterBack: () =>
             {
-                console.log(`pinControllerBeforeBn: onEnterBack`)
-                intentObserver.enable();
+                console.log(`transitionTriggerBeforeBn: onEnterBack`)
+                // intentObserver.enable();
                 gotoPanel(currentIndex - 1, false);
             },
         })
-        pinControllerBeforeBn.disable();
+        transitionTriggerBeforeBn.disable();
 
-        // Bannerセクションの出口でpinScrollTrigger1をON/OFFするためのトリガー
-        pinControllerAfterBn = $ScrollTrigger.create({
-            id: "pinControllerAfterBn",
+        // Bannerセクションの出口でintentObserverをON/OFFするためのトリガー
+        transitionTriggerAfterBn = $ScrollTrigger.create({
+            id: "transitionTriggerAfterBn",
             trigger: "#bn",
             start: "bottom bottom-=1",
             end: "bottom bottom+=1",
             onLeaveBack: () =>
             {
-                console.log(`pinControllerAfterBn: onLeaveBack`)
-                intentObserver.disable();
+                console.log(`transitionTriggerAfterBn: onLeaveBack`)
             },
             onEnter: () =>
             {
-                console.log(`pinControllerAfterBn: onEnter`)
-                intentObserver.enable();
+                console.log(`transitionTriggerAfterBn: onEnter`)
+                gotoPanel(currentIndex + 1, true)
             },
             onLeave: () =>
             {
-                console.log(`pinControllerAfterBn: onLeave`)
-                intentObserver.enable();
-                gotoPanel(currentIndex + 1, true)
+                console.log(`transitionTriggerAfterBn: onLeave`)
             },
             onEnterBack: () =>
             {
-                console.log(`pinControllerAfterBn: onEnterBack`)
-                intentObserver.disable();
+                console.log(`transitionTriggerAfterBn: onEnterBack`)
             },
-            markers: true,
+            markers: true
         })
-        pinControllerAfterBn.disable();
+        transitionTriggerAfterBn.disable();
+
+        // Illustrationセクションの入口でintentObserverをON/OFFするためのトリガー
+        transitionTriggerBeforeIl = $ScrollTrigger.create({
+            id: "transitionTriggerBeforeIl",
+            trigger: "#il",
+            start: "top top-=1",
+            end: "top top+=1",
+            onLeaveBack: () =>
+            {
+                console.log(`transitionTriggerBeforeIl: onLeaveBack`)
+            },
+            onEnter: () =>
+            {
+                console.log(`transitionTriggerBeforeIl: onEnter`)
+            },
+            onLeave: () =>
+            {
+                console.log(`transitionTriggerBeforeIl: onLeave`)
+            },
+            onEnterBack: () =>
+            {
+                console.log(`transitionTriggerBeforeIl: onEnterBack`)
+                gotoPanel(currentIndex - 1, false)
+            },
+            markers: true
+        })
+        transitionTriggerBeforeIl.disable();
 
 
         // pin swipe section and initiate observer
@@ -445,36 +514,6 @@ onMounted(() =>
             },
             markers: false,
         })
-        pinScrollTrigger2 = $ScrollTrigger.create({
-            id: "pinScrollTrigger2",
-            trigger: "#section-group-2",
-            pin: true,
-            start: "top top",
-            onLeaveBack: () =>
-            {
-                console.log(`pinScrollTrigger2: onLeaveBack`)
-                intentObserver.disable();
-            },
-            onEnter: () =>
-            {
-                console.log(`pinScrollTrigger2: onEnter`)
-                intentObserver.enable();
-                // gotoPanel(currentIndex + 1, true);
-            },
-            onLeave: () =>
-            {
-                console.log(`pinScrollTrigger2: onLeave`)
-                intentObserver.disable();
-            },
-            onEnterBack: () =>
-            {
-                console.log(`pinScrollTrigger2: onEnterBack`)
-                intentObserver.enable();
-                // gotoPanel(currentIndex - 1, false);
-            },
-            markers: true,
-        })
-        pinScrollTrigger2.disable();
 
         gotoPanel(currentIndex + 1, true);
     }
