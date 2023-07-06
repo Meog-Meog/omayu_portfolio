@@ -10,7 +10,7 @@
             <banner-panel />
         </section>
     </div>
-    <div id="section-group-2" class="swipe-section" style="z-index: 1; overscroll-behavior: none">
+    <div id="section-group-2" class="swipe-section" style="z-index: 1">
         <section id="il" class="panel">
             <illustration-panel />
             <footer-view v-show="showFooter" />
@@ -50,6 +50,9 @@ onMounted(() =>
             }, timeout);
         }
 
+        $gsap.set($gsap.utils.toArray(".swipe-section section"), { autoAlpha: 0 })
+        $gsap.set($gsap.utils.toArray(".swipe-section"), { autoAlpha: 0 })
+
         const defaultTsArgs = {
             duration: 0.5, ease: 'power3'
         }
@@ -66,59 +69,71 @@ onMounted(() =>
             {
                 id: "kv",
                 enter: () => $gsap.timeline()
-                    .to('#kv', { y: 0, opacity: 1, duration: 0 })
+                    .set('#section-group-1', { autoAlpha: 1 })
+                    .set('#kv', { y: 0, autoAlpha: 1 })
                     .to('#kv-fullname', {
                         duration: 1,
-                        opacity: 1,
+                        autoAlpha: 1,
                         ease: 'power2.inOut',
                     })
                     .to('#kv-scrolling-hint', {
                         duration: 1,
-                        opacity: 1,
+                        autoAlpha: 1,
                         ease: 'power2.inOut',
                     }),
                 leave: () => $gsap.timeline()
-                    .to('#kv', { y: -100, opacity: 0, ...defaultTsArgs }),
+                    .to('#kv', { y: -100, autoAlpha: 0, ...defaultTsArgs }),
                 enterBack: () => $gsap.timeline()
-                    .fromTo('#kv', { y: -100, opacity: 0 }, { y: 0, opacity: 1, ...defaultTsArgs })
+                    .set('#section-group-1', { autoAlpha: 1 })
+                    .fromTo('#kv', { y: -100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs })
             },
             // 2: ws(title)
             {
                 id: "ws(title)",
                 leaveBack: () => $gsap.timeline()
-                    .to('#ws', { y: 100, opacity: 0, ...defaultTsArgs }),
+                    .to('#ws', { y: 100, autoAlpha: 0, ...defaultTsArgs }),
                 enter: () => $gsap.timeline()
-                    .to(['#ws-thumbnails1', '#ws-thumbnails2'], { opacity: 0, duration: 0 })
-                    .fromTo('#ws', { y: 100, opacity: 0 }, { opacity: 1, y: 0, ...defaultTsArgs }),
+                    .set('#ws-thumbnails1', { autoAlpha: 0 })
+                    .set('#ws-thumbnails2', { autoAlpha: 0 })
+                    .set('#section-group-1', { autoAlpha: 1 })
+                    .set(['#ws-thumbnails1', '#ws-thumbnails2'], { autoAlpha: 0 })
+                    .fromTo('#ws', { y: 100, autoAlpha: 0 }, { autoAlpha: 1, y: 0, ...defaultTsArgs }),
                 leave: () => $gsap.timeline(),
-                enterBack: () => $gsap.timeline(),
+                enterBack: () => $gsap.timeline()
+                    .set('#ws-thumbnails1', { autoAlpha: 0 })
+                    .set('#ws-thumbnails2', { autoAlpha: 0 })
+                    .set('#section-group-1', { autoAlpha: 1 }),
             },
             // 3: ws(1,2)
             {
                 id: "ws(1,2)",
                 leaveBack: () => $gsap.timeline()
-                    .to('#ws-thumbnails1', { y: 100, opacity: 0, ...defaultTsArgs }),
+                    .to('#ws-thumbnails1', { y: 100, autoAlpha: 0, ...defaultTsArgs }),
                 enter: () => $gsap.timeline()
-                    .to('#ws-thumbnails1', { y: 100, opacity: 0, duration: 0 })
-                    .to('#ws-thumbnails1', { y: 0, opacity: 1, ...defaultTsArgs }),
+                    .set('#ws-thumbnails2', { autoAlpha: 0, zIndex: -1 })
+                    .fromTo('#ws-thumbnails1', { y: 100, autoAlpha: 0, zIndex: 1 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
                 leave: () => $gsap.timeline()
-                    .to('#ws-thumbnails1', { y: -100, opacity: 0, ...defaultTsArgs }),
+                    .to('#ws-thumbnails1', { y: -100, autoAlpha: 0, ...defaultTsArgs }),
                 enterBack: () => $gsap.timeline()
-                    .to('#ws-thumbnails1', { y: -100, opacity: 0, duration: 0 })
-                    .to('#ws-thumbnails1', { y: 0, opacity: 1, ...defaultTsArgs }),
+                    .set('#ws-thumbnails2', { autoAlpha: 0, zIndex: -1 })
+                    .fromTo('#ws-thumbnails1', { y: -100, autoAlpha: 0, zIndex: 1 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
             },
             // 4: ws(3,4)
             {
                 id: "ws(3,4)",
                 leaveBack: () => $gsap.timeline()
-                    .to('#ws-thumbnails2', { y: 100, opacity: 0, ...defaultTsArgs }),
+                    .to('#ws-thumbnails2', { y: 100, autoAlpha: 0, ...defaultTsArgs }),
                 enter: () => $gsap.timeline()
-                    .fromTo('#ws-thumbnails2', { y: 100, opacity: 0 }, { y: 0, opacity: 1, ...defaultTsArgs }),
+                    .set('#ws-thumbnails1', { autoAlpha: 0, zIndex: -1 })
+                    .set('#section-group-1', { autoAlpha: 1 })
+                    .fromTo('#ws-thumbnails2', { y: 100, autoAlpha: 0, zIndex: 1 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
                 leave: () => $gsap.timeline()
-                    .to('#ws', { y: -100, opacity: 0, ...defaultTsArgs }),
+                    .to('#ws', { y: -100, autoAlpha: 0, ...defaultTsArgs }),
                 enterBack: () => $gsap.timeline()
-                    .to('#ws-thumbnails2', { opacity: 1, duration: 0 })
-                    .fromTo('#ws', { y: -100, opacity: 0 }, { y: 0, opacity: 1, ...defaultTsArgs }),
+                    .set('#ws-thumbnails1', { autoAlpha: 0, zIndex: -1 })
+                    .set('#section-group-1', { autoAlpha: 1 })
+                    .set('#ws-thumbnails2', { autoAlpha: 1, zIndex: 1 })
+                    .fromTo('#ws', { y: -100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
                 enterBackCallBack: () =>
                 {
                     intentObserver.enable();
@@ -129,12 +144,12 @@ onMounted(() =>
             // 5: cmp(title)
             {
                 leaveBack: () => $gsap.timeline()
-                    .to('#cmp', { y: 100, opacity: 0, ...defaultTsArgs }),
+                    .to('#cmp', { y: 100, autoAlpha: 0, ...defaultTsArgs }),
                 enter: () => $gsap.timeline()
-                    .to('#cmp', { y: 100, opacity: 0, duration: 0 })
-                    .to('#cmp-thumbnails', { y: 100, opacity: 0, duration: 0 })
+                    .set('#cmp', { y: 100, autoAlpha: 0 })
+                    .set('#cmp-thumbnails', { y: 100, autoAlpha: 0 })
                     .to('#cmp', {
-                        opacity: 1,
+                        autoAlpha: 1,
                         y: 0,
                         duration: 0.5,
                         ease: 'power3',
@@ -145,11 +160,11 @@ onMounted(() =>
             // 6: cmp(horizontal scroll)
             {
                 leaveBack: () => $gsap.timeline()
-                    .to('#cmp-thumbnails', { y: 100, opacity: 0, ...defaultTsArgs }),
+                    .to('#cmp-thumbnails', { y: 100, autoAlpha: 0, ...defaultTsArgs }),
                 enter: () => $gsap.timeline()
-                    .to('#cmp-thumbnails', { y: 100, opacity: 0, duration: 0 })
+                    .set('#cmp-thumbnails', { y: 100, autoAlpha: 0 })
                     .to('#cmp-thumbnails', {
-                        opacity: 1,
+                        autoAlpha: 1,
                         y: 0,
                         duration: 0.5,
                         ease: 'power3',
@@ -162,14 +177,15 @@ onMounted(() =>
             {
                 id: "bn(head)",
                 leaveBack: () => $gsap.timeline()
-                    .to('#bn', { opacity: 0, ...defaultTsArgs })
-                    .to(['#bn__title', '#bn__grid-wrapper'], { y: 100, opacity: 0, ...defaultTsArgs }, "<"),
+                    .to('#bn', { autoAlpha: 0, ...defaultTsArgs })
+                    .to(['#bn__title', '#bn__grid-wrapper'], { y: 100, autoAlpha: 0, ...defaultTsArgs }, "<"),
                 enter: () => $gsap.timeline()
-                    .set('#bn', { y: 0, opacity: 0 })
-                    .set(['#bn__title', '#bn__grid-wrapper'], { y: 100, opacity: 0 })
-                    .to('#bn', { opacity: 1, ...defaultTsArgs })
-                    .to('#bn__title', { y: 0, opacity: 1, ...defaultTsArgs })
-                    .to('#bn__grid-wrapper', { y: 0, opacity: 1, ...defaultTsArgs }),
+                    .set('#section-group-1', { autoAlpha: 1 })
+                    .set('#bn', { y: 0, autoAlpha: 0 })
+                    .set(['#bn__title', '#bn__grid-wrapper'], { y: 100, autoAlpha: 0 })
+                    .to('#bn', { autoAlpha: 1, ...defaultTsArgs })
+                    .to('#bn__title', { y: 0, autoAlpha: 1, ...defaultTsArgs })
+                    .to('#bn__grid-wrapper', { y: 0, autoAlpha: 1, ...defaultTsArgs }),
                 enterCallBack: () =>
                 {
                     pinScrollTrigger1.disable();
@@ -179,7 +195,8 @@ onMounted(() =>
                     transitionTriggerBeforeIl.disable();
                 },
                 leave: () => $gsap.timeline(),
-                enterBack: () => $gsap.timeline(),
+                enterBack: () => $gsap.timeline()
+                    .set('#section-group-1', { autoAlpha: 1 }),
                 enterBackCallBack: () =>
                 {
                     pinScrollTrigger1.disable();
@@ -228,13 +245,13 @@ onMounted(() =>
                     transitionTriggerBeforeIl.disable();
                 },
                 leave: () => $gsap.timeline()
-                    .to('#bn__grid-wrapper', { y: -100, opacity: 0, ...defaultTsArgs })
-                    .to('#bn', { opacity: 0, ...defaultTsArgs })
-                    .set("#section-group-1", { opacity: 0 }),
+                    .to('#bn__grid-wrapper', { y: -100, autoAlpha: 0, ...defaultTsArgs })
+                    .to('#bn', { autoAlpha: 0, ...defaultTsArgs })
+                    .set("#section-group-1", { autoAlpha: 0 }),
                 enterBack: () => $gsap.timeline()
-                    .set("#section-group-1", { opacity: 1 })
-                    .to('#bn', { opacity: 1, ...defaultTsArgs })
-                    .fromTo(['#bn__title', '#bn__grid-wrapper'], { y: -100, opacity: 0 }, { y: 0, opacity: 1, ...defaultTsArgs }),
+                    .set("#section-group-1", { autoAlpha: 1 })
+                    .to('#bn', { autoAlpha: 1, ...defaultTsArgs })
+                    .fromTo(['#bn__title', '#bn__grid-wrapper'], { y: -100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
                 enterBackCallBack: () =>
                 {
                     pinScrollTrigger1.disable();
@@ -248,11 +265,11 @@ onMounted(() =>
             {
                 id: "il(head)",
                 leaveBack: () => $gsap.timeline()
-                    .fromTo(["#il__title", "#il__showcase-wrapper"], { y: 0, opacity: 1 }, { y: 100, opacity: 0, ...defaultTsArgs })
-                    .set(["#section-group-2", "#il"], { opacity: 1 }),
+                    .fromTo(["#il__title", "#il__showcase-wrapper"], { y: 0, autoAlpha: 1 }, { y: 100, autoAlpha: 0, ...defaultTsArgs })
+                    .set(["#section-group-2", "#il"], { autoAlpha: 1 }),
                 enter: () => $gsap.timeline()
-                    .set(["#section-group-2", "#il"], { opacity: 1 })
-                    .fromTo(["#il__title", "#il__showcase-wrapper"], { y: 100, opacity: 0 }, { y: 0, opacity: 1, ...defaultTsArgs }),
+                    .set(["#section-group-2", "#il"], { autoAlpha: 1 })
+                    .fromTo(["#il__title", "#il__showcase-wrapper"], { y: 100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
                 enterCallBack: () =>
                 {
                     showFooter.value = false;

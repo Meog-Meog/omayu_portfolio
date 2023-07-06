@@ -5,14 +5,14 @@
     </div>
     <div class="wrapper">
       <div id="ws-thumbnails1" class="thumbnails">
-        <div v-for="item of items.slice(0, 2)" class="thumbnail clickable-view" @click="router.push('/' + item.id)">
+        <div v-for="item of items.slice(0, 2)" class="thumbnail" @click="router.push('/' + item.id)">
           <img :alt="item.alt" :src="item.image" />
         </div>
       </div>
     </div>
     <div class="wrapper">
       <div id="ws-thumbnails2" class="thumbnails">
-        <div v-for="item of items.slice(2, 4)" class="thumbnail clickable-view" @click="router.push('/' + item.id)">
+        <div v-for="item of items.slice(2, 4)" class="thumbnail" @click="router.push('/' + item.id)">
           <img :alt="item.alt" :src="item.image" />
         </div>
       </div>
@@ -23,6 +23,25 @@
 <script setup>
 import items from "@/assets/data/webSiteItems.js";
 const router = useRouter();
+const mouseStalkerText = useState('mouseStalkerText')
+
+onMounted(() =>
+{
+  if (process.client)
+  {
+    for (const clickable of document.getElementsByClassName('thumbnail'))
+    {
+      clickable.addEventListener('mouseover', () =>
+      {
+        mouseStalkerText.value = 'View'
+      }, false)
+      clickable.addEventListener('mouseout', () =>
+      {
+        mouseStalkerText.value = ''
+      }, false)
+    }
+  }
+})
 </script>
 
 <style scoped lang="scss">
