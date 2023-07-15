@@ -1,13 +1,12 @@
 <template>
   <div class="container">
     <div class="wrapper">
-      <div id="cmp-title">
+      <div id="cp-title">
         <img src="~/assets/image/competition/competition.svg?url" alt="Competition" />
       </div>
-      <div id="cmp-thumbnails">
-        <ul class="competitions__items">
-          <li v-for="(item, i) in items" :key="i" class="competitions__item clickable-view"
-            @click="router.push('/' + item.id)">
+      <div id="cp-thumbnails-wrapper">
+        <ul id="cp-thumbnails">
+          <li v-for="(item, i) in items" :key="i" class="clickable-view" @click="router.push('/' + item.id)">
             <img :alt="item.alt" :src="item.image" />
           </li>
         </ul>
@@ -24,7 +23,7 @@ import items from '@/assets/data/competitionItems.js';
 <style lang="scss" scoped>
 .container {
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   position: relative;
   display: flex;
   align-items: center;
@@ -36,40 +35,42 @@ import items from '@/assets/data/competitionItems.js';
   width: 100%;
 }
 
-#cmp-title {
+#cp-title {
   margin-bottom: -55px;
-  position: fixed;
 }
 
-#cmp-thumbnails {
+#cp-thumbnails-wrapper {
   position: relative;
   width: 100%;
   height: calc((100vw - 300px)/2 * 640 / 1066);
+  opacity: 0;
+  visibility: hidden;
 }
 
-.competitions__items {
+#cp-thumbnails {
   position: absolute;
   top: 0;
   left: 0;
   display: flex;
   gap: 0 15px;
-}
+  margin: 0;
 
-.competitions__item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  &:first-of-type {
-    margin-left: 150px;
-  }
+    &:first-of-type {
+      margin-left: 150px;
+    }
 
-  &:last-of-type {
-    margin-right: 170px;
-  }
+    &:last-of-type {
+      margin-right: 170px;
+    }
 
-  img {
-    width: calc((100vw - 300px)/2);
+    img {
+      width: calc((100vw - 300px)/2);
+    }
   }
 }
 </style>

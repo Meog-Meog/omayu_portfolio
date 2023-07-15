@@ -1,20 +1,25 @@
 <template>
-    <div id="section-group-1" class="swipe-section" style="z-index: 2;">
-        <section id="kv" class="fullscreen-panel">
-            <key-visual-panel />
-        </section>
-        <section id="ws" class="fullscreen-panel">
-            <web-site-panel />
-        </section>
-        <section id="bn" class="panel">
-            <banner-panel />
-        </section>
-    </div>
-    <div id="section-group-2" class="swipe-section" style="z-index: 1">
-        <section id="il" class="panel">
-            <illustration-panel />
-            <footer-view />
-        </section>
+    <div style="position: relative;">
+        <div id="section-group-1" class="swipe-section" style="z-index: 2;">
+            <section id="kv" class="fullscreen-panel">
+                <key-visual-panel />
+            </section>
+            <section id="ws" class="fullscreen-panel">
+                <web-site-panel />
+            </section>
+            <section id="cp" class="fullscreen-panel">
+                <competition-panel />
+            </section>
+            <section id="bn" class="panel">
+                <banner-panel />
+            </section>
+        </div>
+        <div id="section-group-2" class="swipe-section" style="z-index: 1;">
+            <section id="il" class="panel">
+                <illustration-panel />
+                <footer-view />
+            </section>
+        </div>
     </div>
 </template>
 
@@ -141,6 +146,40 @@ onMounted(() =>
                     .set('#section-group-1', { autoAlpha: 1 })
                     .set('#ws-thumbnails2', { autoAlpha: 1, zIndex: 1 })
                     .fromTo('#ws', { y: -100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
+            },
+            // 4: cp(title)
+            {
+                id: "cp(title)",
+                leaveBack: () => $gsap.timeline()
+                    .fromTo("#cp-title", { y: 0, autoAlpha: 1 }, { y: 100, autoAlpha: 0, ...defaultTsArgs })
+                    .set('#cp', { autoAlpha: 0 }),
+                enter: () => $gsap.timeline()
+                    .set('#cp', { autoAlpha: 1 })
+                    .fromTo("#cp-title", { y: 100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
+                leave: () => $gsap.timeline(),
+                enterBack: () => $gsap.timeline(),
+            },
+            // 4: cp(1)
+            {
+                id: "cp(1)",
+                leaveBack: () => $gsap.timeline()
+                    .fromTo("#cp-thumbnails-wrapper", { y: 0, autoAlpha: 1 }, { y: 100, autoAlpha: 0, ...defaultTsArgs }),
+                enter: () => $gsap.timeline()
+                    .fromTo("#cp-thumbnails-wrapper", { y: 100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
+                leave: () => $gsap.timeline(),
+                enterBack: () => $gsap.timeline(),
+            },
+            // 4: cp(2)
+            {
+                id: "cp(2)",
+                leaveBack: () => $gsap.timeline()
+                    .fromTo("#cp-thumbnails", { x: -(window.innerWidth - 300) / 2 }, { x: 0, ...defaultTsArgs },),
+                enter: () => $gsap.timeline()
+                    .fromTo("#cp-thumbnails", { x: 0 }, { x: -(window.innerWidth - 300) / 2, ...defaultTsArgs }),
+                leave: () => $gsap.timeline()
+                    .set('#cp', { autoAlpha: 0 }),
+                enterBack: () => $gsap.timeline()
+                    .set('#cp', { autoAlpha: 1 }),
                 enterBackCallBack: () =>
                 {
                     intentObserver.enable();
@@ -329,6 +368,7 @@ onMounted(() =>
         // handle the panel swipe animations
         function gotoPanel(index, isScrollingDown)
         {
+            if (transitions[index].noEnterBack) return;
             console.log("===== gotoPanel =====")
             animating = true;
 
@@ -526,6 +566,7 @@ onMounted(() =>
 
 .swipe-section .fullscreen-panel {
     position: absolute;
+    width: 100%;
     opacity: 0;
 }
 
