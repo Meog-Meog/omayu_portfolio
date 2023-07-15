@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="text-align: left;">
         <external-text-link :style="{ 'margin-bottom': contents.overview ? '25px' : '30px' }" :label="contents.title"
             :url="contents.url" large />
         <div v-if="contents.overview" style="margin-bottom: 30px;">

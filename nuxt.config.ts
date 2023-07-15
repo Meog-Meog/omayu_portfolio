@@ -30,6 +30,7 @@ export default defineNuxtConfig({
     { path: '~/components/v2/panels' },
     { path: '~/components/v2/fullScreenPanels' },
     { path: '~/components/v2/buttons' },
+    { path: '~/components/v2/pages' },
     { path: '~/components/organisms' },
     { path: '~/components/molecules' },
     { path: '~/components/atoms' },

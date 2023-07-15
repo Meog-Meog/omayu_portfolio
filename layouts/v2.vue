@@ -2,7 +2,7 @@
     <mouse-stalker-v2 />
     <hamburger-button-v2 class="float-button-container" />
     <div id="smooth-wrapper" class="body">
-        <div id="smooth-content" :class="{ hide: showModal || showProfileModal }">
+        <div id="smooth-content">
             <slot />
         </div>
     </div>
@@ -25,11 +25,11 @@ onMounted(() =>
     if (process.client)
     {
         if (window.innerWidth < 1133) router.replace('/sorry')
-        // $ScrollTrigger.normalizeScroll(true)
         /*
         smoother.value = $ScrollSmoother.create({
             smooth: 1,
             effects: true,
+            normalizeScroll: true,
         })
         */
     }

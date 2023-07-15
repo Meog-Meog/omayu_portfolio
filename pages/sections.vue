@@ -13,7 +13,7 @@
     <div id="section-group-2" class="swipe-section" style="z-index: 1">
         <section id="il" class="panel">
             <illustration-panel />
-            <footer-view v-show="showFooter" />
+            <footer-view />
         </section>
     </div>
 </template>
@@ -23,9 +23,8 @@ definePageMeta({
     layout: "v2",
 })
 
-const { $gsap, $ScrollTrigger } = useNuxtApp();
-
-const showFooter = ref(false);
+const { $gsap, $ScrollTrigger, $ScrollSmoother } = useNuxtApp();
+const smoother = useState('smoother')
 
 onMounted(() =>
 {
@@ -63,7 +62,7 @@ onMounted(() =>
                 noEnterBack: true,
                 enter: () => $gsap.timeline(),
                 leave: () => $gsap.timeline(),
-                enterBack: () => $gsap.timeline(),
+                enterBack: () => $gsap.timeline()
             },
             // 1: kv
             {
@@ -81,6 +80,14 @@ onMounted(() =>
                         autoAlpha: 1,
                         ease: 'power2.inOut',
                     }),
+                enterCallBack: () =>
+                {
+                    pinScrollTrigger1.enable();
+                    intentObserver.enable();
+                    transitionTriggerBeforeBn.disable();
+                    transitionTriggerAfterBn.disable();
+                    transitionTriggerBeforeIl.disable();
+                },
                 leave: () => $gsap.timeline()
                     .to('#kv', { y: -100, autoAlpha: 0, ...defaultTsArgs }),
                 enterBack: () => $gsap.timeline()
@@ -140,39 +147,6 @@ onMounted(() =>
                     pinScrollTrigger1.enable();
                 }
             },
-            /*
-            // 5: cmp(title)
-            {
-                leaveBack: () => $gsap.timeline()
-                    .to('#cmp', { y: 100, autoAlpha: 0, ...defaultTsArgs }),
-                enter: () => $gsap.timeline()
-                    .set('#cmp', { y: 100, autoAlpha: 0 })
-                    .set('#cmp-thumbnails', { y: 100, autoAlpha: 0 })
-                    .to('#cmp', {
-                        autoAlpha: 1,
-                        y: 0,
-                        duration: 0.5,
-                        ease: 'power3',
-                    }),
-                leave: () => $gsap.timeline(),
-                enterBack: () => $gsap.timeline(),
-            },
-            // 6: cmp(horizontal scroll)
-            {
-                leaveBack: () => $gsap.timeline()
-                    .to('#cmp-thumbnails', { y: 100, autoAlpha: 0, ...defaultTsArgs }),
-                enter: () => $gsap.timeline()
-                    .set('#cmp-thumbnails', { y: 100, autoAlpha: 0 })
-                    .to('#cmp-thumbnails', {
-                        autoAlpha: 1,
-                        y: 0,
-                        duration: 0.5,
-                        ease: 'power3',
-                    }),
-                leave: () => $gsap.timeline(),
-                enterBack: () => $gsap.timeline(),
-            },
-            */
             // 7: bn(head)
             {
                 id: "bn(head)",
@@ -199,6 +173,8 @@ onMounted(() =>
                     .set('#section-group-1', { autoAlpha: 1 }),
                 enterBackCallBack: () =>
                 {
+                    smoother.value?.kill();
+                    $ScrollTrigger.refresh();
                     pinScrollTrigger1.disable();
                     intentObserver.enable();
                     transitionTriggerBeforeBn.disable();
@@ -213,6 +189,12 @@ onMounted(() =>
                 enter: () => $gsap.timeline(),
                 enterCallBack: () =>
                 {
+                    smoother.value = $ScrollSmoother.create({
+                        smooth: 1,
+                        effects: true,
+                        normalizeScroll: true,
+                    })
+                    $ScrollTrigger.refresh();
                     pinScrollTrigger1.disable();
                     intentObserver.disable();
                     transitionTriggerBeforeBn.enable();
@@ -223,6 +205,7 @@ onMounted(() =>
                 enterBack: () => $gsap.timeline(),
                 enterBackCallBack: () =>
                 {
+                    $ScrollTrigger.refresh();
                     pinScrollTrigger1.disable();
                     intentObserver.disable();
                     transitionTriggerBeforeBn.enable();
@@ -266,13 +249,15 @@ onMounted(() =>
                 id: "il(head)",
                 leaveBack: () => $gsap.timeline()
                     .fromTo(["#il__title", "#il__showcase-wrapper"], { y: 0, autoAlpha: 1 }, { y: 100, autoAlpha: 0, ...defaultTsArgs })
-                    .set(["#section-group-2", "#il"], { autoAlpha: 1 }),
+                    .set(["#section-group-2", "#il"], { autoAlpha: 0 })
+                    .set("#section-group-2", { maxHeight: "100vh" })
+                ,
                 enter: () => $gsap.timeline()
+                    .set("#section-group-2", { maxHeight: "500vh" })
                     .set(["#section-group-2", "#il"], { autoAlpha: 1 })
                     .fromTo(["#il__title", "#il__showcase-wrapper"], { y: 100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
                 enterCallBack: () =>
                 {
-                    showFooter.value = false;
                     transitionTriggerBeforeBn.disable();
                     transitionTriggerAfterBn.disable();
                     transitionTriggerBeforeIl.disable();
@@ -282,7 +267,6 @@ onMounted(() =>
                 enterBack: () => $gsap.timeline(),
                 enterBackCallBack: () =>
                 {
-                    showFooter.value = false;
                     transitionTriggerBeforeBn.disable();
                     transitionTriggerAfterBn.disable();
                     transitionTriggerBeforeIl.disable();
@@ -297,7 +281,6 @@ onMounted(() =>
                 enter: () => $gsap.timeline(),
                 enterCallBack: () =>
                 {
-                    showFooter.value = true;
                     intentObserver.disable();
                     transitionTriggerBeforeBn.disable();
                     transitionTriggerAfterBn.disable();
@@ -308,7 +291,6 @@ onMounted(() =>
                 enterBack: () => $gsap.timeline(),
                 enterBackCallBack: () =>
                 {
-                    showFooter.value = true;
                     intentObserver.disable();
                     transitionTriggerBeforeBn.disable();
                     transitionTriggerAfterBn.disable();
@@ -349,20 +331,6 @@ onMounted(() =>
         {
             console.log("===== gotoPanel =====")
             animating = true;
-            // return to normal scroll if we're at the end or back up to the start
-            /*
-            if ((index === transitions.length && isScrollingDown) || (index === -1 && !isScrollingDown))
-            {
-                console.log(`end`)
-                animating = false;
-                if (isScrollingDown)
-                {
-                    console.log(`disable`)
-                    intentObserver.disable();
-                }
-                return
-            }
-            */
 
             if (isScrollingDown && index >= transitions.length)
             {
@@ -450,8 +418,8 @@ onMounted(() =>
         transitionTriggerAfterBn = $ScrollTrigger.create({
             id: "transitionTriggerAfterBn",
             trigger: "#bn",
-            start: "bottom bottom-=1",
-            end: "bottom bottom+=1",
+            start: "bottom bottom+=1",
+            end: "bottom bottom-=1",
             onLeaveBack: () =>
             {
                 console.log(`transitionTriggerAfterBn: onLeaveBack`)
@@ -469,7 +437,7 @@ onMounted(() =>
             {
                 console.log(`transitionTriggerAfterBn: onEnterBack`)
             },
-            markers: true
+            markers: false
         })
         transitionTriggerAfterBn.disable();
 
@@ -477,8 +445,8 @@ onMounted(() =>
         transitionTriggerBeforeIl = $ScrollTrigger.create({
             id: "transitionTriggerBeforeIl",
             trigger: "#il",
-            start: "top top-=1",
-            end: "top top+=1",
+            start: "top top+=1",
+            end: "top top-=1",
             onLeaveBack: () =>
             {
                 console.log(`transitionTriggerBeforeIl: onLeaveBack`)
@@ -496,7 +464,7 @@ onMounted(() =>
                 console.log(`transitionTriggerBeforeIl: onEnterBack`)
                 gotoPanel(currentIndex - 1, false)
             },
-            markers: true
+            markers: false
         })
         transitionTriggerBeforeIl.disable();
 
@@ -546,12 +514,15 @@ onMounted(() =>
     width: 100vw;
     overflow: visible;
     background-color: #fff;
-
-    &:not(:first-of-type) {
-        opacity: 0;
-        margin-top: -100vh;
-    }
 }
+
+#section-group-2 {
+    opacity: 0;
+    margin-top: -100vh;
+    max-height: 100vh;
+    overflow: hidden;
+}
+
 
 .swipe-section .fullscreen-panel {
     position: absolute;

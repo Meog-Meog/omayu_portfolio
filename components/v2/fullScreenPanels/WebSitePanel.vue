@@ -5,14 +5,14 @@
     </div>
     <div class="wrapper">
       <div id="ws-thumbnails1" class="thumbnails">
-        <div v-for="item of items.slice(0, 2)" class="thumbnail" @click="router.push('/' + item.id)">
+        <div v-for="item of items.slice(0, 2)" class="thumbnail" @click="router.push('/web-sites/' + item.id)">
           <img :alt="item.alt" :src="item.image" />
         </div>
       </div>
     </div>
     <div class="wrapper">
       <div id="ws-thumbnails2" class="thumbnails">
-        <div v-for="item of items.slice(2, 4)" class="thumbnail" @click="router.push('/' + item.id)">
+        <div v-for="item of items.slice(2, 4)" class="thumbnail" @click="router.push('/web-sites/' + item.id)">
           <img :alt="item.alt" :src="item.image" />
         </div>
       </div>
