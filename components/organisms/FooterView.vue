@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 const router = useRouter()
-const scrollTo = useState<string>('scrollTo', () => '')
+const scrollTo = useState<Number>('scrollTo', () => -1)
 const smoother = useState<ScrollSmoother>('smoother')
 const year: number = new Date().getFullYear();
 
@@ -52,17 +52,10 @@ const webSite = {
   ],
   scrollTo: async (payload: MouseEvent) =>
   {
+    scrollTo.value = 2;
     if (router.currentRoute.value.path !== "/")
     {
-      scrollTo.value = "web-site";
       await router.push("/");
-    }
-    else
-    {
-      nextTick(() =>
-      {
-        smoother.value.scrollTo('.web-sites__title', false, "top top");
-      });
     }
   }
 }
@@ -85,17 +78,10 @@ const competition = {
   ],
   scrollTo: async (payload: MouseEvent) =>
   {
+    scrollTo.value = 5;
     if (router.currentRoute.value.path !== "/")
     {
-      scrollTo.value = "competition";
       await router.push("/");
-    }
-    else
-    {
-      nextTick(() =>
-      {
-        smoother.value?.scrollTo('#competition', false, "center center");
-      });
     }
   }
 }
@@ -105,16 +91,10 @@ const banner = {
   contents: [],
   scrollTo: async (payload: MouseEvent) =>
   {
+    scrollTo.value = 8;
     if (router.currentRoute.value.path !== "/")
     {
-      scrollTo.value = "banner";
       await router.push("/");
-    } else
-    {
-      nextTick(() =>
-      {
-        smoother.value.scrollTo('#banner', false, "top top");
-      });
     }
   }
 }
@@ -124,15 +104,11 @@ const illustration = {
   contents: [],
   scrollTo: async (payload: MouseEvent) =>
   {
+    scrollTo.value = 11;
     if (router.currentRoute.value.path !== "/")
     {
-      scrollTo.value = "illustration";
       await router.push("/");
     }
-    nextTick(() =>
-    {
-      smoother.value.scrollTo('#illustration', false, "top top");
-    });
   }
 }
 
