@@ -2,7 +2,7 @@
     <div id="website-links" style="padding: 150px 100px">
         <hr />
         <template v-for="(item, i) of items">
-            <div class="row-with-hr" @click="router.push('/' + item.id)">
+            <div class="row-with-hr" @click="router.push(item.id)">
                 <div class="row">
                     <img :src="item.img" style="margin: 10px 0" />
                 </div>
@@ -14,47 +14,39 @@
 
 <script setup lang="ts">
 const mouseStalkerText = useState('mouseStalkerText')
-
-interface Props
-{
-    pageId: string;
-}
-const Props = withDefaults(defineProps<Props>(), {
-    pageId: "",
-});
-
+const route = useRoute()
 const router = useRouter();
 
 const items = [
     {
-        id: "sugoyose",
+        id: "/web-sites/sugoyose",
         img: "/image/lnk/lnk_sugoyose.webp"
     },
     {
-        id: "sugoyose-springcp",
+        id: "/web-sites/sugoyose-springcp",
         img: "/image/lnk/lnk_springcp.webp"
     },
     {
-        id: "sugoyose-oshikatsucp",
+        id: "/web-sites/sugoyose-oshikatsucp",
         img: "/image/lnk/lnk_oshikatsu.webp"
     },
     {
-        id: "hagoromo-gakuen",
+        id: "/web-sites/hagoromo-gakuen",
         img: "/image/lnk/lnk_hagoromo.webp"
     },
     {
-        id: "covermark",
+        id: "/web-sites/covermark",
         img: "/image/lnk/lnk_covermark.webp"
     },
     {
-        id: "connect",
+        id: "/web-sites/connect",
         img: "/image/lnk/lnk_connect.webp"
     },
     {
-        id: "matsushita",
+        id: "/web-sites/matsushita",
         img: "/image/lnk/lnk_matsushita.webp"
     },
-].filter((item) => item.id !== Props.pageId)
+].filter((item) => item.id !== route.path)
 
 onMounted(() =>
 {

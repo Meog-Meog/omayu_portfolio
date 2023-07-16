@@ -369,7 +369,7 @@ onMounted(() =>
         // handle the panel swipe animations
         function gotoPanel(index, isScrollingDown)
         {
-            if (transitions[index].noEnterBack) return;
+            if (transitions[index]?.noEnterBack) return;
             console.log("===== gotoPanel =====")
             animating = true;
 

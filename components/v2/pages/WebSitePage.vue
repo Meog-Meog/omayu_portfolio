@@ -173,13 +173,13 @@ onMounted(() =>
             {
                 id: "wsl(head)",
                 leaveBack: () => $gsap.timeline()
-                    .set("#section-groups-wrapper", { clearProps: "min-height" })
+                    .set("#section-groups-wrapper", { clearProps: "height" })
                     .fromTo('#wsl', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: 100, ...defaultTsArgs })
                     .set("#section-group-2", { autoAlpha: 0 }),
                 enter: () => $gsap.timeline()
                     .add(() => smoother.value?.scrollTop(0))
                     .set("#section-group-2", { autoAlpha: 1, maxHeight: "500vh" })
-                    .add(() => window.document.getElementById('section-groups-wrapper').style.minHeight = window.document.getElementById('section-group-2').offsetHeight + 'px')
+                    .add(() => window.document.getElementById('section-groups-wrapper').style.height = window.document.getElementById('section-group-2').offsetHeight + 'px')
                     .fromTo('#wsl', { autoAlpha: 0, y: 100 }, { autoAlpha: 1, y: 0, ...defaultTsArgs }),
                 enterCallBack: () =>
                 {

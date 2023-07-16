@@ -35,19 +35,19 @@ const webSite = {
   contents: [
     {
       label: "Sugoyose",
-      url: "/sugoyose"
+      url: "/web-sites/sugoyose"
     },
     {
       label: "Spring Campaign",
-      url: "/sugoyose-springcp"
+      url: "/web-sites/sugoyose-springcp"
     },
     {
       label: "Oshikatsu",
-      url: "/sugoyose-oshikatsucp"
+      url: "/web-sites/sugoyose-oshikatsucp"
     },
     {
       label: "Hagoromo Academy",
-      url: "/hagoromo-gakuen"
+      url: "/web-sites/hagoromo-gakuen"
     }
   ],
   scrollTo: async (payload: MouseEvent) =>
@@ -72,15 +72,15 @@ const competition = {
   contents: [
     {
       label: "COVERMARK",
-      url: "/covermark"
+      url: "/web-sites/covermark"
     },
     {
       label: "CO.nnect",
-      url: "/connect"
+      url: "/web-sites/connect"
     },
     {
       label: "Matsushita Hospital",
-      url: "/matsushita"
+      url: "/web-sites/matsushita"
     }
   ],
   scrollTo: async (payload: MouseEvent) =>
