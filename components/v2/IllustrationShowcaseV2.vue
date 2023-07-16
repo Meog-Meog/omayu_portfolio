@@ -21,6 +21,7 @@
 
 <script setup>
 import items from "@/assets/data/illustrationItems.js"
+const mouseStalkerText = useState('mouseStalkerText')
 
 const itemsWithSlotIdx = items.map((item, i) =>
 {
@@ -59,6 +60,35 @@ const back = async () =>
     await wait(0.2)
     idx.value = decrement(idx.value)
 }
+
+onMounted(() =>
+{
+    if (process.client)
+    {
+        for (const clickable of document.getElementsByClassName('clickable-next'))
+        {
+            clickable.addEventListener('mouseover', () =>
+            {
+                mouseStalkerText.value = 'Next'
+            }, false)
+            clickable.addEventListener('mouseout', () =>
+            {
+                mouseStalkerText.value = ''
+            }, false)
+        }
+        for (const clickable of document.getElementsByClassName('clickable-back'))
+        {
+            clickable.addEventListener('mouseover', () =>
+            {
+                mouseStalkerText.value = 'Back'
+            }, false)
+            clickable.addEventListener('mouseout', () =>
+            {
+                mouseStalkerText.value = ''
+            }, false)
+        }
+    }
+})
 
 </script>
 

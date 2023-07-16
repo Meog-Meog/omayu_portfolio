@@ -2,7 +2,7 @@
     <web-site-page :text-img="textImg" :mock-img="mockImg" :captures="captures" :contents="contents" />
 </template>
 
-<script setup>
+<script setup lang="ts">
 definePageMeta({
     layout: "v2",
 })

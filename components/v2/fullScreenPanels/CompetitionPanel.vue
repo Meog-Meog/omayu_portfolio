@@ -6,7 +6,7 @@
       </div>
       <div id="cp-thumbnails-wrapper">
         <ul id="cp-thumbnails">
-          <li v-for="(item, i) in items" :key="i" class="clickable-view" @click="router.push('/' + item.id)">
+          <li v-for="(item, i) in items" :key="i" class="clickable-view" @click="router.push('/web-sites/' + item.id)">
             <img :alt="item.alt" :src="item.image" />
           </li>
         </ul>
@@ -15,9 +15,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import items from '@/assets/data/competitionItems.js';
-
+const router = useRouter();
 </script>
 
 <style lang="scss" scoped>

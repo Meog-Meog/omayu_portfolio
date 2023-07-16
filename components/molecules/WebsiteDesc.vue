@@ -141,10 +141,11 @@ const changeCaps = () =>
     capUrls.value = Props.captures[pageIdx.value].cap[device.value === 'pc' ? 'pc' : 'sp']
     if (smoother.value)
     {
-        smoother.value.scrollTo('.web-site__design', false, "top top");
+        // smoother.value.scrollTo('.web-site__design', false, "top top");
     }
     nextTick(() =>
     {
+        smoother.value?.scrollTop(0)
         $ScrollTrigger.refresh()
     })
 }

@@ -1,24 +1,28 @@
 <template>
-    <div id="section-group" class="swipe-section" style="z-index: 2;">
-        <img id="wsm-bgtext" data-speed="0.1" :src="textImg" />
-        <section id="wsm" class="fullscreen-panel">
-            <web-site-mock-panel :text-img="textImg" :mock-img="mockImg" />
-        </section>
-        <section id="wsd" class="panel">
-            <web-site-desc-panel :captures="captures" :contents="contents" />
-        </section>
-    </div>
-    <div id="section-group-2" class="swipe-section" style="z-index: 1">
-        <section id="wsl" class="panel">
-            <web-site-link-panel />
-            <footer-view />
-        </section>
+    <div id="section-groups-wrapper">
+        <div id="section-group" class="swipe-section" style="z-index: 2;">
+            <img id="wsm-bgtext" data-speed="0.1" :src="textImg" />
+            <section id="wsm" class="fullscreen-panel">
+                <web-site-mock-panel :text-img="textImg" :mock-img="mockImg" />
+            </section>
+            <section id="wsd" class="panel">
+                <web-site-desc-panel :captures="captures" :contents="contents" />
+            </section>
+        </div>
+        <div id="section-group-2" class="swipe-section" style="z-index: 1">
+            <section id="wsl" class="panel">
+                <web-site-link-panel />
+                <footer-view />
+            </section>
+        </div>
     </div>
 </template>
 
 <script setup>
 const Props = defineProps(["textImg", "mockImg", "captures", "contents"]);
 const mouseStalkerText = useState('mouseStalkerText', () => '')
+const smoother = useState('smoother')
+smoother.value?.kill();
 
 const { $gsap, $ScrollTrigger, $ScrollSmoother } = useNuxtApp();
 
@@ -29,9 +33,15 @@ onMounted(() =>
     if (process.client)
     {
         mouseStalkerText.value = ""
+        smoother.value = $ScrollSmoother.create({
+            smooth: 1,
+            effects: true,
+            normalizeScroll: true,
+        })
 
         let currentIndex = 0;
         let animating;
+        let pinBgTrigger;
         let transitionTriggerBeforeWsd;
         let transitionTriggerAfterWsd;
         let transitionTriggerBeforeWsl;
@@ -53,7 +63,7 @@ onMounted(() =>
                 id: "wsm",
                 leaveBack: () => $gsap.timeline(),
                 enter: () => $gsap.timeline()
-                    .set('#section-group', { autoAlpha: 1 })
+                    .set('#section-group', { autoAlpha: 1, maxHeight: "100vh" })
                     .set('#wsm', { y: 0, autoAlpha: 1 })
                     .fromTo('#wsm-mock', { autoAlpha: 0, y: "3rem" }, { duration: 1, autoAlpha: 1, y: 0, ease: 'power2.inOut', })
                     .fromTo('#wsm-bgtext', { autoAlpha: 0 }, { duration: 2, autoAlpha: 1, ease: 'power2.inOut', }, "<+50%"),
@@ -67,6 +77,7 @@ onMounted(() =>
                 leave: () => $gsap.timeline()
                     .fromTo('#wsm-mock', { autoAlpha: 1, y: 0, }, { y: "-3rem", autoAlpha: 0, ...defaultTsArgs }),
                 enterBack: () => $gsap.timeline()
+                    .set('#section-group', { maxHeight: "100vh" })
                     .fromTo('#wsm-mock', { y: "-3rem", autoAlpha: 0, }, { autoAlpha: 1, y: 0, ...defaultTsArgs }),
                 enterBackCallBack: () =>
                 {
@@ -83,10 +94,12 @@ onMounted(() =>
                     .fromTo('#wsd', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs })
                     .fromTo(['#wsd-design', '#wsd-desc'], { y: 0, autoAlpha: 1 }, { y: 100, autoAlpha: 0 }, "<"),
                 enter: () => $gsap.timeline()
+                    .set('#section-group', { maxHeight: "1000vh" })
                     .fromTo('#wsd', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
                     .fromTo(['#wsd-design', '#wsd-desc'], { autoAlpha: 0, y: "3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs }),
                 enterCallBack: () =>
                 {
+                    pinBgTrigger.enable();
                     intentObserver.enable();
                     transitionTriggerBeforeWsd.disable();
                     transitionTriggerAfterWsd.disable();
@@ -160,10 +173,13 @@ onMounted(() =>
             {
                 id: "wsl(head)",
                 leaveBack: () => $gsap.timeline()
+                    .set("#section-groups-wrapper", { clearProps: "min-height" })
                     .fromTo('#wsl', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: 100, ...defaultTsArgs })
                     .set("#section-group-2", { autoAlpha: 0 }),
                 enter: () => $gsap.timeline()
+                    .add(() => smoother.value?.scrollTop(0))
                     .set("#section-group-2", { autoAlpha: 1, maxHeight: "500vh" })
+                    .add(() => window.document.getElementById('section-groups-wrapper').style.minHeight = window.document.getElementById('section-group-2').offsetHeight + 'px')
                     .fromTo('#wsl', { autoAlpha: 0, y: 100 }, { autoAlpha: 1, y: 0, ...defaultTsArgs }),
                 enterCallBack: () =>
                 {
@@ -235,8 +251,8 @@ onMounted(() =>
         transitionTriggerAfterWsd = $ScrollTrigger.create({
             id: "transitionTriggerAfterWsd",
             trigger: "#wsd",
-            start: "bottom bottom-=1",
-            end: "bottom bottom+=1",
+            start: "bottom bottom+=1",
+            end: "bottom bottom-=1",
             onLeaveBack: () =>
             {
                 console.log(`transitionTriggerAfterWsd: onLeaveBack`)
@@ -261,8 +277,8 @@ onMounted(() =>
         transitionTriggerBeforeWsl = $ScrollTrigger.create({
             id: "transitionTriggerBeforeWsl",
             trigger: "#wsl",
-            start: "top top-=1",
-            end: "top top+=1",
+            start: "top top+=1",
+            end: "top top-=1",
             onLeaveBack: () =>
             {
                 console.log(`transitionTriggerBeforeWsl: onLeaveBack`)
@@ -282,6 +298,33 @@ onMounted(() =>
             },
         })
         transitionTriggerBeforeWsl.disable();
+
+        pinBgTrigger = $ScrollTrigger.create({
+            id: "pinBgTrigger",
+            trigger: "#wsd-bg",
+            pin: true,
+            start: "top top",
+            endTrigger: "#wsd",
+            end: "bottom bottom",
+            onLeaveBack: () =>
+            {
+                console.log(`pinBgTrigger: onLeaveBack`)
+            },
+            onEnter: () =>
+            {
+                console.log(`pinBgTrigger: onEnter`)
+            },
+            onLeave: () =>
+            {
+                console.log(`pinBgTrigger: onLeave`)
+            },
+            onEnterBack: () =>
+            {
+                console.log(`pinBgTrigger: onEnterBack`)
+            },
+            markers: false,
+        })
+        pinBgTrigger.enable();
 
         // create an observer and disable it to start
         let intentObserver = $ScrollTrigger.observe({
@@ -374,19 +417,25 @@ onMounted(() =>
 </script>
 
 <style lang="scss" scoped>
+#section-groups-wrapper {
+    position: relative;
+    width: 100%;
+}
+
 .swipe-section {
     position: relative;
     min-height: 100vh;
     width: 100%;
     overflow: hidden;
     background-color: #fff;
+}
 
-    &:not(:first-of-type) {
-        opacity: 0;
-        margin-top: -100vh;
-        max-height: 100vh;
-        overflow: hidden;
-    }
+#section-group-2 {
+    opacity: 0;
+    max-height: 100vh;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
 }
 
 .swipe-section .fullscreen-panel {
@@ -402,6 +451,6 @@ onMounted(() =>
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 100;
+    z-index: 1001;
 }
 </style>

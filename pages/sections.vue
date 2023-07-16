@@ -30,6 +30,7 @@ definePageMeta({
 
 const { $gsap, $ScrollTrigger, $ScrollSmoother } = useNuxtApp();
 const smoother = useState('smoother')
+smoother.value?.kill();
 
 onMounted(() =>
 {

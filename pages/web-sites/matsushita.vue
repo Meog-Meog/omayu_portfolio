@@ -1,8 +1,12 @@
 <template>
-    <WebsiteDetailView :text-img="textImg" :mock-img="mockImg" :captures="captures" :contents="contents" />
+    <web-site-page :text-img="textImg" :mock-img="mockImg" :captures="captures" :contents="contents" />
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+    layout: "v2",
+})
+
 const textImg = "/image/cap/07_matsushita/matsushita_text_2c2c2c.svg"
 const mockImg = "/image/mock/mastushita_mock.webp"
 const captures = [
