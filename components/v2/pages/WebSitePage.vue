@@ -29,6 +29,7 @@ const showModal = useState('showModal', () => false)
 const showProfileModal = useState('showProfileModal', () => false)
 const dark = useState('dark', () => false)
 const darkGrad = useState('darkGrad', () => false)
+imgLoaded.value = false
 dark.value = false
 darkGrad.value = false
 showModal.value = false
