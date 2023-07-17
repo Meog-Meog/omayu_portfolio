@@ -30,8 +30,9 @@ definePageMeta({
 
 const { $gsap, $ScrollTrigger, $ScrollSmoother } = useNuxtApp();
 const smoother = useState('smoother')
-const scrollTo = useState('scrollTo', "")
+const scrollTo = useState('scrollTo')
 smoother.value?.kill();
+smoother.value = null;
 const competitionIdx = useState('competitionIdx', () => 1)
 
 let currentIndex = 0;
@@ -58,6 +59,44 @@ function coolDownForDown(timeout = 100)
 const defaultTsArgs = {
     duration: 0.5, ease: 'power3'
 }
+
+const kvCallback = () =>
+{
+    smoother.value?.kill();
+    smoother.value = null;
+    $ScrollTrigger.refresh();
+    transitionTriggerBeforeBn.disable();
+    transitionTriggerAfterBn.disable();
+    transitionTriggerBeforeIl.disable();
+    setTimeout(() => window.scrollTo(0, 0), 200)
+    pinScrollTrigger1.enable();
+    intentObserver.enable();
+}
+const wsCallback = () =>
+{
+    smoother.value?.kill();
+    smoother.value = null;
+    $ScrollTrigger.refresh();
+    transitionTriggerBeforeBn.disable();
+    transitionTriggerAfterBn.disable();
+    transitionTriggerBeforeIl.disable();
+    pinScrollTrigger1.enable();
+    intentObserver.enable();
+    $ScrollTrigger.refresh();
+}
+const cpCallback = () =>
+{
+    smoother.value?.kill();
+    smoother.value = null;
+    $ScrollTrigger.refresh();
+    transitionTriggerBeforeBn.disable();
+    transitionTriggerAfterBn.disable();
+    transitionTriggerBeforeIl.disable();
+    setTimeout(() => window.scrollTo(0, 0), 200)
+    pinScrollTrigger1.enable();
+    intentObserver.enable();
+}
+
 const transitions = [
     // 0: white-screen
     {
@@ -72,7 +111,8 @@ const transitions = [
     {
         id: "kv",
         enter: () => $gsap.timeline()
-            .set('#section-group-1', { autoAlpha: 1 })
+            .add(() => kvCallback())
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
             .set('#kv', { y: 0, autoAlpha: 1 })
             .to('#kv-fullname', {
                 duration: 1,
@@ -84,19 +124,13 @@ const transitions = [
                 autoAlpha: 1,
                 ease: 'power2.inOut',
             }),
-        enterCallBack: () =>
-        {
-            pinScrollTrigger1.enable();
-            intentObserver.enable();
-            transitionTriggerBeforeBn.disable();
-            transitionTriggerAfterBn.disable();
-            transitionTriggerBeforeIl.disable();
-        },
         leave: () => $gsap.timeline()
             .to('#kv', { y: -100, autoAlpha: 0, ...defaultTsArgs }),
         enterBack: () => $gsap.timeline()
-            .set(['#section-group-1', '#kv-fullname', '#kv-scrolling-hint'], { autoAlpha: 1 })
-            .fromTo('#kv', { y: -100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs })
+            .add(() => kvCallback())
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .set(['#kv-fullname', '#kv-scrolling-hint'], { autoAlpha: 1 })
+            .fromTo('#kv', { y: -100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
     },
     // 2: ws(title)
     {
@@ -104,32 +138,23 @@ const transitions = [
         leaveBack: () => $gsap.timeline()
             .to('#ws', { y: 100, autoAlpha: 0, ...defaultTsArgs }),
         enter: () => $gsap.timeline()
-            .set('#ws-thumbnails1', { autoAlpha: 0 })
-            .set('#ws-thumbnails2', { autoAlpha: 0 })
-            .set('#section-group-1', { autoAlpha: 1 })
-            .set(['#ws-thumbnails1', '#ws-thumbnails2'], { autoAlpha: 0 })
-            .fromTo('#ws', { y: 100, autoAlpha: 0 }, { autoAlpha: 1, y: 0, ...defaultTsArgs }),
+            .set("#section-groups-wrapper", { clearProps: "height" })
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .set(['#ws-thumbnails1', '#ws-thumbnails2'], { autoAlpha: 0, y: 0 })
+            .fromTo('#ws', { y: 100, autoAlpha: 0 }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
+            .add(() => wsCallback()),
         leave: () => $gsap.timeline(),
         enterBack: () => $gsap.timeline()
-            .set('#ws-thumbnails1', { autoAlpha: 0 })
-            .set('#ws-thumbnails2', { autoAlpha: 0 })
-            .set('#section-group-1', { autoAlpha: 1 }),
+            .add(() => wsCallback())
+            .set("#section-groups-wrapper", { clearProps: "height" })
+            .set(['#ws-thumbnails1', '#ws-thumbnails2'], { autoAlpha: 0 })
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" }),
         enterBackByJump: () => $gsap.timeline()
-            .add(() => setTimeout(() => window.scrollTo(0, 0), 200))
-            .set('#ws-thumbnails1', { autoAlpha: 0, zIndex: -1 })
-            .set('#section-group-1', { autoAlpha: 1 })
-            .set('#ws-thumbnails2', { autoAlpha: 0, zIndex: 1 })
-            .fromTo('#ws', { y: -100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
-        enterCallBack: () =>
-        {
-            intentObserver.enable();
-            pinScrollTrigger1.enable();
-        },
-        enterBackCallBack: () =>
-        {
-            intentObserver.enable();
-            pinScrollTrigger1.enable();
-        }
+            .set("#section-groups-wrapper", { clearProps: "height" })
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .set(['#ws-thumbnails1', '#ws-thumbnails2'], { autoAlpha: 0, y: 0 })
+            .fromTo('#ws', { y: 100, autoAlpha: 0 }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
+            .add(() => wsCallback()),
     },
     // 3: ws(1,2)
     {
@@ -137,11 +162,15 @@ const transitions = [
         leaveBack: () => $gsap.timeline()
             .to('#ws-thumbnails1', { y: 100, autoAlpha: 0, ...defaultTsArgs }),
         enter: () => $gsap.timeline()
+            .add(() => wsCallback())
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
             .set('#ws-thumbnails2', { autoAlpha: 0, zIndex: -1 })
             .fromTo('#ws-thumbnails1', { y: 100, autoAlpha: 0, zIndex: 1 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
         leave: () => $gsap.timeline()
             .to('#ws-thumbnails1', { y: -100, autoAlpha: 0, ...defaultTsArgs }),
         enterBack: () => $gsap.timeline()
+            .add(() => wsCallback())
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
             .set('#ws-thumbnails2', { autoAlpha: 0, zIndex: -1 })
             .fromTo('#ws-thumbnails1', { y: -100, autoAlpha: 0, zIndex: 1 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
     },
@@ -151,14 +180,16 @@ const transitions = [
         leaveBack: () => $gsap.timeline()
             .to('#ws-thumbnails2', { y: 100, autoAlpha: 0, ...defaultTsArgs }),
         enter: () => $gsap.timeline()
+            .add(() => wsCallback())
             .set('#ws-thumbnails1', { autoAlpha: 0, zIndex: -1 })
-            .set('#section-group-1', { autoAlpha: 1 })
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
             .fromTo('#ws-thumbnails2', { y: 100, autoAlpha: 0, zIndex: 1 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
         leave: () => $gsap.timeline()
             .to('#ws', { y: -100, autoAlpha: 0, ...defaultTsArgs }),
         enterBack: () => $gsap.timeline()
+            .add(() => wsCallback())
             .set('#ws-thumbnails1', { autoAlpha: 0, zIndex: -1 })
-            .set('#section-group-1', { autoAlpha: 1 })
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
             .set('#ws-thumbnails2', { autoAlpha: 1, zIndex: 1 })
             .fromTo('#ws', { y: -100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
     },
@@ -169,27 +200,26 @@ const transitions = [
             .fromTo(["#cp"], { y: 0, autoAlpha: 1 }, { y: 100, autoAlpha: 0, ...defaultTsArgs })
             .set('#cp', { autoAlpha: 0 }),
         enter: () => $gsap.timeline()
+            .add(() => setTimeout(() => window.scrollTo(0, 0), 200))
+            .add(() => cpCallback())
+            .set("#section-groups-wrapper", { clearProps: "height" })
             .add(() => competitionIdx.value = 1)
-            .set(['#section-group-1'], { autoAlpha: 1 })
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .set(['#cp-thumbnails > li', '#cp-thumbnails'], { autoAlpha: 1, x: 0 })
             .fromTo(["#cp"], { y: 100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
         leave: () => $gsap.timeline(),
         enterBack: () => $gsap.timeline()
+            .add(() => cpCallback())
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
             .add(() => competitionIdx.value = 1),
         enterBackByJump: () => $gsap.timeline()
             .add(() => setTimeout(() => window.scrollTo(0, 0), 200))
+            .set("#section-groups-wrapper", { clearProps: "height" })
             .add(() => competitionIdx.value = 1)
-            .set(['#section-group-1', '#cp-thumbnails > li', '#cp-thumbnails'], { autoAlpha: 1, x: 0 })
-            .fromTo(["#cp"], { y: -100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
-        enterCallBack: () =>
-        {
-            intentObserver.enable();
-            pinScrollTrigger1.enable();
-        },
-        enterBackCallBack: () =>
-        {
-            intentObserver.enable();
-            pinScrollTrigger1.enable();
-        }
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .set(['#cp-thumbnails > li', '#cp-thumbnails'], { autoAlpha: 1, x: 0 })
+            .fromTo(["#cp"], { y: 100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs })
+            .add(() => cpCallback()),
     },
     // 6: cp(2)
     {
@@ -199,19 +229,18 @@ const transitions = [
             .fromTo("#cp-thumbnails", { x: -483 }, { x: 0, ...defaultTsArgs })
             .fromTo("#cp-thumbnails > :nth-child(1)", { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs }, "<"),
         enter: () => $gsap.timeline()
+            .add(() => cpCallback())
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
             .add(() => competitionIdx.value = 2)
             //.fromTo("#cp-thumbnails", { x: 0 }, { x: -(window.innerWidth - 300) / 2, ...defaultTsArgs }),
             .fromTo("#cp-thumbnails", { x: 0 }, { x: -483, ...defaultTsArgs })
             .fromTo("#cp-thumbnails > :nth-child(1)", { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs }, "<"),
         leave: () => $gsap.timeline(),
         enterBack: () => $gsap.timeline()
+            .add(() => cpCallback())
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
             .add(() => competitionIdx.value = 2)
             .set('#cp', { autoAlpha: 1 }),
-        enterBackCallBack: () =>
-        {
-            intentObserver.enable();
-            pinScrollTrigger1.enable();
-        }
     },
     // 6: cp(3)
     {
@@ -221,6 +250,8 @@ const transitions = [
             .fromTo("#cp-thumbnails", { x: -483 * 2 }, { x: -483, ...defaultTsArgs })
             .fromTo("#cp-thumbnails > :nth-child(2)", { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs }, "<"),
         enter: () => $gsap.timeline()
+            .add(() => cpCallback())
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
             .add(() => competitionIdx.value = 3)
             //.fromTo("#cp-thumbnails", { x: 0 }, { x: -(window.innerWidth - 300) / 2, ...defaultTsArgs }),
             .fromTo("#cp-thumbnails", { x: -483 }, { x: -483 * 2, ...defaultTsArgs })
@@ -228,13 +259,12 @@ const transitions = [
         leave: () => $gsap.timeline()
             .fromTo('#cp', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -100 }),
         enterBack: () => $gsap.timeline()
+            .add(() => cpCallback())
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .set("#cp-thumbnails", { x: -483 * 2, ...defaultTsArgs })
+            .set(["#cp-thumbnails > :nth-child(1)", "#cp-thumbnails > :nth-child(2)"], { autoAlpha: 0 })
             .add(() => competitionIdx.value = 3)
             .fromTo('#cp', { autoAlpha: 0, y: -100 }, { autoAlpha: 1, y: 0 }),
-        enterBackCallBack: () =>
-        {
-            intentObserver.enable();
-            pinScrollTrigger1.enable();
-        }
     },
     // 7: bn(head)
     {
@@ -243,7 +273,19 @@ const transitions = [
             .to('#bn', { autoAlpha: 0, ...defaultTsArgs })
             .to(['#bn__title', '#bn__grid-wrapper'], { y: 100, autoAlpha: 0, ...defaultTsArgs }, "<"),
         enter: () => $gsap.timeline()
-            .set('#section-group-1', { autoAlpha: 1 })
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "10000vh" })
+            .set('#bn', { y: 0, autoAlpha: 0 })
+            .set(['#bn__title', '#bn__grid-wrapper'], { y: 100, autoAlpha: 0 })
+            .to('#bn', { autoAlpha: 1, ...defaultTsArgs })
+            .to('#bn__title', { y: 0, autoAlpha: 1, ...defaultTsArgs })
+            .to('#bn__grid-wrapper', { y: 0, autoAlpha: 1, ...defaultTsArgs }),
+        leave: () => $gsap.timeline(),
+        enterBack: () => $gsap.timeline()
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "10000vh" }),
+        enterBackByJump: () => $gsap.timeline()
+            .add(() => setTimeout(() => window.scrollTo(0, 0), 200))
+            .set("#section-groups-wrapper", { clearProps: "height" })
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "10000vh" })
             .set('#bn', { y: 0, autoAlpha: 0 })
             .set(['#bn__title', '#bn__grid-wrapper'], { y: 100, autoAlpha: 0 })
             .to('#bn', { autoAlpha: 1, ...defaultTsArgs })
@@ -251,18 +293,19 @@ const transitions = [
             .to('#bn__grid-wrapper', { y: 0, autoAlpha: 1, ...defaultTsArgs }),
         enterCallBack: () =>
         {
+            smoother.value?.kill();
+            smoother.value = null;
+            $ScrollTrigger.refresh();
             pinScrollTrigger1.disable();
             intentObserver.enable();
             transitionTriggerBeforeBn.disable();
             transitionTriggerAfterBn.disable();
             transitionTriggerBeforeIl.disable();
         },
-        leave: () => $gsap.timeline(),
-        enterBack: () => $gsap.timeline()
-            .set('#section-group-1', { autoAlpha: 1 }),
         enterBackCallBack: () =>
         {
             smoother.value?.kill();
+            smoother.value = null;
             $ScrollTrigger.refresh();
             pinScrollTrigger1.disable();
             intentObserver.enable();
@@ -275,7 +318,7 @@ const transitions = [
     {
         id: "bn(body)",
         leaveBack: () => $gsap.timeline(),
-        enter: () => $gsap.timeline(),
+        enter: () => $gsap.timeline().set("#section-group-2", { maxHeight: "100vh" }),
         enterCallBack: () =>
         {
             smoother.value = $ScrollSmoother.create({
@@ -291,7 +334,7 @@ const transitions = [
             transitionTriggerBeforeIl.disable();
         },
         leave: () => $gsap.timeline(),
-        enterBack: () => $gsap.timeline(),
+        enterBack: () => $gsap.timeline().set("#section-group-2", { maxHeight: "100vh" }),
         enterBackCallBack: () =>
         {
             $ScrollTrigger.refresh();
@@ -306,7 +349,7 @@ const transitions = [
     {
         id: "bn(tail)",
         leaveBack: () => $gsap.timeline(),
-        enter: () => $gsap.timeline(),
+        enter: () => $gsap.timeline().set("#section-group-2", { maxHeight: "100vh" }),
         enterCallBack: () =>
         {
             coolDownForDown(500);
@@ -319,8 +362,11 @@ const transitions = [
         leave: () => $gsap.timeline()
             .to('#bn__grid-wrapper', { y: -100, autoAlpha: 0, ...defaultTsArgs })
             .to('#bn', { autoAlpha: 0, ...defaultTsArgs })
+            .set('#bn__grid-wrapper', { y: 0 })
             .set("#section-group-1", { autoAlpha: 0 }),
         enterBack: () => $gsap.timeline()
+            .add(() => smoother.value?.scrollTo('#bn', false, "bottom bottom"))
+            .set("#section-group-2", { maxHeight: "100vh" })
             .set("#section-group-1", { autoAlpha: 1 })
             .to('#bn', { autoAlpha: 1, ...defaultTsArgs })
             .fromTo(['#bn__title', '#bn__grid-wrapper'], { y: -100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
@@ -337,29 +383,34 @@ const transitions = [
     {
         id: "il(head)",
         leaveBack: () => $gsap.timeline()
+            .set("#section-groups-wrapper", { clearProps: "height" })
             .fromTo(["#il__title", "#il__showcase-wrapper"], { y: 0, autoAlpha: 1 }, { y: 100, autoAlpha: 0, ...defaultTsArgs })
             .set(["#section-group-2", "#il"], { autoAlpha: 0 })
-            .set("#section-group-2", { maxHeight: "100vh" })
-        ,
+            .set("#section-group-2", { maxHeight: "100vh" }),
         enter: () => $gsap.timeline()
+            .add(() => smoother.value?.scrollTop(0))
+            .set(["#section-group-2", "#il"], { autoAlpha: 1, y: 0 })
             .set("#section-group-2", { maxHeight: "500vh" })
-            .set(["#section-group-2", "#il"], { autoAlpha: 1 })
+            .add(() => window.document.getElementById('section-groups-wrapper').style.height = window.document.getElementById('section-group-2').offsetHeight + 'px')
+            .fromTo(["#il__title", "#il__showcase-wrapper"], { y: 100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
+        leave: () => $gsap.timeline(),
+        enterBack: () => $gsap.timeline(),
+        enterBackByJump: () => $gsap.timeline()
+            .set(["#section-group-2", "#il"], { autoAlpha: 1, y: 0 })
+            .set("#section-group-2", { maxHeight: "500vh" })
+            .add(() => window.document.getElementById('section-groups-wrapper').style.height = window.document.getElementById('section-group-2').offsetHeight + 'px')
             .fromTo(["#il__title", "#il__showcase-wrapper"], { y: 100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
         enterCallBack: () =>
         {
+            pinScrollTrigger1.disable();
             transitionTriggerBeforeBn.disable();
             transitionTriggerAfterBn.disable();
             transitionTriggerBeforeIl.disable();
             intentObserver.enable();
         },
-        leave: () => $gsap.timeline(),
-        enterBack: () => $gsap.timeline(),
-        enterBackByJump: () => $gsap.timeline()
-            .set("#section-group-2", { maxHeight: "500vh" })
-            .set(["#section-group-2", "#il"], { autoAlpha: 1 })
-            .fromTo(["#il__title", "#il__showcase-wrapper"], { y: -100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
         enterBackCallBack: () =>
         {
+            pinScrollTrigger1.disable();
             transitionTriggerBeforeBn.disable();
             transitionTriggerAfterBn.disable();
             transitionTriggerBeforeIl.disable();
@@ -370,27 +421,39 @@ const transitions = [
     {
         id: "il(body)",
         leaveBack: () => $gsap.timeline(),
-        leaveBackCallBack: () => { },
         enter: () => $gsap.timeline(),
         enterCallBack: () =>
         {
+            pinScrollTrigger1.disable();
             intentObserver.disable();
             transitionTriggerBeforeBn.disable();
             transitionTriggerAfterBn.disable();
+            smoother.value = smoother.value || $ScrollSmoother.create({
+                smooth: 1,
+                effects: true,
+                normalizeScroll: true,
+            })
+            $ScrollTrigger.refresh();
             transitionTriggerBeforeIl.enable();
         },
         leave: () => $gsap.timeline(),
-        leaveCallBack: () => { },
         enterBack: () => $gsap.timeline(),
         enterBackCallBack: () =>
         {
+            pinScrollTrigger1.disable();
             intentObserver.disable();
             transitionTriggerBeforeBn.disable();
             transitionTriggerAfterBn.disable();
+            smoother.value = smoother.value || $ScrollSmoother.create({
+                smooth: 1,
+                effects: true,
+                normalizeScroll: true,
+            })
+            $ScrollTrigger.refresh();
             transitionTriggerBeforeIl.enable();
         },
         leaveBackByJump: () => $gsap.timeline()
-            .fromTo(["#il"], { y: 0, autoAlpha: 1 }, { y: 100, autoAlpha: 0, ...defaultTsArgs })
+            .fromTo(["#il"], { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs })
             .set(["#section-group-2", "#il"], { autoAlpha: 0, y: 0 })
             .set("#section-group-2", { maxHeight: "100vh" })
     },
@@ -415,6 +478,7 @@ function gotoPanel(index, isScrollingDown, isJump = false)
     }
 
     console.log(`${transitions[currentIndex].id} -> ${transitions[index].id}`)
+    // smoother.value?.paused(true);
     const tl = $gsap.timeline()
     const callBacks = []
     if (isScrollingDown)
@@ -425,11 +489,11 @@ function gotoPanel(index, isScrollingDown, isJump = false)
             if (isJump)
             {
                 tl.add(transitions[currentIndex].leaveByJump())
+                tl.add(() => setTimeout(() => window.scrollTo(0, 0), 200))
             } else
             {
                 tl.add(transitions[currentIndex].leave())
             }
-            callBacks.push(transitions[currentIndex].leaveCallBack)
         }
         if (index < transitions.length)
         {
@@ -445,11 +509,12 @@ function gotoPanel(index, isScrollingDown, isJump = false)
             if (isJump)
             {
                 tl.add(transitions[currentIndex].leaveBackByJump())
+                tl.add(() => setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }), 200))
+                tl.to("#section-groups-wrapper", { duration: 0.3 })
             } else
             {
                 tl.add(transitions[currentIndex].leaveBack())
             }
-            callBacks.push(transitions[currentIndex].leaveBackCallBack)
         }
         if (index < transitions.length)
         {
@@ -468,8 +533,9 @@ function gotoPanel(index, isScrollingDown, isJump = false)
     {
         callBacks.forEach(cb => cb && cb())
         animating = false;
+        currentIndex = index;
+        smoother.value?.paused(false);
     })
-    currentIndex = index;
     console.log("===== /gotoPanel =====")
 }
 
@@ -489,13 +555,11 @@ onMounted(() =>
             {
                 if (!isCoolDownForDown)
                 {
-                    console.log('onUp - intentObserver');
                     !animating && gotoPanel(currentIndex + 1, true);
                 }
             },
             onDown: () =>
             {
-                console.log('onDown - intentObserver');
                 !animating && gotoPanel(currentIndex - 1, false);
             },
             wheelSpeed: -1,
@@ -631,18 +695,29 @@ onMounted(() =>
             goToPanelByJump()
         } else
         {
-            gotoPanel(currentIndex + 1, true);
-            //gotoPanel(5, true);
+            //gotoPanel(currentIndex + 1, true);
+            gotoPanel(8, true);
         }
     }
 });
+
+onUnmounted(() =>
+{
+    isCoolDownForDown = false;
+    currentIndex = 0;
+    animating = false;
+    pinScrollTrigger1?.kill();
+    intentObserver?.kill();
+    transitionTriggerBeforeBn?.kill();
+    transitionTriggerAfterBn?.kill();
+    transitionTriggerBeforeIl?.kill();
+})
 
 function goToPanelByJump()
 {
     const isDown = currentIndex < scrollTo.value;
     smoother.value?.kill();
-    pinScrollTrigger1.disable();
-    intentObserver.disable();
+    smoother.value = null;
     transitionTriggerBeforeBn.disable();
     transitionTriggerAfterBn.disable();
     transitionTriggerBeforeIl.disable();
@@ -667,15 +742,16 @@ watch(scrollTo, () =>
     position: relative;
     min-height: 100vh;
     width: 100vw;
-    overflow: visible;
+    overflow: hidden;
     background-color: #fff;
 }
 
 #section-group-2 {
     opacity: 0;
-    margin-top: -100vh;
     max-height: 100vh;
     overflow: hidden;
+    position: absolute;
+    top: 0;
 }
 
 

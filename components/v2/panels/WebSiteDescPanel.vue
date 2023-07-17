@@ -3,7 +3,7 @@
         <div class="container">
             <div class="wsd-design-size" />
             <div id="wsd-desc-container">
-                <div id="wsd-desc" class="web-site__desc-container">
+                <div id="wsd-desc">
                     <WebsiteDesc :captures="captures" :contents="contents" />
                 </div>
             </div>
@@ -128,6 +128,7 @@ const device = useState('device', () => 'pc')
 
 #wsd-desc {
     z-index: 1000;
+    margin-right: 100px;
     position: fixed;
     top: 50%;
     transform: translateY(-50%);
