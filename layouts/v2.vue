@@ -17,6 +17,7 @@ const showProfileModal = useState('showProfileModal', () => false)
 const showModal = useState('showModal', () => false)
 const dark = useState('dark', () => false)
 const darkGrad = useState('darkGrad', () => false)
+const showMouseStalker = useState('showMouseStalker', () => true)
 const mouseStalkerText = useState('mouseStalkerText', () => '')
 const scrollTo = useState<string>('scrollTo', () => '')
 const smoother = useState<ScrollSmoother>('smoother')
@@ -34,6 +35,22 @@ onMounted(() =>
             normalizeScroll: true,
         })
         */
+        window.addEventListener('mouseover', (event) =>
+        {
+            if (event.relatedTarget === null)
+            {
+                console.log('Mouse entered');
+                showMouseStalker.value = true
+            }
+        });
+        window.addEventListener('mouseout', (event) =>
+        {
+            if (event.relatedTarget === null)
+            {
+                console.log('Mouse left');
+                showMouseStalker.value = false
+            }
+        });
     }
 })
 
