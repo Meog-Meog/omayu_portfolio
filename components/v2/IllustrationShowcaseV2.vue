@@ -50,15 +50,21 @@ const next = async () =>
     const item = items[idx.value]
     item.classList.add('slide-out')
     await wait(0.2)
+    item.classList.remove('slide-out')
     idx.value = increment(idx.value)
 }
 const back = async () =>
 {
-    const items = document.getElementsByClassName('illustration-showcase__item')
-    const item = items[decrement(idx.value)]
-    item.classList.add('slide-in')
-    await wait(0.2)
     idx.value = decrement(idx.value)
+    nextTick(async () =>
+    {
+        const items = document.getElementsByClassName('illustration-showcase__item')
+        const item = items[idx.value]
+        item.classList.add('slide-in')
+        await wait(0.2)
+        item.classList.remove('slide-in')
+    })
+
 }
 
 onMounted(() =>
@@ -178,10 +184,6 @@ $animation-prop: cubic-bezier(0.17, 0.87, 1, 1);
         &--show {
             opacity: 1;
         }
-
-        &--prev {
-            opacity: 0;
-        }
     }
 
     &__item-number {
@@ -227,14 +229,14 @@ $animation-prop: cubic-bezier(0.17, 0.87, 1, 1);
 }
 
 @keyframes slide-in-0 {
-    100% {
-        transform: translate3d(0%, 0%, 0px) rotate(-4.2495deg);
-        opacity: 1;
-    }
-
     0% {
         transform: translate3d(-8.9897%, -8.9897%, 0px) rotate(-9.4949deg);
         opacity: 0;
+    }
+
+    100% {
+        transform: translate3d(0%, 0%, 0px) rotate(-4.2495deg);
+        opacity: 1;
     }
 }
 

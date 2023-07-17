@@ -755,7 +755,7 @@ onMounted(() =>
         } else
         {
             //gotoPanel(currentIndex + 1, true);
-            gotoPanel(1, true);
+            gotoPanel(11, true);
         }
     }
 });
