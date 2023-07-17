@@ -24,6 +24,7 @@ const mouseStalkerText = useState('mouseStalkerText', () => '')
 const smoother = useState('smoother')
 smoother.value?.kill();
 
+const imgLoaded = useState('imgLoaded', () => false)
 const showModal = useState('showModal', () => false)
 const showProfileModal = useState('showProfileModal', () => false)
 const dark = useState('dark', () => false)
@@ -69,7 +70,6 @@ const transitions = [
         enter: () => $gsap.timeline()
             .set('#section-group', { autoAlpha: 1, maxHeight: "100vh" })
             .set('#wsm', { y: 0, autoAlpha: 1 })
-            .to('#wsm', { duration: 3 })
             .fromTo('#wsm-mock', { autoAlpha: 0, y: "3rem" }, { duration: 1, autoAlpha: 1, y: 0, ease: 'power2.inOut', })
             .fromTo('#wsm-bgtext', { autoAlpha: 0 }, { duration: 2, autoAlpha: 1, ease: 'power2.inOut', }, "<+50%"),
         enterCallBack: () =>
@@ -430,7 +430,7 @@ onMounted(() =>
             }
         })
         intentObserver.enable();
-        gotoPanel(currentIndex + 1, true);
+        // gotoPanel(currentIndex + 1, true);
     }
 });
 
@@ -446,6 +446,13 @@ onUnmounted(() =>
     transitionTriggerBeforeWsl?.kill();
 });
 
+watch(imgLoaded, () =>
+{
+    if (imgLoaded)
+    {
+        gotoPanel(1, true);
+    }
+});
 const capUrls = useState('capUrls', () => [])
 watch(capUrls, () =>
 {

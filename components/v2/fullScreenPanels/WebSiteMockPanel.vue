@@ -14,12 +14,13 @@ const Props = withDefaults(defineProps<Props>(), {
 });
 
 const { $ScrollTrigger } = useNuxtApp();
-
+const imgLoaded = useState('imgLoaded', () => false)
 const onLoad = () =>
 {
   nextTick(() =>
   {
     $ScrollTrigger.refresh();
+    imgLoaded.value = true;
   });
 };
 
