@@ -32,7 +32,6 @@ const { $gsap, $ScrollTrigger, $ScrollSmoother } = useNuxtApp();
 const smoother = useState('smoother')
 const scrollTo = useState('scrollTo', "")
 smoother.value?.kill();
-const competitionIdx = useState('competitionIdx', () => 1)
 
 let currentIndex = 0;
 let animating;
@@ -162,74 +161,39 @@ const transitions = [
             .set('#ws-thumbnails2', { autoAlpha: 1, zIndex: 1 })
             .fromTo('#ws', { y: -100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
     },
+    // 4: cp(title)
+    {
+        id: "cp(title)",
+        leaveBack: () => $gsap.timeline()
+            .fromTo("#cp-title", { y: 0, autoAlpha: 1 }, { y: 100, autoAlpha: 0, ...defaultTsArgs })
+            .set('#cp', { autoAlpha: 0 }),
+        enter: () => $gsap.timeline()
+            .set('#cp', { autoAlpha: 1 })
+            .fromTo("#cp-title", { y: 100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
+        leave: () => $gsap.timeline(),
+        enterBack: () => $gsap.timeline(),
+    },
     // 4: cp(1)
     {
         id: "cp(1)",
         leaveBack: () => $gsap.timeline()
-            .fromTo(["#cp"], { y: 0, autoAlpha: 1 }, { y: 100, autoAlpha: 0, ...defaultTsArgs })
-            .set('#cp', { autoAlpha: 0 }),
+            .fromTo("#cp-thumbnails-wrapper", { y: 0, autoAlpha: 1 }, { y: 100, autoAlpha: 0, ...defaultTsArgs }),
         enter: () => $gsap.timeline()
-            .add(() => competitionIdx.value = 1)
-            .set(['#section-group-1'], { autoAlpha: 1 })
-            .fromTo(["#cp"], { y: 100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
+            .fromTo("#cp-thumbnails-wrapper", { y: 100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
         leave: () => $gsap.timeline(),
-        enterBack: () => $gsap.timeline()
-            .add(() => competitionIdx.value = 1),
-        enterBackByJump: () => $gsap.timeline()
-            .add(() => setTimeout(() => window.scrollTo(0, 0), 200))
-            .add(() => competitionIdx.value = 1)
-            .set(['#section-group-1', '#cp-thumbnails > li', '#cp-thumbnails'], { autoAlpha: 1, x: 0 })
-            .fromTo(["#cp"], { y: -100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
-        enterCallBack: () =>
-        {
-            intentObserver.enable();
-            pinScrollTrigger1.enable();
-        },
-        enterBackCallBack: () =>
-        {
-            intentObserver.enable();
-            pinScrollTrigger1.enable();
-        }
+        enterBack: () => $gsap.timeline(),
     },
-    // 6: cp(2)
+    // 4: cp(2)
     {
         id: "cp(2)",
         leaveBack: () => $gsap.timeline()
-            //.fromTo("#cp-thumbnails", { x: -(window.innerWidth - 300) / 2 }, { x: 0, ...defaultTsArgs },),
-            .fromTo("#cp-thumbnails", { x: -483 }, { x: 0, ...defaultTsArgs })
-            .fromTo("#cp-thumbnails > :nth-child(1)", { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs }, "<"),
+            .fromTo("#cp-thumbnails", { x: -(window.innerWidth - 300) / 2 }, { x: 0, ...defaultTsArgs },),
         enter: () => $gsap.timeline()
-            .add(() => competitionIdx.value = 2)
-            //.fromTo("#cp-thumbnails", { x: 0 }, { x: -(window.innerWidth - 300) / 2, ...defaultTsArgs }),
-            .fromTo("#cp-thumbnails", { x: 0 }, { x: -483, ...defaultTsArgs })
-            .fromTo("#cp-thumbnails > :nth-child(1)", { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs }, "<"),
-        leave: () => $gsap.timeline(),
-        enterBack: () => $gsap.timeline()
-            .add(() => competitionIdx.value = 2)
-            .set('#cp', { autoAlpha: 1 }),
-        enterBackCallBack: () =>
-        {
-            intentObserver.enable();
-            pinScrollTrigger1.enable();
-        }
-    },
-    // 6: cp(3)
-    {
-        id: "cp(3)",
-        leaveBack: () => $gsap.timeline()
-            //.fromTo("#cp-thumbnails", { x: -(window.innerWidth - 300) / 2 }, { x: 0, ...defaultTsArgs },),
-            .fromTo("#cp-thumbnails", { x: -483 * 2 }, { x: -483, ...defaultTsArgs })
-            .fromTo("#cp-thumbnails > :nth-child(2)", { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs }, "<"),
-        enter: () => $gsap.timeline()
-            .add(() => competitionIdx.value = 3)
-            //.fromTo("#cp-thumbnails", { x: 0 }, { x: -(window.innerWidth - 300) / 2, ...defaultTsArgs }),
-            .fromTo("#cp-thumbnails", { x: -483 }, { x: -483 * 2, ...defaultTsArgs })
-            .fromTo("#cp-thumbnails > :nth-child(2)", { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs }, "<"),
+            .fromTo("#cp-thumbnails", { x: 0 }, { x: -(window.innerWidth - 300) / 2, ...defaultTsArgs }),
         leave: () => $gsap.timeline()
-            .fromTo('#cp', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -100 }),
+            .set('#cp', { autoAlpha: 0 }),
         enterBack: () => $gsap.timeline()
-            .add(() => competitionIdx.value = 3)
-            .fromTo('#cp', { autoAlpha: 0, y: -100 }, { autoAlpha: 1, y: 0 }),
+            .set('#cp', { autoAlpha: 1 }),
         enterBackCallBack: () =>
         {
             intentObserver.enable();
@@ -632,7 +596,6 @@ onMounted(() =>
         } else
         {
             gotoPanel(currentIndex + 1, true);
-            //gotoPanel(5, true);
         }
     }
 });
