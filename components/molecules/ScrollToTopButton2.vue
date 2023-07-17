@@ -12,8 +12,10 @@ const scrollTo = async () =>
     if (router.currentRoute.value.path !== "/")
     {
         await router.push({ path: "/" });
+    } else
+    {
+        location.reload();
     }
-    smoother.value.scrollTop(0);
 }
 
 onMounted(() =>
