@@ -23,6 +23,7 @@
   display: flex;
   align-items: center;
   padding-left: 100px;
+  margin-bottom: 86px;
 }
 
 #il__title {
