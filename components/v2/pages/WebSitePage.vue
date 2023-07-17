@@ -69,6 +69,7 @@ const transitions = [
         enter: () => $gsap.timeline()
             .set('#section-group', { autoAlpha: 1, maxHeight: "100vh" })
             .set('#wsm', { y: 0, autoAlpha: 1 })
+            .to('#wsm', { duration: 3 })
             .fromTo('#wsm-mock', { autoAlpha: 0, y: "3rem" }, { duration: 1, autoAlpha: 1, y: 0, ease: 'power2.inOut', })
             .fromTo('#wsm-bgtext', { autoAlpha: 0 }, { duration: 2, autoAlpha: 1, ease: 'power2.inOut', }, "<+50%"),
         enterCallBack: () =>
