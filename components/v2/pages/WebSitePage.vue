@@ -99,7 +99,7 @@ const transitions = [
         leaveBack: () => $gsap.timeline()
             .add(() => dark.value = false)
             .fromTo('#wsd', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs })
-            .fromTo(['#wsd-design', '#wsd-desc'], { y: 0, autoAlpha: 1 }, { y: 100, autoAlpha: 0 }, "<"),
+            .fromTo(['#wsd-design', '#wsd-desc'], { y: 0, autoAlpha: 1 }, { y: "3rem", autoAlpha: 0 }, "<"),
         enter: () => $gsap.timeline()
             .add(() => dark.value = true)
             .set('#section-group', { maxHeight: "1000vh" })
@@ -184,13 +184,13 @@ const transitions = [
         id: "wsl(head)",
         leaveBack: () => $gsap.timeline()
             .set("#section-groups-wrapper", { clearProps: "height" })
-            .fromTo('#wsl', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: 100, ...defaultTsArgs })
+            .fromTo('#wsl', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: "3rem", ...defaultTsArgs })
             .set("#section-group-2", { autoAlpha: 0 }),
         enter: () => $gsap.timeline()
             .add(() => smoother.value?.scrollTop(0))
             .set("#section-group-2", { autoAlpha: 1, maxHeight: "500vh" })
             .add(() => window.document.getElementById('section-groups-wrapper').style.height = window.document.getElementById('section-group-2').offsetHeight + 'px')
-            .fromTo('#wsl', { autoAlpha: 0, y: 100 }, { autoAlpha: 1, y: 0, ...defaultTsArgs }),
+            .fromTo('#wsl', { autoAlpha: 0, y: "3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs }),
         enterCallBack: () =>
         {
             intentObserver.enable();
