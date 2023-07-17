@@ -197,7 +197,7 @@ button {
   height: 70px;
   text-align: center;
   font: normal normal normal 16px/35px ZenKakuGothicNew;
-  @include xd-line-height(16px, 35px);
+  @include xd-line-spacing(16px, 35px, 4px, 3px);
   letter-spacing: 0.64px;
   color: #000;
   opacity: 1;

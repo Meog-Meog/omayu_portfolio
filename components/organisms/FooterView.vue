@@ -26,6 +26,7 @@
 
 <script setup lang="ts">
 const router = useRouter()
+const scrollTo = useState<Number>('scrollTo', () => -1)
 const smoother = useState<ScrollSmoother>('smoother')
 const year: number = new Date().getFullYear();
 
@@ -34,33 +35,27 @@ const webSite = {
   contents: [
     {
       label: "Sugoyose",
-      url: "/sugoyose"
+      url: "/web-sites/sugoyose"
     },
     {
       label: "Spring Campaign",
-      url: "/sugoyose-springcp"
+      url: "/web-sites/sugoyose-springcp"
     },
     {
       label: "Oshikatsu",
-      url: "/sugoyose-oshikatsucp"
+      url: "/web-sites/sugoyose-oshikatsucp"
     },
     {
       label: "Hagoromo Academy",
-      url: "/hagoromo-gakuen"
+      url: "/web-sites/hagoromo-gakuen"
     }
   ],
   scrollTo: async (payload: MouseEvent) =>
   {
+    scrollTo.value = 2;
     if (router.currentRoute.value.path !== "/")
     {
-      await router.push({ path: "/", hash: "#web-site" });
-    }
-    else
-    {
-      nextTick(() =>
-      {
-        smoother.value.scrollTo('.web-sites__title', false, "top top");
-      });
+      await router.push("/");
     }
   }
 }
@@ -70,29 +65,23 @@ const competition = {
   contents: [
     {
       label: "COVERMARK",
-      url: "/covermark"
+      url: "/web-sites/covermark"
     },
     {
       label: "CO.nnect",
-      url: "/connect"
+      url: "/web-sites/connect"
     },
     {
       label: "Matsushita Hospital",
-      url: "/matsushita"
+      url: "/web-sites/matsushita"
     }
   ],
   scrollTo: async (payload: MouseEvent) =>
   {
+    scrollTo.value = 5;
     if (router.currentRoute.value.path !== "/")
     {
-      await router.push({ path: "/", hash: "#competition" });
-    }
-    else
-    {
-      nextTick(() =>
-      {
-        smoother.value.scrollTo('.competitions__title', false, "top 70%");
-      });
+      await router.push("/");
     }
   }
 }
@@ -102,15 +91,10 @@ const banner = {
   contents: [],
   scrollTo: async (payload: MouseEvent) =>
   {
+    scrollTo.value = 8;
     if (router.currentRoute.value.path !== "/")
     {
-      await router.push({ path: "/", hash: "#banner" });
-    } else
-    {
-      nextTick(() =>
-      {
-        smoother.value.scrollTo('#banner', false, "top top");
-      });
+      await router.push("/");
     }
   }
 }
@@ -120,14 +104,11 @@ const illustration = {
   contents: [],
   scrollTo: async (payload: MouseEvent) =>
   {
+    scrollTo.value = 11;
     if (router.currentRoute.value.path !== "/")
     {
-      await router.push({ path: "/", hash: "#illustration" });
+      await router.push("/");
     }
-    nextTick(() =>
-    {
-      smoother.value.scrollTo('#illustration', false, "top top");
-    });
   }
 }
 
@@ -147,7 +128,7 @@ a {
   position: relative;
   color: #101010;
   font: normal normal normal 16px/24px ZenKakuGothicNew;
-  @include xd-line-height(16px, 24px);
+  @include xd-line-spacing(16px, 24px, 4px, 3px);
   letter-spacing: 0.64px;
   width: 100vw;
   height: calc(100vh - 110px);
@@ -201,7 +182,7 @@ a {
 
   &__copy-right {
     font: normal normal normal 13px/19px ZenKakuGothicNew;
-    @include xd-line-height(13px, 19px);
+    @include xd-line-spacing(13px, 19px, 4px, 3px);
     letter-spacing: 0.52px;
     color: #101010;
   }

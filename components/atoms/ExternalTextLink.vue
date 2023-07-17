@@ -1,15 +1,17 @@
 <template>
     <a v-if="url" class="external-text-link clickable" :class="{ 'external-text-link--large': large }" :href="url"
         target="_blank">
-        <div>
-            <span class="external-text-link__label">{{ label }}</span>
-            <img v-if="large" class="external-text__icon" src="~/assets/image/icon/icon_tab_l.svg?url" />
-            <img v-else class="external-text__icon" src="~/assets/image/icon/icon_tab_s.svg?url" />
+        <div class="clickable-area">
+            <div class="external-text-link__label">
+                <span>{{ label }}</span>
+                <img v-if="large" class="external-text__icon" src="~/assets/image/icon/icon_tab_l.svg?url" />
+                <img v-else class="external-text__icon" src="~/assets/image/icon/icon_tab_s.svg?url" />
+            </div>
         </div>
     </a>
     <div v-else class="external-text-link" :class="{ 'external-text-link--large': large }">
-        <div>
-            <span class="external-text-link__label">{{ label }}</span>
+        <div class="external-text-link__label">
+            <span>{{ label }}</span>
         </div>
     </div>
 </template>
@@ -36,23 +38,18 @@ const Props = withDefaults(defineProps<Props>(), {
     transition-duration: 0.5s;
     cursor: none;
 
-    div {
-        padding: 10px;
-        margin: -10px;
-    }
-
     &--large {
-        div {
-            padding: 15px;
-            margin: -15px;
-        }
-
-        div span.external-text-link__label {
-            font: normal normal bold 22px/36px ZenKakuGothicNew;
-            letter-spacing: 0.88px;
-            @include xd-line-height(22px, 36px);
+        .external-text-link__label {
+            font: normal normal bold 22px/26px ZenKakuGothicNew;
+            letter-spacing: 0px;
+            @include xd-line-spacing(22px, 26px, 4px, 3px);
         }
     }
+}
+
+.clickable-area {
+    padding: 10px;
+    margin: -10px;
 }
 
 .clickable:hover {
@@ -67,6 +64,6 @@ const Props = withDefaults(defineProps<Props>(), {
     font: normal normal normal 13px/26px ZenKakuGothicNew;
     letter-spacing: 0px;
     color: #EEEEEE;
-    @include xd-line-height(13px, 26px);
+    @include xd-line-spacing(13px, 26px, 4px, 3px);
 }
 </style>

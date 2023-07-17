@@ -14,10 +14,10 @@
 
 <script setup lang="ts">
 const route = useRoute();
-const showProfileModal = useState('showProfileModal')
-const showModal = useState('showModal')
-const dark = useState('dark')
-const darkGrad = useState('darkGrad')
+const showProfileModal = useState('showProfileModal', () => false)
+const showModal = useState('showModal', () => false)
+const dark = useState('dark', () => false)
+const darkGrad = useState('darkGrad', () => false)
 const smoother = useState<ScrollSmoother>('smoother')
 
 function isCurrentUrl(url: string): boolean
@@ -43,13 +43,11 @@ interface Props
     heading: string;
     contents: Item[];
     scrollTo: (payload: MouseEvent) => void;
-    dark: boolean;
 }
 const Props = withDefaults(defineProps<Props>(), {
     heading: "",
     contents: () => [],
     scrollTo: () => { },
-    dark: false
 });
 
 </script>

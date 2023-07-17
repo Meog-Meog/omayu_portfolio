@@ -33,7 +33,7 @@ interface Contents
     period: string,
     area: string,
     overview: string,
-    design: string,
+    design: Array<string>,
     awards: Array<Award>
 }
 interface CaptureImg
@@ -70,7 +70,7 @@ const Props = withDefaults(defineProps<Props>(), {
             period: "",
             area: "",
             overview: "",
-            design: "",
+            design: [""],
             awards: []
         }
     }
@@ -213,6 +213,9 @@ const onCapImgLoad = () =>
 
 onMounted(() =>
 {
+    console.log('false')
+    const smoother = useState<ScrollSmoother>('smoother')
+    smoother.value?.paused(false);
     const mouseStalkerText = useState('mouseStalkerText')
     mouseStalkerText.value = ""
 })

@@ -15,7 +15,6 @@
           :scrollTo="illustration.scrollTo" dark />
       </div>
     </div>
-
   </nav>
 </template>
 
@@ -26,6 +25,7 @@ const dark = useState('dark', () => false)
 const darkGrad = useState('darkGrad', () => false)
 const smoother = useState<ScrollSmoother>('smoother')
 const mouseStalkerText = useState('mouseStalkerText', () => '')
+const scrollTo = useState<Number>('scrollTo', () => -1)
 
 const scrollToTop = async () =>
 {
@@ -36,7 +36,7 @@ const scrollToTop = async () =>
   {
     await router.push({ path: "/" });
   }
-  smoother.value.scrollTop(0);
+  location.reload();
 }
 
 const webSite = {
@@ -44,19 +44,19 @@ const webSite = {
   contents: [
     {
       label: "Sugoyose",
-      url: "/sugoyose"
+      url: "/web-sites/sugoyose"
     },
     {
       label: "Spring Campaign",
-      url: "/sugoyose-springcp"
+      url: "/web-sites/sugoyose-springcp"
     },
     {
       label: "Oshikatsu",
-      url: "/sugoyose-oshikatsucp"
+      url: "/web-sites/sugoyose-oshikatsucp"
     },
     {
       label: "Hagoromo Academy",
-      url: "/hagoromo-gakuen"
+      url: "/web-sites/hagoromo-gakuen"
     }
   ],
   scrollTo: async (payload: MouseEvent) =>
@@ -64,14 +64,11 @@ const webSite = {
     showModal.value = false
     dark.value = false
     darkGrad.value = false
+    scrollTo.value = 2;
     if (router.currentRoute.value.path !== "/")
     {
-      await router.push({ path: "/", hash: "#web-page" });
+      await router.push("/");
     }
-    nextTick(() =>
-    {
-      smoother.value.scrollTo('.web-sites__title', false, "top top");
-    });
   }
 }
 
@@ -80,15 +77,15 @@ const competition = {
   contents: [
     {
       label: "COVERMARK",
-      url: "/covermark"
+      url: "/web-sites/covermark"
     },
     {
       label: "CO.nnect",
-      url: "/connect"
+      url: "/web-sites/connect"
     },
     {
       label: "Matsushita Hospital",
-      url: "/matsushita"
+      url: "/web-sites/matsushita"
     }
   ],
   scrollTo: async (payload: MouseEvent) =>
@@ -96,11 +93,11 @@ const competition = {
     showModal.value = false
     dark.value = false
     darkGrad.value = false
+    scrollTo.value = 5;
     if (router.currentRoute.value.path !== "/")
     {
-      await router.push({ path: "/", hash: "#competition" });
+      await router.push("/");
     }
-    smoother.value.scrollTo('.competitions__title', false, "top 70%");
   }
 }
 
@@ -110,13 +107,12 @@ const banner = {
   scrollTo: async (payload: MouseEvent) =>
   {
     showModal.value = false
-    dark.value = false
     darkGrad.value = false
+    scrollTo.value = 8;
     if (router.currentRoute.value.path !== "/")
     {
-      await router.push({ path: "/", hash: "#banner" });
+      await router.push("/");
     }
-    smoother.value.scrollTo('#banner', false, "top top");
   }
 }
 
@@ -128,11 +124,11 @@ const illustration = {
     showModal.value = false
     dark.value = false
     darkGrad.value = false
+    scrollTo.value = 11;
     if (router.currentRoute.value.path !== "/")
     {
-      await router.push({ path: "/", hash: "#illustration" });
+      await router.push("/");
     }
-    smoother.value.scrollTo('#illustration', false, "top top");
   }
 }
 
@@ -157,6 +153,7 @@ onMounted(() =>
 
 <style lang="scss" scoped>
 .menu-modal {
+  cursor: none;
   position: fixed;
   top: 0;
   right: 0;
@@ -170,8 +167,13 @@ onMounted(() =>
   opacity: 0;
   overflow: scroll;
 
+  background-image: url('~/assets/image/bg01.webp');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
   &--open {
-    transition: .8s ease-out;
+    transition: .1s ease-out;
     pointer-events: auto;
     opacity: 1;
 

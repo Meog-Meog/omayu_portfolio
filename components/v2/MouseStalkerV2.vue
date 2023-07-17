@@ -1,5 +1,5 @@
 <template>
-  <div id="mouse-stalker" :class="{ 'disable-mix-blend-mode': mouseStalkerText }">
+  <div v-show="showMouseStalker" id="mouse-stalker" :class="{ 'disable-mix-blend-mode': mouseStalkerText }">
     <div
       :class="{ 'mouse-stalker--clickable': mouseStalkerText, 'mouse-stalker--clickable--dark': mouseStalkerText && (dark || isMouseStalkerTextDark) }"
       class="mouse-stalker">
@@ -11,16 +11,11 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'mouse-stalker'
-}
-</script>
-
 <script setup>
 import { onMounted } from "vue";
 import { useState } from "nuxt/app";
 
+const showMouseStalker = useState('showMouseStalker', () => true)
 const dark = useState('dark', () => false)
 const mouseStalkerText = useState('mouseStalkerText', () => '')
 const mouseStalkerTextToShow = computed(() =>

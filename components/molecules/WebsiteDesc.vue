@@ -1,60 +1,53 @@
 <template>
-    <div>
-        <external-text-link style="margin-bottom: 30px;" :label="contents.title" :url="contents.url" large />
-        <div class="item">
-            <h2 style="margin-bottom: 7px;">
-                制作期間
-            </h2>
-            <p>
-                {{ contents.period }}
-            </p>
-        </div>
-        <div class="item">
-            <h2 style="margin-bottom: 10px;">
-                担当領域
-            </h2>
-            <p>
-                {{ contents.area }}
-            </p>
-        </div>
-        <div class="item">
-            <h2 style="margin-bottom: 10px;">
-                サービス概要
-            </h2>
+    <div style="text-align: left;">
+        <external-text-link :style="{ 'margin-bottom': contents.overview ? '25px' : '30px' }" :label="contents.title"
+            :url="contents.url" large />
+        <div v-if="contents.overview" style="margin-bottom: 30px;">
             <p>
                 {{ contents.overview }}
             </p>
         </div>
-        <div class="item">
-            <h2 style="margin-bottom: 12px;">
-                施策・デザイン説明
-            </h2>
+        <hr style="margin-bottom: 25px;" />
+        <div style="margin-bottom: 10px;">
             <p>
-                {{ contents.design }}
+                {{ contents.period }}
             </p>
         </div>
-        <div v-if="contents.awards.length > 0" class="item">
-            <h2 style="margin-bottom: 10px;">
-                受賞歴・掲載歴
-            </h2>
-            <external-text-link v-for="(award, i) of contents.awards" :key="i" :label="award.name" :url="award.url" />
+        <div style="margin-bottom: 30px;">
+            <p>
+                {{ contents.area }}
+            </p>
+        </div>
+        <div style="margin-bottom: 30px;">
+            <p>
+                <template v-for="d of contents.design">
+                    {{ d }}
+                    <br>
+                </template>
+            </p>
+        </div>
+        <div v-if="contents.awards.length > 0" style="margin-bottom: 30px;">
+            <external-text-link v-for="(award, i) of contents.awards" :key="i" :label="award.name" :url="award.url"
+                style="margin-bottom: 10px;" />
         </div>
         <template v-if="showDeviceLink || showPageLink">
-            <hr />
-            <div v-if="showDeviceLink" class="device-link">
+            <hr style="margin-bottom: 35px;" />
+            <div class="device-link">
                 <p>
                     ページ切り替え
                 </p>
-                <button v-if="captures[pageIdx].cap['pc'].length" class="icon-btn"
-                    :class="{ 'icon-btn--active': device === 'pc' }" @click="changeDevice('pc')">
-                    <img v-if="device === 'pc'" src="~/assets/image/icon/icon_desktop_eee.svg?url" />
-                    <img v-else src="~/assets/image/icon/icon_desktop_6a6a6a.svg?url" />
-                </button>
-                <button v-if="captures[pageIdx].cap['sp'].length" class="icon-btn"
-                    :class="{ 'icon-btn--active': device === 'sp' }" @click="changeDevice('sp')">
-                    <img v-if="device === 'sp'" src="~/assets/image/icon/icon_phone_eee.svg?url" />
-                    <img v-else src="~/assets/image/icon/icon_phone_6a6a6a.svg?url" />
-                </button>
+                <template v-if="showDeviceLink">
+                    <button v-if="captures[pageIdx].cap['pc'].length" class="icon-btn"
+                        :class="{ 'icon-btn--active': device === 'pc' }" @click="changeDevice('pc')">
+                        <img v-if="device === 'pc'" src="~/assets/image/icon/icon_desktop_eee.svg?url" />
+                        <img v-else src="~/assets/image/icon/icon_desktop_6a6a6a.svg?url" />
+                    </button>
+                    <button v-if="captures[pageIdx].cap['sp'].length" class="icon-btn"
+                        :class="{ 'icon-btn--active': device === 'sp' }" @click="changeDevice('sp')">
+                        <img v-if="device === 'sp'" src="~/assets/image/icon/icon_phone_eee.svg?url" />
+                        <img v-else src="~/assets/image/icon/icon_phone_6a6a6a.svg?url" />
+                    </button>
+                </template>
             </div>
             <div v-if="showPageLink" class="page-link">
                 <span v-for="(page, i) of captures" :key="i">
@@ -82,7 +75,7 @@ interface Contents
     period: string,
     area: string,
     overview: string,
-    design: string,
+    design: Array<string>,
     awards: Array<Award>
 }
 interface CaptureImg
@@ -115,7 +108,7 @@ const Props = withDefaults(defineProps<Props>(), {
             period: "",
             area: "",
             overview: "",
-            design: "",
+            design: [""],
             awards: []
         }
     }
@@ -131,7 +124,7 @@ const capUrls = useState<String[]>('capUrls', () => [])
 const showPageLink = Props.captures.length > 1
 const hasPcPage = Props.captures.some(c => c.cap.pc.length > 0)
 const hasSpPage = Props.captures.some(c => c.cap.sp.length > 0)
-const showDeviceLink = showPageLink || (hasPcPage && hasSpPage)
+const showDeviceLink = hasPcPage && hasSpPage
 
 onMounted(() =>
 {
@@ -148,10 +141,11 @@ const changeCaps = () =>
     capUrls.value = Props.captures[pageIdx.value].cap[device.value === 'pc' ? 'pc' : 'sp']
     if (smoother.value)
     {
-        smoother.value.scrollTo('.web-site__desc', false, "center center");
+        // smoother.value.scrollTo('.web-site__design', false, "top top");
     }
     nextTick(() =>
     {
+        smoother.value?.scrollTop(0)
         $ScrollTrigger.refresh()
     })
 }
@@ -183,32 +177,28 @@ const changePage = (idx: number) =>
 h1 {
     margin-bottom: 30px;
     font: normal normal bold 22px/36px ZenKakuGothicNew;
-    @include xd-line-height(22px, 36px);
+    @include xd-line-spacing(22px, 36px, 4px, 3px);
     letter-spacing: 0.88px;
     color: #EEEEEE;
 }
 
-.item {
-    margin-bottom: 24px;
-}
-
 h2 {
     font: normal normal bold 13px/26px ZenKakuGothicNew;
-    @include xd-line-height(13px, 26px);
+    @include xd-line-spacing(13px, 26px, 4px, 3px);
     letter-spacing: 0px;
     color: #EEEEEE;
 }
 
 p {
     font: normal normal normal 13px/26px ZenKakuGothicNew;
-    @include xd-line-height(13px, 26px);
+    @include xd-line-spacing(13px, 26px, 4px, 3px);
     letter-spacing: 0px;
     color: #EEEEEE;
 }
 
 button {
     font: normal normal normal 13px/26px ZenKakuGothicNew;
-    @include xd-line-height(13px, 26px);
+    @include xd-line-spacing(13px, 26px, 4px, 3px);
     letter-spacing: 0px;
     color: #6A6A6A;
     display: flex;
@@ -221,7 +211,6 @@ button.active {
 }
 
 hr {
-    margin: 30px 0;
     background-color: #2c2c2c;
     height: 1px;
     border: none;

@@ -1,7 +1,7 @@
-import website_sugoyose from 'assets/image/website/website_sugoyose.webp'
-import website_sugoyose_oshikatsucp from 'assets/image/website/website_sugoyose_oshikatsucp.webp'
-import website_hagoromogakuen from 'assets/image/website/website_hagoromogakuen.webp'
-import website_sugoyose_springcp from 'assets/image/website/website_sugoyose_springcp.png'
+import website_sugoyose from 'assets/image/website/sugoyose.webp'
+import website_sugoyose_oshikatsucp from 'assets/image/website/sugoyose_oshikatsucp.webp'
+import website_hagoromogakuen from 'assets/image/website/hagoromogakue.webp'
+import website_sugoyose_springcp from 'assets/image/website/sugoyose_springcp.webp'
 
 export default [
   {

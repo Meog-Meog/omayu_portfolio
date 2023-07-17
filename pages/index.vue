@@ -1,169 +1,864 @@
 <template>
-    <div>
-        <first-view />
-        <web-sites-view />
-        <competitions-view />
-        <banners-view />
-        <illustrations-view />
+    <div id="section-groups-wrapper">
+        <div id="section-group-1" class="swipe-section" style="z-index: 2;">
+            <section id="kv" class="fullscreen-panel">
+                <key-visual-panel />
+            </section>
+            <section id="ws" class="fullscreen-panel">
+                <web-site-panel />
+            </section>
+            <section id="cp" class="fullscreen-panel">
+                <competition-panel />
+            </section>
+            <section id="bn" class="panel">
+                <banner-panel />
+            </section>
+        </div>
+        <div id="section-group-2" class="swipe-section" style="z-index: 1;">
+            <section id="il" class="panel">
+                <illustration-panel />
+                <footer-view />
+            </section>
+        </div>
     </div>
 </template>
 
-<script setup lang="ts">
-const { $gsap, $ScrollTrigger } = useNuxtApp();
-const showProfileModal = useState('showProfileModal')
-const showModal = useState('showModal')
-const dark = useState('dark')
-const darkGrad = useState('darkGrad')
-const mouseStalkerText = useState('mouseStalkerText')
-const route = useRoute()
-const smoother = useState<ScrollSmoother>('smoother')
-
-useHead({
-    title: 'MAYU TERAMOTO\'s Portfolio'
+<script setup>
+definePageMeta({
+    layout: "v2",
 })
+
+const { $gsap, $ScrollTrigger, $ScrollSmoother } = useNuxtApp();
+const smoother = useState('smoother')
+const scrollTo = useState('scrollTo')
+smoother.value?.kill();
+smoother.value = null;
+const competitionIdx = useState('competitionIdx', () => 1)
+const showModal = useState('showModal', () => false)
+const showProfileModal = useState('showProfileModal', () => false)
+const dark = useState('dark', () => false)
+const darkGrad = useState('darkGrad', () => false)
+
+let currentIndex = 0;
+let animating;
+let intentObserver;
+let pinScrollTrigger1;
+let transitionTriggerBeforeBn;
+let transitionTriggerAfterBn;
+let transitionTriggerBeforeIl;
+
+let isCoolDownForDown = false;
+let timerIdForDown;
+
+function coolDownForDown(timeout = 100)
+{
+    isCoolDownForDown = true;
+    clearTimeout(timerIdForDown);
+    timerIdForDown = setTimeout(() =>
+    {
+        isCoolDownForDown = false;
+    }, timeout);
+}
+
+const defaultTsArgs = {
+    duration: 0.5, ease: 'power3'
+}
+
+const kvCallback = () =>
+{
+    smoother.value?.kill();
+    smoother.value = null;
+    $ScrollTrigger.refresh();
+    transitionTriggerBeforeBn.disable();
+    transitionTriggerAfterBn.disable();
+    transitionTriggerBeforeIl.disable();
+    setTimeout(() => window.scrollTo(0, 0), 200)
+    pinScrollTrigger1.enable();
+    intentObserver.enable();
+}
+const wsCallback = () =>
+{
+    smoother.value?.kill();
+    smoother.value = null;
+    $ScrollTrigger.refresh();
+    transitionTriggerBeforeBn.disable();
+    transitionTriggerAfterBn.disable();
+    transitionTriggerBeforeIl.disable();
+    pinScrollTrigger1.enable();
+    intentObserver.enable();
+    $ScrollTrigger.refresh();
+}
+const cpCallback = () =>
+{
+    smoother.value?.kill();
+    smoother.value = null;
+    $ScrollTrigger.refresh();
+    transitionTriggerBeforeBn.disable();
+    transitionTriggerAfterBn.disable();
+    transitionTriggerBeforeIl.disable();
+    setTimeout(() => window.scrollTo(0, 0), 200)
+    pinScrollTrigger1.enable();
+    intentObserver.enable();
+}
+
+const transitions = [
+    // 0: white-screen
+    {
+        id: "init",
+        noEnterBack: true,
+        enter: () => $gsap.timeline(),
+        leave: () => $gsap.timeline(),
+        enterBack: () => $gsap.timeline(),
+        leaveByJump: () => $gsap.timeline(),
+        fadeOut: () => $gsap.timeline()
+    },
+    // 1: kv
+    {
+        id: "kv",
+        enter: () => $gsap.timeline()
+            .add(() => kvCallback())
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .set('#kv', { y: 0, autoAlpha: 1 })
+            .fromTo('#kv-fullname', { autoAlpha: 0, }, { duration: 1, autoAlpha: 1, ease: 'power2.inOut' })
+            .fromTo('#kv-scrolling-hint', { autoAlpha: 0, }, { duration: 1, autoAlpha: 1, ease: 'power2.inOut' }),
+        leave: () => $gsap.timeline()
+            .to('#kv', { y: "-3rem", autoAlpha: 0, ...defaultTsArgs }),
+        enterBack: () => $gsap.timeline()
+            .add(() => kvCallback())
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .set(['#kv-fullname', '#kv-scrolling-hint'], { autoAlpha: 1 })
+            .fromTo('#kv', { y: "-3rem", autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
+        fadeOut: () => $gsap.timeline()
+            .to(['#section-group-1', '#kv'], { autoAlpha: 0, ...defaultTsArgs }),
+        enterCallBack: () =>
+        {
+            kvCallback();
+        },
+    },
+    // 2: ws(title)
+    {
+        id: "ws(title)",
+        leaveBack: () => $gsap.timeline()
+            .to('#ws', { y: "3rem", autoAlpha: 0, ...defaultTsArgs }),
+        enter: () => $gsap.timeline()
+            .set("#section-groups-wrapper", { clearProps: "height" })
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .set(['#ws-thumbnails1', '#ws-thumbnails2'], { autoAlpha: 0, y: 0 })
+            .fromTo('#ws', { y: "3rem", autoAlpha: 0 }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
+            .add(() => wsCallback()),
+        leave: () => $gsap.timeline(),
+        enterBack: () => $gsap.timeline()
+            .add(() => wsCallback())
+            .set("#section-groups-wrapper", { clearProps: "height" })
+            .set(['#ws-thumbnails1', '#ws-thumbnails2'], { autoAlpha: 0 })
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" }),
+        enterBackByJump: () => $gsap.timeline()
+            .set("#section-groups-wrapper", { clearProps: "height" })
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .set(['#ws-thumbnails1', '#ws-thumbnails2'], { autoAlpha: 0, y: 0 })
+            .fromTo('#ws', { y: "3rem", autoAlpha: 0 }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
+            .add(() => wsCallback()),
+        fadeOut: () => $gsap.timeline()
+            .to(['#section-group-1', '#ws'], { autoAlpha: 0, ...defaultTsArgs }),
+        enterCallBack: () =>
+        {
+            wsCallback();
+        },
+    },
+    // 3: ws(1,2)
+    {
+        id: "ws(1,2)",
+        leaveBack: () => $gsap.timeline()
+            .to('#ws-thumbnails1', { y: "3rem", autoAlpha: 0, ...defaultTsArgs }),
+        enter: () => $gsap.timeline()
+            .add(() => wsCallback())
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .set('#ws-thumbnails2', { autoAlpha: 0, zIndex: -1 })
+            .fromTo('#ws-thumbnails1', { y: "3rem", autoAlpha: 0, zIndex: 1 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
+        leave: () => $gsap.timeline()
+            .to('#ws-thumbnails1', { y: "-3rem", autoAlpha: 0, ...defaultTsArgs }),
+        enterBack: () => $gsap.timeline()
+            .add(() => wsCallback())
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .set('#ws-thumbnails2', { autoAlpha: 0, zIndex: -1 })
+            .fromTo('#ws-thumbnails1', { y: "-3rem", autoAlpha: 0, zIndex: 1 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
+        fadeOut: () => $gsap.timeline()
+            .to(['#section-group-1', '#ws'], { autoAlpha: 0, ...defaultTsArgs }),
+        enterCallBack: () =>
+        {
+            wsCallback();
+        },
+    },
+    // 4: ws(3,4)
+    {
+        id: "ws(3,4)",
+        leaveBack: () => $gsap.timeline()
+            .to('#ws-thumbnails2', { y: "3rem", autoAlpha: 0, ...defaultTsArgs }),
+        enter: () => $gsap.timeline()
+            .add(() => wsCallback())
+            .set('#ws-thumbnails1', { autoAlpha: 0, zIndex: -1 })
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .fromTo('#ws-thumbnails2', { y: "3rem", autoAlpha: 0, zIndex: 1 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
+        leave: () => $gsap.timeline()
+            .to('#ws', { y: "-3rem", autoAlpha: 0, ...defaultTsArgs }),
+        enterBack: () => $gsap.timeline()
+            .add(() => wsCallback())
+            .set('#ws-thumbnails1', { autoAlpha: 0, zIndex: -1 })
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .set('#ws-thumbnails2', { autoAlpha: 1, zIndex: 1 })
+            .fromTo('#ws', { y: "-3rem", autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
+        fadeOut: () => $gsap.timeline()
+            .to(['#section-group-1', '#ws'], { autoAlpha: 0, ...defaultTsArgs }),
+        enterCallBack: () =>
+        {
+            wsCallback();
+        },
+    },
+    // 4: cp(1)
+    {
+        id: "cp(1)",
+        leaveBack: () => $gsap.timeline()
+            .fromTo(["#cp"], { y: 0, autoAlpha: 1 }, { y: "3rem", autoAlpha: 0, ...defaultTsArgs })
+            .set('#cp', { autoAlpha: 0 }),
+        enter: () => $gsap.timeline()
+            .add(() => setTimeout(() => window.scrollTo(0, 0), 200))
+            .add(() => cpCallback())
+            .set("#section-groups-wrapper", { clearProps: "height" })
+            .add(() => competitionIdx.value = 1)
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .set(['#cp-thumbnails > li', '#cp-thumbnails'], { autoAlpha: 1, x: 0 })
+            .fromTo(["#cp"], { y: "3rem", autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
+        leave: () => $gsap.timeline(),
+        enterBack: () => $gsap.timeline()
+            .add(() => cpCallback())
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .add(() => competitionIdx.value = 1),
+        enterBackByJump: () => $gsap.timeline()
+            .add(() => setTimeout(() => window.scrollTo(0, 0), 200))
+            .set("#section-groups-wrapper", { clearProps: "height" })
+            .add(() => competitionIdx.value = 1)
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .set(['#cp-thumbnails > li', '#cp-thumbnails'], { autoAlpha: 1, x: 0 })
+            .fromTo(["#cp"], { y: "3rem", autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs })
+            .add(() => cpCallback()),
+        fadeOut: () => $gsap.timeline()
+            .to(['#section-group-1', '#cp'], { autoAlpha: 0, ...defaultTsArgs }),
+        enterCallBack: () =>
+        {
+            cpCallback();
+        },
+    },
+    // 6: cp(2)
+    {
+        id: "cp(2)",
+        leaveBack: () => $gsap.timeline()
+            //.fromTo("#cp-thumbnails", { x: -(window.innerWidth - 300) / 2 }, { x: 0, ...defaultTsArgs },),
+            .fromTo("#cp-thumbnails", { x: -483 }, { x: 0, ...defaultTsArgs })
+            .fromTo("#cp-thumbnails > :nth-child(1)", { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs }, "<"),
+        enter: () => $gsap.timeline()
+            .add(() => cpCallback())
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .add(() => competitionIdx.value = 2)
+            //.fromTo("#cp-thumbnails", { x: 0 }, { x: -(window.innerWidth - 300) / 2, ...defaultTsArgs }),
+            .fromTo("#cp-thumbnails", { x: 0 }, { x: -483, ...defaultTsArgs })
+            .fromTo("#cp-thumbnails > :nth-child(1)", { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs }, "<"),
+        leave: () => $gsap.timeline(),
+        enterBack: () => $gsap.timeline()
+            .add(() => cpCallback())
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .add(() => competitionIdx.value = 2)
+            .set('#cp', { autoAlpha: 1 }),
+        fadeOut: () => $gsap.timeline()
+            .to(['#section-group-1', '#cp'], { autoAlpha: 0, ...defaultTsArgs }),
+        enterCallBack: () =>
+        {
+            cpCallback();
+        },
+    },
+    // 6: cp(3)
+    {
+        id: "cp(3)",
+        leaveBack: () => $gsap.timeline()
+            //.fromTo("#cp-thumbnails", { x: -(window.innerWidth - 300) / 2 }, { x: 0, ...defaultTsArgs },),
+            .fromTo("#cp-thumbnails", { x: -483 * 2 }, { x: -483, ...defaultTsArgs })
+            .fromTo("#cp-thumbnails > :nth-child(2)", { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs }, "<"),
+        enter: () => $gsap.timeline()
+            .add(() => cpCallback())
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .add(() => competitionIdx.value = 3)
+            //.fromTo("#cp-thumbnails", { x: 0 }, { x: -(window.innerWidth - 300) / 2, ...defaultTsArgs }),
+            .fromTo("#cp-thumbnails", { x: -483 }, { x: -483 * 2, ...defaultTsArgs })
+            .fromTo("#cp-thumbnails > :nth-child(2)", { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs }, "<"),
+        leave: () => $gsap.timeline()
+            .fromTo('#cp', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: "-3rem" }),
+        enterBack: () => $gsap.timeline()
+            .add(() => cpCallback())
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .set("#cp-thumbnails", { x: -483 * 2, ...defaultTsArgs })
+            .set(["#cp-thumbnails > :nth-child(1)", "#cp-thumbnails > :nth-child(2)"], { autoAlpha: 0 })
+            .add(() => competitionIdx.value = 3)
+            .fromTo('#cp', { autoAlpha: 0, y: "-3rem" }, { autoAlpha: 1, y: 0 }),
+        fadeOut: () => $gsap.timeline()
+            .to(['#section-group-1', '#cp'], { autoAlpha: 0, ...defaultTsArgs }),
+        enterCallBack: () =>
+        {
+            cpCallback();
+        },
+    },
+    // 7: bn(head)
+    {
+        id: "bn(head)",
+        leaveBack: () => $gsap.timeline()
+            .add(() => dark.value = false)
+            .to('#bn', { autoAlpha: 0, ...defaultTsArgs })
+            .to(['#bn__title', '#bn__grid-wrapper'], { y: "3rem", autoAlpha: 0, ...defaultTsArgs }, "<"),
+        enter: () => $gsap.timeline()
+            .add(() => dark.value = true)
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "10000vh" })
+            .set('#bn', { y: 0, autoAlpha: 0 })
+            .set(['#bn__title', '#bn__grid-wrapper'], { y: "3rem", autoAlpha: 0 })
+            .to('#bn', { autoAlpha: 1, ...defaultTsArgs })
+            .to('#bn__title', { y: 0, autoAlpha: 1, ...defaultTsArgs })
+            .to('#bn__grid-wrapper', { y: 0, autoAlpha: 1, ...defaultTsArgs }),
+        leave: () => $gsap.timeline(),
+        enterBack: () => $gsap.timeline()
+            .add(() => dark.value = true)
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "10000vh" }),
+        enterBackByJump: () => $gsap.timeline()
+            .add(() => dark.value = true)
+            .add(() => setTimeout(() => window.scrollTo(0, 0), 200))
+            .set("#section-groups-wrapper", { clearProps: "height" })
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "10000vh" })
+            .set('#bn', { y: 0, autoAlpha: 0 })
+            .set(['#bn__title', '#bn__grid-wrapper'], { y: "3rem", autoAlpha: 0 })
+            .to('#bn', { autoAlpha: 1, ...defaultTsArgs })
+            .to('#bn__title', { y: 0, autoAlpha: 1, ...defaultTsArgs })
+            .to('#bn__grid-wrapper', { y: 0, autoAlpha: 1, ...defaultTsArgs }),
+        fadeOut: () => $gsap.timeline()
+            .add(() => dark.value = false)
+            .to(['#section-group-1', '#bn'], { autoAlpha: 0, ...defaultTsArgs }),
+        enterCallBack: () =>
+        {
+            smoother.value?.kill();
+            smoother.value = null;
+            $ScrollTrigger.refresh();
+            pinScrollTrigger1.disable();
+            intentObserver.enable();
+            transitionTriggerBeforeBn.disable();
+            transitionTriggerAfterBn.disable();
+            transitionTriggerBeforeIl.disable();
+        },
+        enterBackCallBack: () =>
+        {
+            smoother.value?.kill();
+            smoother.value = null;
+            $ScrollTrigger.refresh();
+            pinScrollTrigger1.disable();
+            intentObserver.enable();
+            transitionTriggerBeforeBn.disable();
+            transitionTriggerAfterBn.disable();
+            transitionTriggerBeforeIl.disable();
+        },
+    },
+    // 8: bn(body)
+    {
+        id: "bn(body)",
+        leaveBack: () => $gsap.timeline(),
+        enter: () => $gsap.timeline().add(() => dark.value = true).set("#section-group-2", { maxHeight: "100vh" }),
+        enterCallBack: () =>
+        {
+            smoother.value = $ScrollSmoother.create({
+                smooth: 1,
+                effects: true,
+                normalizeScroll: true,
+            })
+            $ScrollTrigger.refresh();
+            pinScrollTrigger1.disable();
+            intentObserver.disable();
+            transitionTriggerBeforeBn.enable();
+            transitionTriggerAfterBn.enable();
+            transitionTriggerBeforeIl.disable();
+        },
+        leave: () => $gsap.timeline(),
+        enterBack: () => $gsap.timeline().add(() => dark.value = true).set("#section-group-2", { maxHeight: "100vh" }),
+        fadeOut: () => $gsap.timeline()
+            .add(() => dark.value = false)
+            .to(['#section-group-1', '#bn'], { autoAlpha: 0, ...defaultTsArgs }),
+        enterBackCallBack: () =>
+        {
+            $ScrollTrigger.refresh();
+            pinScrollTrigger1.disable();
+            intentObserver.disable();
+            transitionTriggerBeforeBn.enable();
+            transitionTriggerAfterBn.enable();
+            transitionTriggerBeforeIl.disable();
+        },
+    },
+    // 9: bn(tail)
+    {
+        id: "bn(tail)",
+        leaveBack: () => $gsap.timeline(),
+        enter: () => $gsap.timeline().add(() => dark.value = true).set("#section-group-2", { maxHeight: "100vh" }),
+        enterCallBack: () =>
+        {
+            coolDownForDown(500);
+            pinScrollTrigger1.disable();
+            intentObserver.enable();
+            transitionTriggerBeforeBn.disable();
+            transitionTriggerAfterBn.disable();
+            transitionTriggerBeforeIl.disable();
+        },
+        leave: () => $gsap.timeline()
+            .add(() => dark.value = false)
+            .to('#bn__grid-wrapper', { y: "-3rem", autoAlpha: 0, ...defaultTsArgs })
+            .to('#bn', { autoAlpha: 0, ...defaultTsArgs })
+            .set('#bn__grid-wrapper', { y: 0 })
+            .set("#section-group-1", { autoAlpha: 0 }),
+        enterBack: () => $gsap.timeline()
+            .add(() => dark.value = true)
+            .add(() => smoother.value?.scrollTo('#bn', false, "bottom bottom"))
+            .set("#section-group-2", { maxHeight: "100vh" })
+            .set("#section-group-1", { autoAlpha: 1 })
+            .to('#bn', { autoAlpha: 1, ...defaultTsArgs })
+            .fromTo(['#bn__title', '#bn__grid-wrapper'], { y: "-3rem", autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
+        fadeOut: () => $gsap.timeline()
+            .add(() => dark.value = false)
+            .to(['#section-group-1', '#bn'], { autoAlpha: 0, ...defaultTsArgs }),
+        enterBackCallBack: () =>
+        {
+            pinScrollTrigger1.disable();
+            intentObserver.enable();
+            transitionTriggerBeforeBn.disable();
+            transitionTriggerAfterBn.disable();
+            transitionTriggerBeforeIl.disable();
+        },
+    },
+    // 10: il(head)
+    {
+        id: "il(head)",
+        leaveBack: () => $gsap.timeline()
+            .set("#section-groups-wrapper", { clearProps: "height" })
+            .fromTo(["#il__title", "#il__showcase-wrapper"], { y: 0, autoAlpha: 1 }, { y: "3rem", autoAlpha: 0, ...defaultTsArgs })
+            .set(["#section-group-2", "#il"], { autoAlpha: 0 })
+            .set("#section-group-2", { maxHeight: "100vh" }),
+        enter: () => $gsap.timeline()
+            .add(() => smoother.value?.scrollTop(0))
+            .set(["#section-group-2", "#il"], { autoAlpha: 1, y: 0 })
+            .set("#section-group-2", { maxHeight: "500vh" })
+            .add(() => window.document.getElementById('section-groups-wrapper').style.height = window.document.getElementById('section-group-2').offsetHeight + 'px')
+            .fromTo(["#il__title", "#il__showcase-wrapper"], { y: "3rem", autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
+        leave: () => $gsap.timeline(),
+        enterBack: () => $gsap.timeline(),
+        enterBackByJump: () => $gsap.timeline()
+            .set(["#section-group-2", "#il"], { autoAlpha: 1, y: 0 })
+            .set("#section-group-2", { maxHeight: "500vh" })
+            .add(() => window.document.getElementById('section-groups-wrapper').style.height = window.document.getElementById('section-group-2').offsetHeight + 'px')
+            .fromTo(["#il__title", "#il__showcase-wrapper"], { y: "3rem", autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
+        fadeOut: () => $gsap.timeline()
+            .set("#section-groups-wrapper", { clearProps: "height" })
+            .set("#section-group-2", { maxHeight: "100vh" })
+            .to(['#section-group-2', '#il'], { autoAlpha: 0, ...defaultTsArgs }),
+        enterCallBack: () =>
+        {
+            pinScrollTrigger1.disable();
+            transitionTriggerBeforeBn.disable();
+            transitionTriggerAfterBn.disable();
+            transitionTriggerBeforeIl.disable();
+            intentObserver.enable();
+        },
+        enterBackCallBack: () =>
+        {
+            pinScrollTrigger1.disable();
+            transitionTriggerBeforeBn.disable();
+            transitionTriggerAfterBn.disable();
+            transitionTriggerBeforeIl.disable();
+            intentObserver.enable();
+        },
+    },
+    // 10: il(body)
+    {
+        id: "il(body)",
+        leaveBack: () => $gsap.timeline(),
+        enter: () => $gsap.timeline(),
+        enterCallBack: () =>
+        {
+            pinScrollTrigger1.disable();
+            intentObserver.disable();
+            transitionTriggerBeforeBn.disable();
+            transitionTriggerAfterBn.disable();
+            smoother.value = smoother.value || $ScrollSmoother.create({
+                smooth: 1,
+                effects: true,
+                normalizeScroll: true,
+            })
+            $ScrollTrigger.refresh();
+            transitionTriggerBeforeIl.enable();
+        },
+        leave: () => $gsap.timeline(),
+        enterBack: () => $gsap.timeline(),
+        enterBackCallBack: () =>
+        {
+            pinScrollTrigger1.disable();
+            intentObserver.disable();
+            transitionTriggerBeforeBn.disable();
+            transitionTriggerAfterBn.disable();
+            smoother.value = smoother.value || $ScrollSmoother.create({
+                smooth: 1,
+                effects: true,
+                normalizeScroll: true,
+            })
+            $ScrollTrigger.refresh();
+            transitionTriggerBeforeIl.enable();
+        },
+        fadeOut: () => $gsap.timeline()
+            .set("#section-groups-wrapper", { clearProps: "height" })
+            .set("#section-group-2", { maxHeight: "100vh" })
+            .to(['#section-group-2', '#il'], { autoAlpha: 0, ...defaultTsArgs }),
+    },
+]
+
+// handle the panel swipe animations
+function gotoPanel(index, isScrollingDown, isJump = false)
+{
+    if (transitions[index]?.noEnterBack) return;
+    console.log("===== gotoPanel =====")
+    animating = true;
+
+    if (isScrollingDown && index >= transitions.length)
+    {
+        animating = false;
+        return
+    }
+    if (!isScrollingDown && currentIndex <= 0)
+    {
+        animating = false;
+        return
+    }
+
+    console.log(`${transitions[currentIndex].id} -> ${transitions[index].id}`)
+    // smoother.value?.paused(true);
+    const tl = $gsap.timeline()
+    const callBacks = []
+    if (isScrollingDown)
+    {
+        if (currentIndex >= 0)
+        {
+            console.log(`leave ${transitions[currentIndex].id}`)
+            if (isJump)
+            {
+                tl.add(transitions[currentIndex].fadeOut())
+                tl.add(() => setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }), 200))
+                tl.to("#section-groups-wrapper", { duration: 0.3 })
+            } else
+            {
+                tl.add(transitions[currentIndex].leave())
+            }
+        }
+        if (index < transitions.length)
+        {
+            console.log(`enter ${transitions[index].id}`)
+            tl.add(transitions[index].enter())
+            callBacks.push(transitions[index].enterCallBack)
+        }
+    } else
+    {
+        if (currentIndex >= 0)
+        {
+            console.log(`leaveBack ${transitions[currentIndex].id}`)
+            if (isJump)
+            {
+                tl.add(transitions[currentIndex].fadeOut())
+                tl.add(() => setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }), 200))
+                tl.to("#section-groups-wrapper", { duration: 0.3 })
+            } else
+            {
+                tl.add(transitions[currentIndex].leaveBack())
+            }
+        }
+        if (index < transitions.length)
+        {
+            console.log(`enterBack ${transitions[index].id}`)
+            if (isJump)
+            {
+                tl.add(transitions[index].enterBackByJump())
+            } else
+            {
+                tl.add(transitions[index].enterBack())
+            }
+            callBacks.push(transitions[index].enterBackCallBack)
+        }
+    }
+    tl.then(() =>
+    {
+        callBacks.forEach(cb => cb && cb())
+        animating = false;
+        currentIndex = index;
+        smoother.value?.paused(false);
+    })
+    console.log("===== /gotoPanel =====")
+}
 
 onMounted(() =>
 {
     if (process.client)
     {
-        // ダークモード切り替えの設定
-        document.querySelectorAll('.js-target-darken').forEach((el, idx) =>
-        {
-            $gsap.to(el, {
-                scrollTrigger: {
-                    trigger: el,
-                    id: idx.toString(),
-                    start: 'top 80%',
-                    end: 'bottom 50%',
-                    onEnter: self => dark.value = true,
-                    onEnterBack: self => dark.value = true,
-                    onLeave: self => dark.value = false,
-                    onLeaveBack: self => dark.value = false
-                }
-            })
-        })
-        const resizeObserver = new ResizeObserver(entries =>
-        {
-            for (const entry of entries)
+        setTimeout(() => window.scrollTo(0, 0), 200)
+
+        $gsap.set($gsap.utils.toArray(".swipe-section section"), { autoAlpha: 0 })
+        $gsap.set($gsap.utils.toArray(".swipe-section"), { autoAlpha: 0 })
+
+        // create an observer and disable it to start
+        intentObserver = $ScrollTrigger.observe({
+            type: "wheel,touch",
+            onUp: () =>
             {
-                if (entry.target.classList.contains('js-target-darken'))
+                if (!isCoolDownForDown)
                 {
-                    $ScrollTrigger.refresh();
+                    !animating && gotoPanel(currentIndex + 1, true);
                 }
+            },
+            onDown: () =>
+            {
+                !animating && gotoPanel(currentIndex - 1, false);
+            },
+            wheelSpeed: -1,
+            tolerance: 10,
+            preventDefault: true,
+            onPress: self =>
+            {
+                // on touch devices like iOS, if we want to prevent scrolling, we must call preventDefault() on the touchstart (Observer doesn't do that because that would also prevent side-scrolling which is undesirable in most cases)
+                $ScrollTrigger.isTouch && self.event.preventDefault()
             }
-        });
-        document.querySelectorAll('.js-target-darken').forEach(el =>
-        {
-            resizeObserver.observe(el);
-        });
-        onUnmounted(() =>
-        {
-            document.querySelectorAll('.js-target-darken').forEach(el =>
-            {
-                resizeObserver.unobserve(el);
-            });
-        });
-
-        // 画面に映ったら要素をフワッと表示させるアニメーションの設定
-        document.querySelectorAll('.js-is-in-view-target').forEach((el, idx) =>
-        {
-            $gsap.to(el, {
-                scrollTrigger: {
-                    trigger: el,
-                    id: idx.toString(),
-                    start: 'top 80%',
-                    toggleClass: { targets: el, className: 'is-in-view' },
-                    once: true
-                }
-            })
         })
-        document.querySelectorAll('.js-is-in-view-target--lazy').forEach((el, idx) =>
-        {
-            $gsap.to(el, {
-                scrollTrigger: {
-                    trigger: el,
-                    id: idx.toString(),
-                    start: 'top 80%',
-                    toggleClass: { targets: el, className: 'is-in-view--lazy' },
-                    once: true
-                }
-            })
+        intentObserver.disable();
+
+        // Bannerセクションの入口でintentObserverをON/OFFするためのトリガー
+        transitionTriggerBeforeBn = $ScrollTrigger.create({
+            id: "transitionTriggerBeforeBn",
+            trigger: "#bn",
+            start: "top top-=1",
+            end: "top top+=1",
+            onLeaveBack: () =>
+            {
+                console.log(`transitionTriggerBeforeBn: onLeaveBack`)
+                // intentObserver.enable();
+            },
+            onEnter: () =>
+            {
+                console.log(`transitionTriggerBeforeBn: onEnter`)
+                // intentObserver.enable();
+            },
+            onLeave: () =>
+            {
+                console.log(`transitionTriggerBeforeBn: onLeave`)
+                // intentObserver.disable();
+            },
+            onEnterBack: () =>
+            {
+                console.log(`transitionTriggerBeforeBn: onEnterBack`)
+                // intentObserver.enable();
+                gotoPanel(currentIndex - 1, false);
+            },
+        })
+        transitionTriggerBeforeBn.disable();
+
+        // Bannerセクションの出口でintentObserverをON/OFFするためのトリガー
+        transitionTriggerAfterBn = $ScrollTrigger.create({
+            id: "transitionTriggerAfterBn",
+            trigger: "#bn",
+            start: "bottom bottom+=1",
+            end: "bottom bottom-=1",
+            onLeaveBack: () =>
+            {
+                console.log(`transitionTriggerAfterBn: onLeaveBack`)
+            },
+            onEnter: () =>
+            {
+                console.log(`transitionTriggerAfterBn: onEnter`)
+                gotoPanel(currentIndex + 1, true)
+            },
+            onLeave: () =>
+            {
+                console.log(`transitionTriggerAfterBn: onLeave`)
+            },
+            onEnterBack: () =>
+            {
+                console.log(`transitionTriggerAfterBn: onEnterBack`)
+            },
+            markers: false
+        })
+        transitionTriggerAfterBn.disable();
+
+        // Illustrationセクションの入口でintentObserverをON/OFFするためのトリガー
+        transitionTriggerBeforeIl = $ScrollTrigger.create({
+            id: "transitionTriggerBeforeIl",
+            trigger: "#il",
+            start: "top top+=1",
+            end: "top top-=1",
+            onLeaveBack: () =>
+            {
+                console.log(`transitionTriggerBeforeIl: onLeaveBack`)
+            },
+            onEnter: () =>
+            {
+                console.log(`transitionTriggerBeforeIl: onEnter`)
+            },
+            onLeave: () =>
+            {
+                console.log(`transitionTriggerBeforeIl: onLeave`)
+            },
+            onEnterBack: () =>
+            {
+                console.log(`transitionTriggerBeforeIl: onEnterBack`)
+                gotoPanel(currentIndex - 1, false)
+            },
+            markers: false
+        })
+        transitionTriggerBeforeIl.disable();
+
+
+        // pin swipe section and initiate observer
+        pinScrollTrigger1 = $ScrollTrigger.create({
+            id: "pinScrollTrigger1",
+            trigger: "#section-group-1",
+            pin: true,
+            start: "top top",
+            onLeaveBack: () =>
+            {
+                console.log(`pinScrollTrigger1: onLeaveBack`)
+                intentObserver.disable();
+            },
+            onEnter: () =>
+            {
+                console.log(`pinScrollTrigger1: onEnter`)
+                intentObserver.enable();
+                // gotoPanel(currentIndex + 1, true);
+            },
+            onLeave: () =>
+            {
+                console.log(`pinScrollTrigger1: onLeave`)
+                intentObserver.disable();
+            },
+            onEnterBack: () =>
+            {
+                console.log(`pinScrollTrigger1: onEnterBack`)
+                intentObserver.enable();
+                // gotoPanel(currentIndex - 1, false);
+            },
+            markers: false,
         })
 
-        // クリック可能要素上にホバーした際の処理を設定
-        for (const clickable of document.getElementsByClassName('clickable'))
+        if (scrollTo.value > 0)
         {
-            clickable.addEventListener('mouseover', () =>
-            {
-                mouseStalkerText.value = 'Click'
-            }, false)
-            clickable.addEventListener('mouseout', () =>
-            {
-                mouseStalkerText.value = ''
-            }, false)
-        }
-        for (const clickable of document.getElementsByClassName('clickable-view'))
+            currentIndex = 0;
+            goToPanelByJump()
+        } else
         {
-            clickable.addEventListener('mouseover', () =>
-            {
-                mouseStalkerText.value = 'View'
-            }, false)
-            clickable.addEventListener('mouseout', () =>
-            {
-                mouseStalkerText.value = ''
-            }, false)
-        }
-        for (const clickable of document.getElementsByClassName('clickable-next'))
-        {
-            clickable.addEventListener('mouseover', () =>
-            {
-                mouseStalkerText.value = 'Next'
-            }, false)
-            clickable.addEventListener('mouseout', () =>
-            {
-                mouseStalkerText.value = ''
-            }, false)
-        }
-        for (const clickable of document.getElementsByClassName('clickable-back'))
-        {
-            clickable.addEventListener('mouseover', () =>
-            {
-                mouseStalkerText.value = 'Back'
-            }, false)
-            clickable.addEventListener('mouseout', () =>
-            {
-                mouseStalkerText.value = ''
-            }, false)
-        }
-
-        // クリック可能要素上にホバーした際の処理を設定（darkテーマ固定版）
-        for (const clickable of document.getElementsByClassName('clickable--dark'))
-        {
-            clickable.addEventListener('mouseover', () =>
-            {
-                mouseStalkerText.value = 'Click--dark'
-            }, false)
-            clickable.addEventListener('mouseout', () =>
-            {
-                mouseStalkerText.value = ''
-            }, false)
-        }
-
-        if (route.hash === '#web-site')
-        {
-            smoother.value?.scrollTo('.web-sites__title', false, "top top");
-        }
-        if (route.hash === '#competition')
-        {
-            smoother.value?.scrollTo('.competitions__title', false, "top 70%");
-        }
-        if (route.hash === '#banner')
-        {
-            nextTick(() =>
-            {
-                smoother.value?.scrollTo('.banners__title-container', false, "top top");
-            })
+            //gotoPanel(currentIndex + 1, true);
+            gotoPanel(1, true);
         }
     }
+});
+
+onUnmounted(() =>
+{
+    isCoolDownForDown = false;
+    currentIndex = 0;
+    animating = false;
+    pinScrollTrigger1?.kill();
+    intentObserver?.kill();
+    transitionTriggerBeforeBn?.kill();
+    transitionTriggerAfterBn?.kill();
+    transitionTriggerBeforeIl?.kill();
 })
+
+function goToPanelByJump()
+{
+    const isDown = currentIndex < scrollTo.value;
+    smoother.value?.kill();
+    smoother.value = null;
+    transitionTriggerBeforeBn.disable();
+    transitionTriggerAfterBn.disable();
+    transitionTriggerBeforeIl.disable();
+    gotoPanel(scrollTo.value, isDown, true);
+    scrollTo.value = -1;
+}
+
+watch(scrollTo, () =>
+{
+    if (scrollTo.value > 0) goToPanelByJump();
+})
+watch(showModal, () =>
+{
+    if (showModal.value)
+    {
+        intentObserver.disable();
+        pinScrollTrigger1.disable();
+        transitionTriggerBeforeBn.disable();
+        transitionTriggerAfterBn.disable();
+        transitionTriggerBeforeIl.disable();
+        smoother.value?.paused(true);
+        document.body.style.overflow = 'hidden';
+    } else
+    {
+        smoother.value?.paused(false);
+        transitions[currentIndex].enterCallBack();
+        document.body.style.overflow = 'auto';
+    };
+})
+watch(showProfileModal, () =>
+{
+    if (showProfileModal.value)
+    {
+        intentObserver.disable();
+        pinScrollTrigger1.disable();
+        transitionTriggerBeforeBn.disable();
+        transitionTriggerAfterBn.disable();
+        transitionTriggerBeforeIl.disable();
+        smoother.value?.paused(true);
+        document.body.style.overflow = 'hidden';
+    } else
+    {
+        dark.value = false
+        darkGrad.value = false
+        smoother.value?.paused(false);
+        transitions[currentIndex].enterCallBack();
+        document.body.style.overflow = 'auto';
+    };
+})
+
 </script>
+
+<style lang="scss" scoped>
+#section-groups-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.swipe-section {
+    position: relative;
+    min-height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+#section-group-2 {
+    opacity: 0;
+    max-height: 100vh;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+}
+
+
+.swipe-section .fullscreen-panel {
+    position: absolute;
+    width: 100%;
+    opacity: 0;
+}
+
+.swipe-section .panel {
+    opacity: 0;
+}
+</style>

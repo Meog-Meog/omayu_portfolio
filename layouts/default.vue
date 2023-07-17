@@ -24,6 +24,7 @@ const showModal = useState('showModal', () => false)
 const dark = useState('dark', () => false)
 const darkGrad = useState('darkGrad', () => false)
 const mouseStalkerText = useState('mouseStalkerText', () => '')
+const scrollTo = useState<string>('scrollTo', () => '')
 const smoother = useState<ScrollSmoother>('smoother')
 const { $ScrollTrigger, $ScrollSmoother } = useNuxtApp();
 
@@ -54,7 +55,7 @@ onMounted(() =>
                 $ScrollSmoother.refresh()
                 if (smoother.value) smoother.value.kill();
                 smoother.value = $ScrollSmoother.create({
-                    smooth: 1.5,
+                    smooth: 1,
                     effects: true,
                 })
             })
@@ -65,10 +66,14 @@ onMounted(() =>
 watch(route, value =>
 {
     showModal.value = false
-    dark.value = false
+    if (scrollTo.value !== 'banner')
+    {
+        dark.value = false
+    }
     darkGrad.value = false
     mouseStalkerText.value = ''
     showProfileModal.value = false
+    smoother?.value?.paused(false);
 }, { deep: true, immediate: true })
 
 watch(showModal, value =>
