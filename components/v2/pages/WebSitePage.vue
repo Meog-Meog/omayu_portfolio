@@ -24,6 +24,13 @@ const mouseStalkerText = useState('mouseStalkerText', () => '')
 const smoother = useState('smoother')
 smoother.value?.kill();
 
+const showModal = useState('showModal', () => false)
+const dark = useState('dark', () => false)
+const darkGrad = useState('darkGrad', () => false)
+dark.value = false
+darkGrad.value = false
+showModal.value = false
+
 const { $gsap, $ScrollTrigger, $ScrollSmoother } = useNuxtApp();
 
 let isCoolDownForDown = false;
@@ -45,6 +52,13 @@ const transitions = [
         enter: () => $gsap.timeline(),
         leave: () => $gsap.timeline(),
         enterBack: () => $gsap.timeline(),
+        enterCallBack: () =>
+        {
+            intentObserver.enable();
+            transitionTriggerBeforeWsd.disable();
+            transitionTriggerAfterWsd.disable();
+            transitionTriggerBeforeWsl.disable();
+        },
     },
     // 1: wsm
     {
@@ -437,6 +451,20 @@ watch(capUrls, () =>
         transitionTriggerAfterWsd.disable();
         transitionTriggerBeforeWsl.disable();
     }
+});
+watch(showModal, () =>
+{
+    if (showModal.value)
+    {
+        intentObserver.disable();
+        smoother.value?.paused(true);
+        document.body.style.overflow = 'hidden';
+    } else
+    {
+        smoother.value?.paused(false);
+        transitions[currentIndex].enterCallBack();
+        document.body.style.overflow = 'auto';
+    };
 });
 </script>
 

@@ -13,6 +13,7 @@ import { useState } from "nuxt/app";
 const showProfileModal = useState('showProfileModal', () => false)
 const showModal = useState('showModal', () => false)
 const dark = useState('dark', () => false)
+const mouseStalkerText = useState('mouseStalkerText')
 
 let beforeDark = false
 
@@ -30,6 +31,25 @@ const toggle = (_) =>
     dark.value = true
   }
 }
+
+onMounted(() =>
+{
+  if (process.client)
+  {
+    for (const clickable of document.getElementsByClassName('hamburger-btn'))
+    {
+      clickable.addEventListener('mouseover', () =>
+      {
+        mouseStalkerText.value = 'Click'
+      }, false)
+      clickable.addEventListener('mouseout', () =>
+      {
+        mouseStalkerText.value = ''
+      }, false)
+    }
+  }
+})
+
 </script>
 
 <style lang="scss" scoped>
@@ -41,6 +61,7 @@ const toggle = (_) =>
   transition-timing-function: ease-out;
   transition-duration: 0.3s;
   mix-blend-mode: difference;
+  cursor: none;
 
   &.fade-in {
     opacity: 0;

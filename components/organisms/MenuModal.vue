@@ -15,7 +15,6 @@
           :scrollTo="illustration.scrollTo" dark />
       </div>
     </div>
-
   </nav>
 </template>
 
@@ -37,7 +36,7 @@ const scrollToTop = async () =>
   {
     await router.push({ path: "/" });
   }
-  smoother.value.scrollTop(0);
+  location.reload();
 }
 
 const webSite = {
@@ -174,7 +173,7 @@ onMounted(() =>
   background-size: cover;
 
   &--open {
-    transition: .8s ease-out;
+    transition: .1s ease-out;
     pointer-events: auto;
     opacity: 1;
 
