@@ -12,6 +12,7 @@ const showProfileModal = useState('showProfileModal', () => false)
 
 <style lang="scss" scoped>
 .profile-modal {
+  cursor: none;
   position: fixed;
   top: 0;
   right: 0;
@@ -27,8 +28,13 @@ const showProfileModal = useState('showProfileModal', () => false)
   justify-content: center;
   align-items: center;
 
+  background-image: url('~/assets/image/bg01.webp');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
   &--open {
-    transition: .8s ease-out;
+    transition: .1s ease-out;
     pointer-events: auto;
     opacity: 1;
 

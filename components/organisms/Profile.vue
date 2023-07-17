@@ -1,16 +1,15 @@
 <template>
   <div class="profile__container">
     <div>
-      <img src="~/assets/image/profile/mayuteramoto_pf.svg?url" class="profile__name js-is-in-view-target"
-        alt="Mayu Teramoto" />
+      <img src="~/assets/image/profile/mayuteramoto_pf.svg?url" class="profile__name" alt="Mayu Teramoto" />
       <div class="profile__desc">
         <span>
           大阪府出身 / 東京都在住　Webデザイナー歴 5年目
         </span>
       </div>
       <div class="profile__text">
-        得意なことは整理整頓、好きなことは1つの作業に集中して取り組むこと。
-        これまでの業務では、デザインに加えて企画段階の打ち合わせにも参加し、同じチームで働くデザイナーのスケジュールや納期管理も担当してきました。
+        得意なことは整理整頓、好きなことは1つの作業に集中して取り組むこと。<br>
+        これまでの業務では、デザインに加えて企画段階の打ち合わせにも参加し、同じチームで働くデザイナーのスケジュールや納期管理も担当してきました。<br>
         どんな案件でも、自分も携わったと胸を張って言えるデザイン制作を心掛けています。
       </div>
     </div>
@@ -67,7 +66,7 @@ const year: number = new Date().getFullYear();
 
   &__text {
     text-align: left;
-    font: normal normal normal 14px ZenKakuGothicNew;
+    font: normal normal normal 14px/26px ZenKakuGothicNew;
     letter-spacing: 0;
     width: 100%;
     @include xd-line-spacing(14px, 26px, 4px, 3px);

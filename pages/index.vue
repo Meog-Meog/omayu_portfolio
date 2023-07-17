@@ -35,6 +35,9 @@ smoother.value?.kill();
 smoother.value = null;
 const competitionIdx = useState('competitionIdx', () => 1)
 const showModal = useState('showModal', () => false)
+const showProfileModal = useState('showProfileModal', () => false)
+const dark = useState('dark', () => false)
+const darkGrad = useState('darkGrad', () => false)
 
 let currentIndex = 0;
 let animating;
@@ -306,9 +309,11 @@ const transitions = [
     {
         id: "bn(head)",
         leaveBack: () => $gsap.timeline()
+            .add(() => dark.value = false)
             .to('#bn', { autoAlpha: 0, ...defaultTsArgs })
             .to(['#bn__title', '#bn__grid-wrapper'], { y: 100, autoAlpha: 0, ...defaultTsArgs }, "<"),
         enter: () => $gsap.timeline()
+            .add(() => dark.value = true)
             .set('#section-group-1', { autoAlpha: 1, maxHeight: "10000vh" })
             .set('#bn', { y: 0, autoAlpha: 0 })
             .set(['#bn__title', '#bn__grid-wrapper'], { y: 100, autoAlpha: 0 })
@@ -317,8 +322,10 @@ const transitions = [
             .to('#bn__grid-wrapper', { y: 0, autoAlpha: 1, ...defaultTsArgs }),
         leave: () => $gsap.timeline(),
         enterBack: () => $gsap.timeline()
+            .add(() => dark.value = true)
             .set('#section-group-1', { autoAlpha: 1, maxHeight: "10000vh" }),
         enterBackByJump: () => $gsap.timeline()
+            .add(() => dark.value = true)
             .add(() => setTimeout(() => window.scrollTo(0, 0), 200))
             .set("#section-groups-wrapper", { clearProps: "height" })
             .set('#section-group-1', { autoAlpha: 1, maxHeight: "10000vh" })
@@ -328,6 +335,7 @@ const transitions = [
             .to('#bn__title', { y: 0, autoAlpha: 1, ...defaultTsArgs })
             .to('#bn__grid-wrapper', { y: 0, autoAlpha: 1, ...defaultTsArgs }),
         fadeOut: () => $gsap.timeline()
+            .add(() => dark.value = false)
             .to(['#section-group-1', '#bn'], { autoAlpha: 0, ...defaultTsArgs }),
         enterCallBack: () =>
         {
@@ -356,7 +364,7 @@ const transitions = [
     {
         id: "bn(body)",
         leaveBack: () => $gsap.timeline(),
-        enter: () => $gsap.timeline().set("#section-group-2", { maxHeight: "100vh" }),
+        enter: () => $gsap.timeline().add(() => dark.value = true).set("#section-group-2", { maxHeight: "100vh" }),
         enterCallBack: () =>
         {
             smoother.value = $ScrollSmoother.create({
@@ -372,8 +380,9 @@ const transitions = [
             transitionTriggerBeforeIl.disable();
         },
         leave: () => $gsap.timeline(),
-        enterBack: () => $gsap.timeline().set("#section-group-2", { maxHeight: "100vh" }),
+        enterBack: () => $gsap.timeline().add(() => dark.value = true).set("#section-group-2", { maxHeight: "100vh" }),
         fadeOut: () => $gsap.timeline()
+            .add(() => dark.value = false)
             .to(['#section-group-1', '#bn'], { autoAlpha: 0, ...defaultTsArgs }),
         enterBackCallBack: () =>
         {
@@ -389,7 +398,7 @@ const transitions = [
     {
         id: "bn(tail)",
         leaveBack: () => $gsap.timeline(),
-        enter: () => $gsap.timeline().set("#section-group-2", { maxHeight: "100vh" }),
+        enter: () => $gsap.timeline().add(() => dark.value = true).set("#section-group-2", { maxHeight: "100vh" }),
         enterCallBack: () =>
         {
             coolDownForDown(500);
@@ -400,17 +409,20 @@ const transitions = [
             transitionTriggerBeforeIl.disable();
         },
         leave: () => $gsap.timeline()
+            .add(() => dark.value = false)
             .to('#bn__grid-wrapper', { y: -100, autoAlpha: 0, ...defaultTsArgs })
             .to('#bn', { autoAlpha: 0, ...defaultTsArgs })
             .set('#bn__grid-wrapper', { y: 0 })
             .set("#section-group-1", { autoAlpha: 0 }),
         enterBack: () => $gsap.timeline()
+            .add(() => dark.value = true)
             .add(() => smoother.value?.scrollTo('#bn', false, "bottom bottom"))
             .set("#section-group-2", { maxHeight: "100vh" })
             .set("#section-group-1", { autoAlpha: 1 })
             .to('#bn', { autoAlpha: 1, ...defaultTsArgs })
             .fromTo(['#bn__title', '#bn__grid-wrapper'], { y: -100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
         fadeOut: () => $gsap.timeline()
+            .add(() => dark.value = false)
             .to(['#section-group-1', '#bn'], { autoAlpha: 0, ...defaultTsArgs }),
         enterBackCallBack: () =>
         {
@@ -789,6 +801,26 @@ watch(showModal, () =>
         document.body.style.overflow = 'hidden';
     } else
     {
+        smoother.value?.paused(false);
+        transitions[currentIndex].enterCallBack();
+        document.body.style.overflow = 'auto';
+    };
+})
+watch(showProfileModal, () =>
+{
+    if (showProfileModal.value)
+    {
+        intentObserver.disable();
+        pinScrollTrigger1.disable();
+        transitionTriggerBeforeBn.disable();
+        transitionTriggerAfterBn.disable();
+        transitionTriggerBeforeIl.disable();
+        smoother.value?.paused(true);
+        document.body.style.overflow = 'hidden';
+    } else
+    {
+        dark.value = false
+        darkGrad.value = false
         smoother.value?.paused(false);
         transitions[currentIndex].enterCallBack();
         document.body.style.overflow = 'auto';

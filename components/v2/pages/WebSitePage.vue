@@ -25,11 +25,13 @@ const smoother = useState('smoother')
 smoother.value?.kill();
 
 const showModal = useState('showModal', () => false)
+const showProfileModal = useState('showProfileModal', () => false)
 const dark = useState('dark', () => false)
 const darkGrad = useState('darkGrad', () => false)
 dark.value = false
 darkGrad.value = false
 showModal.value = false
+showProfileModal.value = false
 
 const { $gsap, $ScrollTrigger, $ScrollSmoother } = useNuxtApp();
 
@@ -93,9 +95,11 @@ const transitions = [
     {
         id: "wsd(head)",
         leaveBack: () => $gsap.timeline()
+            .add(() => dark.value = false)
             .fromTo('#wsd', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs })
             .fromTo(['#wsd-design', '#wsd-desc'], { y: 0, autoAlpha: 1 }, { y: 100, autoAlpha: 0 }, "<"),
         enter: () => $gsap.timeline()
+            .add(() => dark.value = true)
             .set('#section-group', { maxHeight: "1000vh" })
             .fromTo('#wsd', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
             .fromTo(['#wsd-design', '#wsd-desc'], { autoAlpha: 0, y: "3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs }),
@@ -108,7 +112,7 @@ const transitions = [
             transitionTriggerBeforeWsl.disable();
         },
         leave: () => $gsap.timeline(),
-        enterBack: () => $gsap.timeline(),
+        enterBack: () => $gsap.timeline().add(() => dark.value = true),
         enterBackCallBack: () =>
         {
             intentObserver.enable();
@@ -121,7 +125,7 @@ const transitions = [
     {
         id: "wsd(body)",
         leaveBack: () => $gsap.timeline(),
-        enter: () => $gsap.timeline().set("#section-group-2", { maxHeight: "100vh" }),
+        enter: () => $gsap.timeline().set("#section-group-2", { maxHeight: "100vh" }).add(() => dark.value = true),
         enterCallBack: () =>
         {
             intentObserver.disable();
@@ -130,7 +134,7 @@ const transitions = [
             transitionTriggerBeforeWsl.disable();
         },
         leave: () => $gsap.timeline(),
-        enterBack: () => $gsap.timeline(),
+        enterBack: () => $gsap.timeline().add(() => dark.value = true),
         enterBackCallBack: () =>
         {
             intentObserver.disable();
@@ -143,7 +147,7 @@ const transitions = [
     {
         id: "wsd(tail)",
         leaveBack: () => $gsap.timeline(),
-        enter: () => $gsap.timeline().set("#section-group-2", { maxHeight: "100vh" }),
+        enter: () => $gsap.timeline().set("#section-group-2", { maxHeight: "100vh" }).add(() => dark.value = true),
         enterCallBack: () =>
         {
             intentObserver.enable();
@@ -152,11 +156,13 @@ const transitions = [
             transitionTriggerBeforeWsl.disable();
         },
         leave: () => $gsap.timeline()
+            .add(() => dark.value = false)
             .fromTo(['#wsd-design', '#wsd-desc'], { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: "-3rem", ...defaultTsArgs }, "<")
             .fromTo('#wsm-bgtext', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs }, "<")
             .fromTo('#wsd', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs })
             .set('#section-group', { autoAlpha: 0 }),
         enterBack: () => $gsap.timeline()
+            .add(() => dark.value = true)
             .add(() => window.scrollBy(0, document.body.scrollHeight))
             .set("#section-group-2", { maxHeight: "100vh" })
             .set('#section-group', { autoAlpha: 1 })
@@ -455,6 +461,20 @@ watch(capUrls, () =>
 watch(showModal, () =>
 {
     if (showModal.value)
+    {
+        intentObserver.disable();
+        smoother.value?.paused(true);
+        document.body.style.overflow = 'hidden';
+    } else
+    {
+        smoother.value?.paused(false);
+        transitions[currentIndex].enterCallBack();
+        document.body.style.overflow = 'auto';
+    };
+});
+watch(showProfileModal, () =>
+{
+    if (showProfileModal.value)
     {
         intentObserver.disable();
         smoother.value?.paused(true);

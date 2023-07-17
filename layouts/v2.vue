@@ -2,6 +2,7 @@
     <mouse-stalker-v2 />
     <hamburger-button-v2 class="float-button-container" />
     <menu-modal />
+    <profile-modal />
     <div id="smooth-wrapper" class="body">
         <div id="smooth-content">
             <slot />
