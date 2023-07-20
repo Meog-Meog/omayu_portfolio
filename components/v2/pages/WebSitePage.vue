@@ -30,12 +30,6 @@ const showModal = useState('showModal', () => false)
 const showProfileModal = useState('showProfileModal', () => false)
 const dark = useState('dark', () => false)
 const darkGrad = useState('darkGrad', () => false)
-imgLoaded.value = false
-dark.value = false
-darkGrad.value = false
-showModal.value = false
-showProfileModal.value = false
-
 const { $gsap, $ScrollTrigger, $ScrollSmoother } = useNuxtApp();
 
 let animating = false;
@@ -334,6 +328,12 @@ onMounted(() =>
 {
     if (process.client)
     {
+        imgLoaded.value = false
+        dark.value = false
+        darkGrad.value = false
+        showModal.value = false
+        showProfileModal.value = false
+
         setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }), 200)
         mouseStalkerText.value = ""
         smoother.value = $ScrollSmoother.create({
@@ -476,6 +476,7 @@ onUnmounted(() =>
     animating = false;
     intentObserver?.kill();
     pinBgTrigger?.kill();
+    transitionTriggerAfterWsm?.kill();
     transitionTriggerBeforeWsd?.kill();
     transitionTriggerAfterWsd?.kill();
     transitionTriggerBeforeWsl?.kill();

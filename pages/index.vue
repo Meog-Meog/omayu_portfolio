@@ -602,6 +602,11 @@ onMounted(() =>
 {
     if (process.client)
     {
+        dark.value = false
+        darkGrad.value = false
+        showModal.value = false
+        showProfileModal.value = false
+
         setTimeout(() => window.scrollTo(0, 0), 200)
 
         $gsap.set($gsap.utils.toArray(".swipe-section section"), { autoAlpha: 0 })
