@@ -1,14 +1,12 @@
 <template>
     <div id="section-groups-wrapper">
         <div id="section-group" class="swipe-section" style="z-index: 2;">
-            <div style="position: relative;">
-                <section id="wsm" class="panel">
-                    <web-site-mock-panel :text-img="textImg" :mock-img="mockImg" />
-                </section>
-                <section id="wsd" class="panel" style="position: absolute; top: 0;">
-                    <web-site-desc-panel :text-img="textImgDark" :captures="captures" :contents="contents" />
-                </section>
-            </div>
+            <section id="wsm" class="panel">
+                <web-site-mock-panel :text-img="textImg" :mock-img="mockImg" />
+            </section>
+            <section id="wsd" class="panel">
+                <web-site-desc-panel :text-img="textImgDark" :captures="captures" :contents="contents" />
+            </section>
         </div>
         <div id="section-group-2" class="swipe-section" style="z-index: 1">
             <section id="wsl" class="panel">
@@ -74,8 +72,17 @@ const transitions = [
         id: "wsm",
         leaveBack: () => $gsap.timeline(),
         enter: () => $gsap.timeline()
-            .set('#section-group', { autoAlpha: 1, maxHeight: "500vh" })
+            .add(() =>
+            {
+                intentObserver.disable();
+                transitionTriggerAfterWsm.enable();
+                transitionTriggerBeforeWsd.disable();
+                transitionTriggerAfterWsd.disable();
+                transitionTriggerBeforeWsl.disable();
+            })
+            .set('#section-group', { autoAlpha: 1, maxHeight: window.document.getElementById('wsm').offsetHeight + 'px' })
             .set('#wsm', { y: 0, autoAlpha: 1 })
+            .set('#wsd', { marginTop: "-" + window.document.getElementById('wsm').offsetHeight + 'px' })
             .fromTo('#wsm-mock', { autoAlpha: 0, y: "3rem" }, { duration: 1, autoAlpha: 1, y: 0, ease: 'power2.inOut', })
             .fromTo('#wsm-bgtext', { autoAlpha: 0 }, { duration: 2, autoAlpha: 1, ease: 'power2.inOut', }, "<+50%"),
         leave: () => $gsap.timeline()
@@ -83,22 +90,21 @@ const transitions = [
             .fromTo('#wsm-mock', { autoAlpha: 1, y: 0, }, { y: "-3rem", autoAlpha: 0, ...defaultTsArgs })
             .fromTo('#wsm-bgtext', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs }, "<"),
         enterBack: () => $gsap.timeline()
-            .set('#section-group', { maxHeight: "500vh" })
+            .set('#section-group', { autoAlpha: 1, maxHeight: window.document.getElementById('wsm').offsetHeight + 'px' })
             .add(() => smoother.value?.scrollTo("#wsm", false, "bottom-=10px bottom"))
+            .add(() =>
+            {
+                $ScrollTrigger.refresh();
+                intentObserver.disable();
+                transitionTriggerAfterWsm.enable();
+                transitionTriggerBeforeWsd.disable();
+                transitionTriggerAfterWsd.disable();
+                transitionTriggerBeforeWsl.disable();
+            })
             .fromTo('#wsm-mock', { y: "-3rem", autoAlpha: 0, }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
             .fromTo('#wsm-bgtext', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs }, "<"),
         enterCallBack: () =>
         {
-            $ScrollTrigger.refresh()
-            intentObserver.disable();
-            transitionTriggerAfterWsm.enable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.disable();
-        },
-        enterBackCallBack: () =>
-        {
-            $ScrollTrigger.refresh();
             intentObserver.disable();
             transitionTriggerAfterWsm.enable();
             transitionTriggerBeforeWsd.disable();
@@ -111,34 +117,37 @@ const transitions = [
         id: "wsd(head)",
         leaveBack: () => $gsap.timeline()
             .add(() => dark.value = false)
-            .set(["#section-group", "#section-groups-wrapper"], { clearProps: "height" })
             .fromTo(['#wsd', '#wsd-bgtext'], { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs })
             .fromTo(['#wsd-design', '#wsd-desc'], { y: 0, autoAlpha: 1 }, { y: "3rem", autoAlpha: 0 }, "<"),
         enter: () => $gsap.timeline()
             .add(() => dark.value = true)
-            .set("#section-group-2", { maxHeight: "100vh" })
-            .set('#section-group', { maxHeight: "10000vh" })
+            .set('#wsd', { marginTop: "-" + window.document.getElementById('wsm').offsetHeight + 'px' })
+            .set("#section-group", { maxHeight: window.document.getElementById('wsd').offsetHeight + 'px' })
+            .add(() => $ScrollTrigger.refresh())
             .add(() => smoother.value.scrollTo("#wsd", false, "top top"))
-            .add(() => document.body.style.position = 'fixed')
-            .add(() => window.document.getElementById('section-group').style.height = window.document.getElementById('wsd').offsetHeight + 'px')
-            .add(() => window.document.getElementById('section-groups-wrapper').style.height = window.document.getElementById('wsd').offsetHeight + 'px')
+            .add(() =>
+            {
+                intentObserver.enable();
+                transitionTriggerAfterWsm.disable();
+                transitionTriggerBeforeWsd.disable();
+                transitionTriggerAfterWsd.disable();
+                transitionTriggerBeforeWsl.disable();
+            })
             .fromTo(['#wsd', '#wsd-bgtext'], { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
             .fromTo(['#wsd-design', '#wsd-desc'], { autoAlpha: 0, y: "3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
             .add(() => document.body.style.position = 'static'),
         leave: () => $gsap.timeline(),
-        enterBack: () => $gsap.timeline(),
+        enterBack: () => $gsap.timeline()
+            .add(() =>
+            {
+                intentObserver.enable();
+                transitionTriggerAfterWsm.disable();
+                transitionTriggerBeforeWsd.disable();
+                transitionTriggerAfterWsd.disable();
+                transitionTriggerBeforeWsl.disable();
+            }),
         enterCallBack: () =>
         {
-            $ScrollTrigger.refresh();
-            intentObserver.enable();
-            transitionTriggerAfterWsm.disable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.disable();
-        },
-        enterBackCallBack: () =>
-        {
-            $ScrollTrigger.refresh();
             intentObserver.enable();
             transitionTriggerAfterWsm.disable();
             transitionTriggerBeforeWsd.disable();
@@ -150,18 +159,26 @@ const transitions = [
     {
         id: "wsd",
         leaveBack: () => $gsap.timeline(),
-        enter: () => $gsap.timeline(),
+        enter: () => $gsap.timeline()
+            .add(() =>
+            {
+                intentObserver.disable();
+                transitionTriggerAfterWsm.disable();
+                transitionTriggerBeforeWsd.enable();
+                transitionTriggerAfterWsd.enable();
+                transitionTriggerBeforeWsl.disable();
+            }),
         leave: () => $gsap.timeline(),
-        enterBack: () => $gsap.timeline(),
+        enterBack: () => $gsap.timeline()
+            .add(() =>
+            {
+                intentObserver.disable();
+                transitionTriggerAfterWsm.disable();
+                transitionTriggerBeforeWsd.enable();
+                transitionTriggerAfterWsd.enable();
+                transitionTriggerBeforeWsl.disable();
+            }),
         enterCallBack: () =>
-        {
-            intentObserver.disable();
-            transitionTriggerAfterWsm.disable();
-            transitionTriggerBeforeWsd.enable();
-            transitionTriggerAfterWsd.enable();
-            transitionTriggerBeforeWsl.disable();
-        },
-        enterBackCallBack: () =>
         {
             intentObserver.disable();
             transitionTriggerAfterWsm.disable();
@@ -174,31 +191,39 @@ const transitions = [
     {
         id: "wsd(tail)",
         leaveBack: () => $gsap.timeline(),
-        enter: () => $gsap.timeline(),
+        enter: () => $gsap.timeline()
+            .add(() =>
+            {
+                intentObserver.enable();
+                transitionTriggerAfterWsm.disable();
+                transitionTriggerBeforeWsd.disable();
+                transitionTriggerAfterWsd.disable();
+                transitionTriggerBeforeWsl.disable();
+            }),
         leave: () => $gsap.timeline()
             .add(() => dark.value = false)
             .fromTo(['#wsd-design', '#wsd-desc'], { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: "-3rem", ...defaultTsArgs }, "<")
-            .fromTo('#wsm-bgtext', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs }, "<")
+            .fromTo('#wsd-bgtext', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs }, "<")
             .fromTo('#wsd', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs })
             .set('#section-group', { autoAlpha: 0 }),
         enterBack: () => $gsap.timeline()
             .add(() => dark.value = true)
-            .add(() => $gsap.set(["#section-group", "#section-groups-wrapper"], { height: window.document.getElementById('wsd').offsetHeight + 'px' }))
             .set("#section-group-2", { maxHeight: "100vh" })
-            .set('#section-group', { autoAlpha: 1 })
-            .add(() => smoother.value.scrollTo("#wsd", false, "bottom-=20 bottom"))
+            .set('#section-group', { autoAlpha: 1, maxHeight: window.document.getElementById('wsd').offsetHeight + 'px' })
             .fromTo('#wsd', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
-            .fromTo('#wsm-bgtext', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
-            .fromTo(['#wsd-design', '#wsd-desc'], { autoAlpha: 0, y: "-3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs }, "<+50%"),
+            .add(() => smoother.value.scrollTo("#wsd", false, "bottom bottom"))
+            .add(() => $ScrollTrigger.refresh())
+            .fromTo('#wsd-bgtext', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
+            .fromTo(['#wsd-design', '#wsd-desc'], { autoAlpha: 0, y: "-3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs }, "<+50%")
+            .add(() =>
+            {
+                intentObserver.enable();
+                transitionTriggerAfterWsm.disable();
+                transitionTriggerBeforeWsd.disable();
+                transitionTriggerAfterWsd.disable();
+                transitionTriggerBeforeWsl.disable();
+            }),
         enterCallBack: () =>
-        {
-            intentObserver.enable();
-            transitionTriggerAfterWsm.disable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.disable();
-        },
-        enterBackCallBack: () =>
         {
             intentObserver.enable();
             transitionTriggerAfterWsm.disable();
@@ -211,25 +236,32 @@ const transitions = [
     {
         id: "wsl",
         leaveBack: () => $gsap.timeline()
-            .set("#section-groups-wrapper", { clearProps: "height" })
             .fromTo('#wsl', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: "3rem", ...defaultTsArgs })
-            .set("#section-group-2", { autoAlpha: 0 }),
+            .set("#section-group-2", { autoAlpha: 0, maxHeight: "100vh" }),
         enter: () => $gsap.timeline()
             .add(() => smoother.value.scrollTo("#wsd", false, "top+=10 top"))
-            .set("#section-group-2", { autoAlpha: 1, maxHeight: "500vh" })
-            .add(() => window.document.getElementById('section-groups-wrapper').style.height = window.document.getElementById('section-group-2').offsetHeight + 'px')
-            .fromTo('#wsl', { autoAlpha: 0, y: "3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs }),
-        enterCallBack: () =>
-        {
-            intentObserver.disable();
-            transitionTriggerAfterWsm.disable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.enable();
-        },
+            .set("#section-group", { maxHeight: "100vh", autoAlpha: 0 })
+            .set("#section-group-2", { autoAlpha: 1, maxHeight: "10000vh" })
+            .fromTo('#wsl', { autoAlpha: 0, y: "3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
+            .add(() =>
+            {
+                intentObserver.disable();
+                transitionTriggerAfterWsm.disable();
+                transitionTriggerBeforeWsd.disable();
+                transitionTriggerAfterWsd.disable();
+                transitionTriggerBeforeWsl.enable();
+            }),
         leave: () => $gsap.timeline(),
-        enterBack: () => $gsap.timeline(),
-        enterBackCallBack: () =>
+        enterBack: () => $gsap.timeline()
+            .add(() =>
+            {
+                intentObserver.disable();
+                transitionTriggerAfterWsm.disable();
+                transitionTriggerBeforeWsd.disable();
+                transitionTriggerAfterWsd.disable();
+                transitionTriggerBeforeWsl.enable();
+            }),
+        enterCallBack: () =>
         {
             intentObserver.disable();
             transitionTriggerAfterWsm.disable();
@@ -239,10 +271,7 @@ const transitions = [
         },
     }
 ]
-function preventDefault(e)
-{
-    e.preventDefault();
-}
+
 // handle the panel swipe animations
 function gotoPanel(index, isScrollingDown)
 {
@@ -486,14 +515,13 @@ watch(capUrlsLoading, () =>
             .fromTo(["#wsd-bgtext", "#wsd-design"], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" })
             .add(() =>
             {
-                $ScrollTrigger.refresh()
                 if (currentIndex >= 2)
                 {
                     currentIndex = 3
                     gotoPanel(3, true);
-                    $gsap.set(["#section-group", "#section-groups-wrapper"], { height: window.document.getElementById('wsd').offsetHeight + 'px' })
+                    $gsap.set('#section-group', { autoAlpha: 1, maxHeight: window.document.getElementById('wsd').offsetHeight + 'px' })
+                    $ScrollTrigger.refresh()
                 }
-                $ScrollTrigger.refresh()
             })
     }
 });
@@ -518,6 +546,7 @@ watch(showProfileModal, () =>
         document.body.style.overflow = 'hidden';
     } else
     {
+        dark.value = false
         smoother.value?.paused(false);
         transitions[currentIndex].enterCallBack();
         document.body.style.overflow = 'auto';
@@ -542,14 +571,8 @@ watch(showProfileModal, () =>
 #section-group-2 {
     opacity: 0;
     max-height: 100vh;
+    margin-top: -100vh;
     overflow: hidden;
-    position: absolute;
-    top: 0;
-}
-
-.swipe-section .fullscreen-panel {
-    position: absolute;
-    opacity: 0;
 }
 
 .swipe-section .panel {
