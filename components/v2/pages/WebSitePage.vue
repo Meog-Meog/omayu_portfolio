@@ -1,7 +1,11 @@
 <template>
     <div id="section-groups-wrapper">
         <div id="section-group" class="swipe-section" style="z-index: 2;">
-            <section id="wsm" class="panel">
+            <section id="init"
+                style="height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 80px;" ref="loadingAnimation"></div>
+            </section>
+            <section id="wsm" class="panel" style="margin-top: -100vh;">
                 <web-site-mock-panel :text-img="textImg" :mock-img="mockImg" />
             </section>
             <section id="wsd" class="panel">
@@ -18,6 +22,9 @@
 </template>
 
 <script setup>
+import lottie from 'lottie-web';
+const loadingAnimation = ref(null);
+
 const Props = defineProps(["textImg", "textImgDark", "mockImg", "captures", "contents"]);
 const mouseStalkerText = useState('mouseStalkerText', () => '')
 const smoother = useState('smoother')
@@ -50,7 +57,7 @@ const transitions = [
         id: "init",
         noEnterBack: true,
         enter: () => $gsap.timeline(),
-        leave: () => $gsap.timeline(),
+        leave: () => $gsap.timeline().to("#init", { autoAlpha: 0, ...defaultTsArgs }),
         enterBack: () => $gsap.timeline(),
         enterCallBack: () =>
         {
@@ -328,6 +335,15 @@ onMounted(() =>
 {
     if (process.client)
     {
+        lottie.loadAnimation({
+            container: loadingAnimation.value,
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: '/circles-menu-1.json'
+        });
+        $gsap.timeline().set('#init', { autoAlpha: 1 })
+
         imgLoaded.value = false
         dark.value = false
         darkGrad.value = false
@@ -579,5 +595,10 @@ watch(showProfileModal, () =>
 .swipe-section .panel {
     opacity: 0;
     width: 100%;
+}
+
+.loading-animation {
+    opacity: 0;
+    transition: opacity 1s;
 }
 </style>
