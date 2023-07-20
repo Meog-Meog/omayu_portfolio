@@ -818,6 +818,7 @@ watch(showModal, () =>
 {
     if (showModal.value)
     {
+        console.log("showModal.value = true")
         intentObserver.value.disable();
         pinScrollTrigger1.value.disable();
         transitionTriggerBeforeBn.value.disable();
@@ -827,6 +828,7 @@ watch(showModal, () =>
         document.body.style.overflow = 'hidden';
     } else
     {
+        console.log("showModal.value = false")
         smoother.value?.paused(false);
         transitions[currentIndex].enterCallBack();
         document.body.style.overflow = 'auto';
@@ -836,6 +838,7 @@ watch(showProfileModal, () =>
 {
     if (showProfileModal.value)
     {
+        console.log("showProfileModal.value = true")
         intentObserver.value.disable();
         pinScrollTrigger1.value.disable();
         transitionTriggerBeforeBn.value.disable();
@@ -845,6 +848,7 @@ watch(showProfileModal, () =>
         document.body.style.overflow = 'hidden';
     } else
     {
+        console.log("showProfileModal.value = false")
         dark.value = false
         darkGrad.value = false
         smoother.value?.paused(false);

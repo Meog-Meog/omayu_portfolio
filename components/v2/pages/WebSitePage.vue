@@ -28,7 +28,6 @@ const loadingAnimation = ref(null);
 const Props = defineProps(["textImg", "textImgDark", "mockImg", "captures", "contents"]);
 const mouseStalkerText = useState('mouseStalkerText', () => '')
 const smoother = useState('smoother')
-smoother.value?.kill();
 
 const loaded = false;
 const textLoaded = useState('textLoaded', () => false)
@@ -368,7 +367,7 @@ onMounted(() =>
 
         setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }), 200)
         mouseStalkerText.value = ""
-        smoother.value = $ScrollSmoother.create({
+        smoother.value = smoother.value || $ScrollSmoother.create({
             smooth: 1,
             effects: true,
             normalizeScroll: true,
@@ -520,18 +519,20 @@ onUnmounted(() =>
     animating = false;
     mouseStalkerText.value = ""
 });
-
-watch(imgLoaded, () =>
+const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
+watch(imgLoaded, async () =>
 {
     if (imgLoaded && textLoaded && currentIndex === 0)
     {
+        await sleep(500);
         gotoPanel(1, true);
     }
 });
-watch(textLoaded, () =>
+watch(textLoaded, async () =>
 {
     if (imgLoaded && textLoaded && currentIndex === 0)
     {
+        await sleep(500);
         gotoPanel(1, true);
     }
 });
@@ -569,10 +570,12 @@ watch(showModal, () =>
 {
     if (showModal.value)
     {
+        console.log("showModal.value = true")
         smoother.value?.paused(true);
         document.body.style.overflow = 'hidden';
     } else
     {
+        console.log("showModal.value = false")
         smoother.value?.paused(false);
         transitions[currentIndex].enterCallBack();
         document.body.style.overflow = 'auto';
@@ -582,10 +585,12 @@ watch(showProfileModal, () =>
 {
     if (showProfileModal.value)
     {
+        console.log("showProfileModal.value = true")
         smoother.value?.paused(true);
         document.body.style.overflow = 'hidden';
     } else
     {
+        console.log("showProfileModal.value = false")
         dark.value = false
         smoother.value?.paused(false);
         transitions[currentIndex].enterCallBack();
