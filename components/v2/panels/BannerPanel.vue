@@ -49,8 +49,8 @@ useResize((width, height) =>
 .background--dark {
   background-image: url('~/assets/image/bg01.webp');
   background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
+  background-attachment: fixed;
 }
 
 #bn__grid-wrapper {
