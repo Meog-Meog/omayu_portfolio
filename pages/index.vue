@@ -41,11 +41,17 @@ const darkGrad = useState('darkGrad', () => false)
 
 let currentIndex = 0;
 let animating;
-let intentObserver;
-let pinScrollTrigger1;
-let transitionTriggerBeforeBn;
-let transitionTriggerAfterBn;
-let transitionTriggerBeforeIl;
+const intentObserver = useState('intentObserver', () => null)
+const pinScrollTrigger1 = useState('pinScrollTrigger1', () => null)
+const transitionTriggerBeforeBn = useState('transitionTriggerBeforeBn', () => null)
+const transitionTriggerAfterBn = useState('transitionTriggerAfterBn', () => null)
+const transitionTriggerBeforeIl = useState('transitionTriggerBeforeIl', () => null)
+const intentObserverWeb = useState('intentObserverWeb', () => null)
+const pinBgTriggerWeb = useState('pinBgTriggerWeb', () => null)
+const transitionTriggerAfterWsmWeb = useState('transitionTriggerAfterWsmWeb', () => null)
+const transitionTriggerBeforeWsdWeb = useState('transitionTriggerBeforeWsdWeb', () => null)
+const transitionTriggerAfterWsdWeb = useState('transitionTriggerAfterWsdWeb', () => null)
+const transitionTriggerBeforeWslWeb = useState('transitionTriggerBeforeWslWeb', () => null)
 
 let isCoolDownForDown = false;
 let timerIdForDown;
@@ -69,23 +75,23 @@ const kvCallback = () =>
     smoother.value?.kill();
     smoother.value = null;
     $ScrollTrigger.refresh();
-    transitionTriggerBeforeBn.disable();
-    transitionTriggerAfterBn.disable();
-    transitionTriggerBeforeIl.disable();
+    transitionTriggerBeforeBn.value.disable();
+    transitionTriggerAfterBn.value.disable();
+    transitionTriggerBeforeIl.value.disable();
     setTimeout(() => window.scrollTo(0, 0), 200)
-    pinScrollTrigger1.enable();
-    intentObserver.enable();
+    pinScrollTrigger1.value.enable();
+    intentObserver.value.enable();
 }
 const wsCallback = () =>
 {
     smoother.value?.kill();
     smoother.value = null;
     $ScrollTrigger.refresh();
-    transitionTriggerBeforeBn.disable();
-    transitionTriggerAfterBn.disable();
-    transitionTriggerBeforeIl.disable();
-    pinScrollTrigger1.enable();
-    intentObserver.enable();
+    transitionTriggerBeforeBn.value.disable();
+    transitionTriggerAfterBn.value.disable();
+    transitionTriggerBeforeIl.value.disable();
+    pinScrollTrigger1.value.enable();
+    intentObserver.value.enable();
     $ScrollTrigger.refresh();
 }
 const cpCallback = () =>
@@ -93,12 +99,12 @@ const cpCallback = () =>
     smoother.value?.kill();
     smoother.value = null;
     $ScrollTrigger.refresh();
-    transitionTriggerBeforeBn.disable();
-    transitionTriggerAfterBn.disable();
-    transitionTriggerBeforeIl.disable();
+    transitionTriggerBeforeBn.value.disable();
+    transitionTriggerAfterBn.value.disable();
+    transitionTriggerBeforeIl.value.disable();
     setTimeout(() => window.scrollTo(0, 0), 200)
-    pinScrollTrigger1.enable();
-    intentObserver.enable();
+    pinScrollTrigger1.value.enable();
+    intentObserver.value.enable();
 }
 
 const transitions = [
@@ -342,21 +348,21 @@ const transitions = [
             smoother.value?.kill();
             smoother.value = null;
             $ScrollTrigger.refresh();
-            pinScrollTrigger1.disable();
-            intentObserver.enable();
-            transitionTriggerBeforeBn.disable();
-            transitionTriggerAfterBn.disable();
-            transitionTriggerBeforeIl.disable();
+            pinScrollTrigger1.value.disable();
+            intentObserver.value.enable();
+            transitionTriggerBeforeBn.value.disable();
+            transitionTriggerAfterBn.value.disable();
+            transitionTriggerBeforeIl.value.disable();
         },
         enterBackCallBack: () =>
         {
             smoother.value?.kill();
             smoother.value = null;
-            pinScrollTrigger1.disable();
-            intentObserver.enable();
-            transitionTriggerBeforeBn.disable();
-            transitionTriggerAfterBn.disable();
-            transitionTriggerBeforeIl.disable();
+            pinScrollTrigger1.value.disable();
+            intentObserver.value.enable();
+            transitionTriggerBeforeBn.value.disable();
+            transitionTriggerAfterBn.value.disable();
+            transitionTriggerBeforeIl.value.disable();
         },
     },
     // 8: bn(body)
@@ -371,11 +377,11 @@ const transitions = [
                 effects: true,
                 normalizeScroll: true,
             })
-            pinScrollTrigger1.disable();
-            intentObserver.disable();
-            transitionTriggerBeforeBn.enable();
-            transitionTriggerAfterBn.enable();
-            transitionTriggerBeforeIl.disable();
+            pinScrollTrigger1.value.disable();
+            intentObserver.value.disable();
+            transitionTriggerBeforeBn.value.enable();
+            transitionTriggerAfterBn.value.enable();
+            transitionTriggerBeforeIl.value.disable();
         },
         leave: () => $gsap.timeline(),
         enterBack: () => $gsap.timeline().add(() => dark.value = true).set("#section-group-2", { maxHeight: "100vh" }),
@@ -384,11 +390,11 @@ const transitions = [
             .to(['#section-group-1', '#bn'], { autoAlpha: 0, ...defaultTsArgs }),
         enterBackCallBack: () =>
         {
-            pinScrollTrigger1.disable();
-            intentObserver.disable();
-            transitionTriggerBeforeBn.enable();
-            transitionTriggerAfterBn.enable();
-            transitionTriggerBeforeIl.disable();
+            pinScrollTrigger1.value.disable();
+            intentObserver.value.disable();
+            transitionTriggerBeforeBn.value.enable();
+            transitionTriggerAfterBn.value.enable();
+            transitionTriggerBeforeIl.value.disable();
         },
     },
     // 9: bn(tail)
@@ -399,11 +405,11 @@ const transitions = [
         enterCallBack: () =>
         {
             coolDownForDown(100);
-            pinScrollTrigger1.disable();
-            intentObserver.enable();
-            transitionTriggerBeforeBn.disable();
-            transitionTriggerAfterBn.disable();
-            transitionTriggerBeforeIl.disable();
+            pinScrollTrigger1.value.disable();
+            intentObserver.value.enable();
+            transitionTriggerBeforeBn.value.disable();
+            transitionTriggerAfterBn.value.disable();
+            transitionTriggerBeforeIl.value.disable();
         },
         leave: () => $gsap.timeline()
             .add(() => dark.value = false)
@@ -424,11 +430,11 @@ const transitions = [
             .to(['#section-group-1', '#bn'], { autoAlpha: 0, ...defaultTsArgs }),
         enterBackCallBack: () =>
         {
-            pinScrollTrigger1.disable();
-            intentObserver.enable();
-            transitionTriggerBeforeBn.disable();
-            transitionTriggerAfterBn.disable();
-            transitionTriggerBeforeIl.disable();
+            pinScrollTrigger1.value.disable();
+            intentObserver.value.enable();
+            transitionTriggerBeforeBn.value.disable();
+            transitionTriggerAfterBn.value.disable();
+            transitionTriggerBeforeIl.value.disable();
         },
     },
     // 10: il(head)
@@ -458,19 +464,19 @@ const transitions = [
             .to(['#section-group-2', '#il'], { autoAlpha: 0, ...defaultTsArgs }),
         enterCallBack: () =>
         {
-            pinScrollTrigger1.disable();
-            transitionTriggerBeforeBn.disable();
-            transitionTriggerAfterBn.disable();
-            transitionTriggerBeforeIl.disable();
-            intentObserver.enable();
+            pinScrollTrigger1.value.disable();
+            transitionTriggerBeforeBn.value.disable();
+            transitionTriggerAfterBn.value.disable();
+            transitionTriggerBeforeIl.value.disable();
+            intentObserver.value.enable();
         },
         enterBackCallBack: () =>
         {
-            pinScrollTrigger1.disable();
-            transitionTriggerBeforeBn.disable();
-            transitionTriggerAfterBn.disable();
-            transitionTriggerBeforeIl.disable();
-            intentObserver.enable();
+            pinScrollTrigger1.value.disable();
+            transitionTriggerBeforeBn.value.disable();
+            transitionTriggerAfterBn.value.disable();
+            transitionTriggerBeforeIl.value.disable();
+            intentObserver.value.enable();
         },
     },
     // 10: il(body)
@@ -480,33 +486,33 @@ const transitions = [
         enter: () => $gsap.timeline(),
         enterCallBack: () =>
         {
-            pinScrollTrigger1.disable();
-            intentObserver.disable();
-            transitionTriggerBeforeBn.disable();
-            transitionTriggerAfterBn.disable();
+            pinScrollTrigger1.value.disable();
+            intentObserver.value.disable();
+            transitionTriggerBeforeBn.value.disable();
+            transitionTriggerAfterBn.value.disable();
             smoother.value = smoother.value || $ScrollSmoother.create({
                 smooth: 1,
                 effects: true,
                 normalizeScroll: true,
             })
             $ScrollTrigger.refresh();
-            transitionTriggerBeforeIl.enable();
+            transitionTriggerBeforeIl.value.enable();
         },
         leave: () => $gsap.timeline(),
         enterBack: () => $gsap.timeline(),
         enterBackCallBack: () =>
         {
-            pinScrollTrigger1.disable();
-            intentObserver.disable();
-            transitionTriggerBeforeBn.disable();
-            transitionTriggerAfterBn.disable();
+            pinScrollTrigger1.value.disable();
+            intentObserver.value.disable();
+            transitionTriggerBeforeBn.value.disable();
+            transitionTriggerAfterBn.value.disable();
             smoother.value = smoother.value || $ScrollSmoother.create({
                 smooth: 1,
                 effects: true,
                 normalizeScroll: true,
             })
             $ScrollTrigger.refresh();
-            transitionTriggerBeforeIl.enable();
+            transitionTriggerBeforeIl.value.enable();
         },
         fadeOut: () => $gsap.timeline()
             .set("#section-groups-wrapper", { clearProps: "height" })
@@ -598,8 +604,17 @@ function gotoPanel(index, isScrollingDown, isJump = false)
 
 onMounted(() =>
 {
+
     if (process.client)
     {
+        console.log("===== onMounted top =====")
+        intentObserverWeb.value?.kill();
+        pinBgTriggerWeb.value?.kill();
+        transitionTriggerAfterWsmWeb.value?.kill();
+        transitionTriggerBeforeWsdWeb.value?.kill();
+        transitionTriggerAfterWsdWeb.value?.kill();
+        transitionTriggerBeforeWslWeb.value?.kill();
+
         dark.value = false
         darkGrad.value = false
         showModal.value = false
@@ -611,7 +626,9 @@ onMounted(() =>
         $gsap.set($gsap.utils.toArray(".swipe-section"), { autoAlpha: 0 })
 
         // create an observer and disable it to start
-        intentObserver = $ScrollTrigger.observe({
+        intentObserver.value?.kill();
+        intentObserver.value = $ScrollTrigger.observe({
+            id: "intentObserver",
             type: "wheel,touch",
             onUp: () =>
             {
@@ -633,10 +650,11 @@ onMounted(() =>
                 $ScrollTrigger.isTouch && self.event.preventDefault()
             }
         })
-        intentObserver.disable();
+        intentObserver.value.disable();
 
         // Bannerセクションの入口でintentObserverをON/OFFするためのトリガー
-        transitionTriggerBeforeBn = $ScrollTrigger.create({
+        transitionTriggerBeforeBn.value?.kill();
+        transitionTriggerBeforeBn.value = $ScrollTrigger.create({
             id: "transitionTriggerBeforeBn",
             trigger: "#bn",
             start: "top top-=1",
@@ -663,10 +681,11 @@ onMounted(() =>
                 gotoPanel(currentIndex - 1, false);
             },
         })
-        transitionTriggerBeforeBn.disable();
+        transitionTriggerBeforeBn.value.disable();
 
         // Bannerセクションの出口でintentObserverをON/OFFするためのトリガー
-        transitionTriggerAfterBn = $ScrollTrigger.create({
+        transitionTriggerAfterBn.value?.kill();
+        transitionTriggerAfterBn.value = $ScrollTrigger.create({
             id: "transitionTriggerAfterBn",
             trigger: "#bn",
             start: "bottom bottom+=1",
@@ -690,10 +709,11 @@ onMounted(() =>
             },
             markers: false
         })
-        transitionTriggerAfterBn.disable();
+        transitionTriggerAfterBn.value.disable();
 
         // Illustrationセクションの入口でintentObserverをON/OFFするためのトリガー
-        transitionTriggerBeforeIl = $ScrollTrigger.create({
+        transitionTriggerBeforeIl.value?.kill();
+        transitionTriggerBeforeIl.value = $ScrollTrigger.create({
             id: "transitionTriggerBeforeIl",
             trigger: "#il",
             start: "top top+=1",
@@ -717,11 +737,12 @@ onMounted(() =>
             },
             markers: false
         })
-        transitionTriggerBeforeIl.disable();
+        transitionTriggerBeforeIl.value.disable();
 
 
         // pin swipe section and initiate observer
-        pinScrollTrigger1 = $ScrollTrigger.create({
+        pinScrollTrigger1.value?.kill();
+        pinScrollTrigger1.value = $ScrollTrigger.create({
             id: "pinScrollTrigger1",
             trigger: "#section-group-1",
             pin: true,
@@ -729,23 +750,23 @@ onMounted(() =>
             onLeaveBack: () =>
             {
                 console.log(`pinScrollTrigger1: onLeaveBack`)
-                intentObserver.disable();
+                intentObserver.value.disable();
             },
             onEnter: () =>
             {
                 console.log(`pinScrollTrigger1: onEnter`)
-                intentObserver.enable();
+                intentObserver.value.enable();
                 // gotoPanel(currentIndex + 1, true);
             },
             onLeave: () =>
             {
                 console.log(`pinScrollTrigger1: onLeave`)
-                intentObserver.disable();
+                intentObserver.value.disable();
             },
             onEnterBack: () =>
             {
                 console.log(`pinScrollTrigger1: onEnterBack`)
-                intentObserver.enable();
+                intentObserver.value.enable();
                 // gotoPanel(currentIndex - 1, false);
             },
             markers: false,
@@ -765,14 +786,16 @@ onMounted(() =>
 
 onUnmounted(() =>
 {
+    console.log("===== onUnmounted top =====")
     isCoolDownForDown = false;
     currentIndex = 0;
     animating = false;
-    pinScrollTrigger1?.kill();
-    intentObserver?.kill();
-    transitionTriggerBeforeBn?.kill();
-    transitionTriggerAfterBn?.kill();
-    transitionTriggerBeforeIl?.kill();
+    scrollTo.value = -1
+    competitionIdx.value = 1;
+    showModal.value = false;
+    showProfileModal.value = false;
+    dark.value = false
+    darkGrad.value = false
 })
 
 function goToPanelByJump()
@@ -780,9 +803,9 @@ function goToPanelByJump()
     const isDown = currentIndex < scrollTo.value;
     smoother.value?.kill();
     smoother.value = null;
-    transitionTriggerBeforeBn.disable();
-    transitionTriggerAfterBn.disable();
-    transitionTriggerBeforeIl.disable();
+    transitionTriggerBeforeBn.value.disable();
+    transitionTriggerAfterBn.value.disable();
+    transitionTriggerBeforeIl.value.disable();
     gotoPanel(scrollTo.value, isDown, true);
     scrollTo.value = -1;
 }
@@ -795,11 +818,11 @@ watch(showModal, () =>
 {
     if (showModal.value)
     {
-        intentObserver.disable();
-        pinScrollTrigger1.disable();
-        transitionTriggerBeforeBn.disable();
-        transitionTriggerAfterBn.disable();
-        transitionTriggerBeforeIl.disable();
+        intentObserver.value.disable();
+        pinScrollTrigger1.value.disable();
+        transitionTriggerBeforeBn.value.disable();
+        transitionTriggerAfterBn.value.disable();
+        transitionTriggerBeforeIl.value.disable();
         smoother.value?.paused(true);
         document.body.style.overflow = 'hidden';
     } else
@@ -813,11 +836,11 @@ watch(showProfileModal, () =>
 {
     if (showProfileModal.value)
     {
-        intentObserver.disable();
-        pinScrollTrigger1.disable();
-        transitionTriggerBeforeBn.disable();
-        transitionTriggerAfterBn.disable();
-        transitionTriggerBeforeIl.disable();
+        intentObserver.value.disable();
+        pinScrollTrigger1.value.disable();
+        transitionTriggerBeforeBn.value.disable();
+        transitionTriggerAfterBn.value.disable();
+        transitionTriggerBeforeIl.value.disable();
         smoother.value?.paused(true);
         document.body.style.overflow = 'hidden';
     } else

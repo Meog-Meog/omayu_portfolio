@@ -37,17 +37,23 @@ const showModal = useState('showModal', () => false)
 const showProfileModal = useState('showProfileModal', () => false)
 const dark = useState('dark', () => false)
 const darkGrad = useState('darkGrad', () => false)
+
+const intentObserverTop = useState('intentObserver', () => null)
+const pinScrollTrigger1Top = useState('pinScrollTrigger1', () => null)
+const transitionTriggerBeforeBnTop = useState('transitionTriggerBeforeBn', () => null)
+const transitionTriggerAfterBnTop = useState('transitionTriggerAfterBn', () => null)
+const transitionTriggerBeforeIlTop = useState('transitionTriggerBeforeIl', () => null)
+const intentObserver = useState('intentObserverWeb', () => null)
+const pinBgTrigger = useState('pinBgTriggerWeb', () => null)
+const transitionTriggerAfterWsm = useState('transitionTriggerAfterWsmWeb', () => null)
+const transitionTriggerBeforeWsd = useState('transitionTriggerBeforeWsdWeb', () => null)
+const transitionTriggerAfterWsd = useState('transitionTriggerAfterWsdWeb', () => null)
+const transitionTriggerBeforeWsl = useState('transitionTriggerBeforeWslWeb', () => null)
 const { $gsap, $ScrollTrigger, $ScrollSmoother } = useNuxtApp();
 
 let animating = false;
 let isCoolDownForDown = false;
-let intentObserver;
 let currentIndex = 0;
-let pinBgTrigger;
-let transitionTriggerAfterWsm;
-let transitionTriggerBeforeWsd;
-let transitionTriggerAfterWsd;
-let transitionTriggerBeforeWsl;
 const defaultTsArgs = {
     duration: 0.5, ease: 'power3'
 }
@@ -62,10 +68,10 @@ const transitions = [
         enterCallBack: () =>
         {
             intentObserver.enable();
-            transitionTriggerAfterWsm.disable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.disable();
+            transitionTriggerAfterWsm.value.disable();
+            transitionTriggerBeforeWsd.value.disable();
+            transitionTriggerAfterWsd.value.disable();
+            transitionTriggerBeforeWsl.value.disable();
         },
     },
     // 1: wsm
@@ -75,11 +81,11 @@ const transitions = [
         enter: () => $gsap.timeline()
             .add(() =>
             {
-                intentObserver.disable();
-                transitionTriggerAfterWsm.enable();
-                transitionTriggerBeforeWsd.disable();
-                transitionTriggerAfterWsd.disable();
-                transitionTriggerBeforeWsl.disable();
+                intentObserver.value.disable();
+                transitionTriggerAfterWsm.value.enable();
+                transitionTriggerBeforeWsd.value.disable();
+                transitionTriggerAfterWsd.value.disable();
+                transitionTriggerBeforeWsl.value.disable();
             })
             .set('#section-group', { autoAlpha: 1, maxHeight: window.document.getElementById('wsm').offsetHeight + 'px' })
             .set('#wsm', { y: 0, autoAlpha: 1 })
@@ -87,7 +93,7 @@ const transitions = [
             .fromTo('#wsm-mock', { autoAlpha: 0, y: "3rem" }, { duration: 1, autoAlpha: 1, y: 0, ease: 'power2.inOut', })
             .fromTo('#wsm-bgtext', { autoAlpha: 0 }, { duration: 2, autoAlpha: 1, ease: 'power2.inOut', }, "<+50%"),
         leave: () => $gsap.timeline()
-            .add(() => transitionTriggerAfterWsm.disable())
+            .add(() => transitionTriggerAfterWsm.value.disable())
             .fromTo('#wsm-mock', { autoAlpha: 1, y: 0, }, { y: "-3rem", autoAlpha: 0, ...defaultTsArgs })
             .fromTo('#wsm-bgtext', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs }, "<"),
         enterBack: () => $gsap.timeline()
@@ -96,21 +102,21 @@ const transitions = [
             .add(() =>
             {
                 $ScrollTrigger.refresh();
-                intentObserver.disable();
-                transitionTriggerAfterWsm.enable();
-                transitionTriggerBeforeWsd.disable();
-                transitionTriggerAfterWsd.disable();
-                transitionTriggerBeforeWsl.disable();
+                intentObserver.value.disable();
+                transitionTriggerAfterWsm.value.enable();
+                transitionTriggerBeforeWsd.value.disable();
+                transitionTriggerAfterWsd.value.disable();
+                transitionTriggerBeforeWsl.value.disable();
             })
             .fromTo('#wsm-mock', { y: "-3rem", autoAlpha: 0, }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
             .fromTo('#wsm-bgtext', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs }, "<"),
         enterCallBack: () =>
         {
-            intentObserver.disable();
-            transitionTriggerAfterWsm.enable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.disable();
+            intentObserver.value.disable();
+            transitionTriggerAfterWsm.value.enable();
+            transitionTriggerBeforeWsd.value.disable();
+            transitionTriggerAfterWsd.value.disable();
+            transitionTriggerBeforeWsl.value.disable();
         },
     },
     // 2: wsd(head)
@@ -128,11 +134,11 @@ const transitions = [
             .add(() => smoother.value.scrollTo("#wsd", false, "top top"))
             .add(() =>
             {
-                intentObserver.enable();
-                transitionTriggerAfterWsm.disable();
-                transitionTriggerBeforeWsd.disable();
-                transitionTriggerAfterWsd.disable();
-                transitionTriggerBeforeWsl.disable();
+                intentObserver.value.enable();
+                transitionTriggerAfterWsm.value.disable();
+                transitionTriggerBeforeWsd.value.disable();
+                transitionTriggerAfterWsd.value.disable();
+                transitionTriggerBeforeWsl.value.disable();
             })
             .fromTo(['#wsd', '#wsd-bgtext'], { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
             .fromTo(['#wsd-design', '#wsd-desc'], { autoAlpha: 0, y: "3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
@@ -141,19 +147,19 @@ const transitions = [
         enterBack: () => $gsap.timeline()
             .add(() =>
             {
-                intentObserver.enable();
-                transitionTriggerAfterWsm.disable();
-                transitionTriggerBeforeWsd.disable();
-                transitionTriggerAfterWsd.disable();
-                transitionTriggerBeforeWsl.disable();
+                intentObserver.value.enable();
+                transitionTriggerAfterWsm.value.disable();
+                transitionTriggerBeforeWsd.value.disable();
+                transitionTriggerAfterWsd.value.disable();
+                transitionTriggerBeforeWsl.value.disable();
             }),
         enterCallBack: () =>
         {
-            intentObserver.enable();
-            transitionTriggerAfterWsm.disable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.disable();
+            intentObserver.value.enable();
+            transitionTriggerAfterWsm.value.disable();
+            transitionTriggerBeforeWsd.value.disable();
+            transitionTriggerAfterWsd.value.disable();
+            transitionTriggerBeforeWsl.value.disable();
         },
     },
     // 2: wsd
@@ -163,29 +169,29 @@ const transitions = [
         enter: () => $gsap.timeline()
             .add(() =>
             {
-                intentObserver.disable();
-                transitionTriggerAfterWsm.disable();
-                transitionTriggerBeforeWsd.enable();
-                transitionTriggerAfterWsd.enable();
-                transitionTriggerBeforeWsl.disable();
+                intentObserver.value.disable();
+                transitionTriggerAfterWsm.value.disable();
+                transitionTriggerBeforeWsd.value.enable();
+                transitionTriggerAfterWsd.value.enable();
+                transitionTriggerBeforeWsl.value.disable();
             }),
         leave: () => $gsap.timeline(),
         enterBack: () => $gsap.timeline()
             .add(() =>
             {
-                intentObserver.disable();
-                transitionTriggerAfterWsm.disable();
-                transitionTriggerBeforeWsd.enable();
-                transitionTriggerAfterWsd.enable();
-                transitionTriggerBeforeWsl.disable();
+                intentObserver.value.disable();
+                transitionTriggerAfterWsm.value.disable();
+                transitionTriggerBeforeWsd.value.enable();
+                transitionTriggerAfterWsd.value.enable();
+                transitionTriggerBeforeWsl.value.disable();
             }),
         enterCallBack: () =>
         {
-            intentObserver.disable();
-            transitionTriggerAfterWsm.disable();
-            transitionTriggerBeforeWsd.enable();
-            transitionTriggerAfterWsd.enable();
-            transitionTriggerBeforeWsl.disable();
+            intentObserver.value.disable();
+            transitionTriggerAfterWsm.value.disable();
+            transitionTriggerBeforeWsd.value.enable();
+            transitionTriggerAfterWsd.value.enable();
+            transitionTriggerBeforeWsl.value.disable();
         },
     },
     // 2: wsd(tail)
@@ -195,11 +201,11 @@ const transitions = [
         enter: () => $gsap.timeline()
             .add(() =>
             {
-                intentObserver.enable();
-                transitionTriggerAfterWsm.disable();
-                transitionTriggerBeforeWsd.disable();
-                transitionTriggerAfterWsd.disable();
-                transitionTriggerBeforeWsl.disable();
+                intentObserver.value.enable();
+                transitionTriggerAfterWsm.value.disable();
+                transitionTriggerBeforeWsd.value.disable();
+                transitionTriggerAfterWsd.value.disable();
+                transitionTriggerBeforeWsl.value.disable();
             }),
         leave: () => $gsap.timeline()
             .add(() => dark.value = false)
@@ -218,19 +224,19 @@ const transitions = [
             .fromTo(['#wsd-design', '#wsd-desc'], { autoAlpha: 0, y: "-3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs }, "<+50%")
             .add(() =>
             {
-                intentObserver.enable();
-                transitionTriggerAfterWsm.disable();
-                transitionTriggerBeforeWsd.disable();
-                transitionTriggerAfterWsd.disable();
-                transitionTriggerBeforeWsl.disable();
+                intentObserver.value.enable();
+                transitionTriggerAfterWsm.value.disable();
+                transitionTriggerBeforeWsd.value.disable();
+                transitionTriggerAfterWsd.value.disable();
+                transitionTriggerBeforeWsl.value.disable();
             }),
         enterCallBack: () =>
         {
-            intentObserver.enable();
-            transitionTriggerAfterWsm.disable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.disable();
+            intentObserver.value.enable();
+            transitionTriggerAfterWsm.value.disable();
+            transitionTriggerBeforeWsd.value.disable();
+            transitionTriggerAfterWsd.value.disable();
+            transitionTriggerBeforeWsl.value.disable();
         },
     },
     // 5: wsl
@@ -246,29 +252,29 @@ const transitions = [
             .fromTo('#wsl', { autoAlpha: 0, y: "3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
             .add(() =>
             {
-                intentObserver.disable();
-                transitionTriggerAfterWsm.disable();
-                transitionTriggerBeforeWsd.disable();
-                transitionTriggerAfterWsd.disable();
-                transitionTriggerBeforeWsl.enable();
+                intentObserver.value.disable();
+                transitionTriggerAfterWsm.value.disable();
+                transitionTriggerBeforeWsd.value.disable();
+                transitionTriggerAfterWsd.value.disable();
+                transitionTriggerBeforeWsl.value.enable();
             }),
         leave: () => $gsap.timeline(),
         enterBack: () => $gsap.timeline()
             .add(() =>
             {
-                intentObserver.disable();
-                transitionTriggerAfterWsm.disable();
-                transitionTriggerBeforeWsd.disable();
-                transitionTriggerAfterWsd.disable();
-                transitionTriggerBeforeWsl.enable();
+                intentObserver.value.disable();
+                transitionTriggerAfterWsm.value.disable();
+                transitionTriggerBeforeWsd.value.disable();
+                transitionTriggerAfterWsd.value.disable();
+                transitionTriggerBeforeWsl.value.enable();
             }),
         enterCallBack: () =>
         {
-            intentObserver.disable();
-            transitionTriggerAfterWsm.disable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.enable();
+            intentObserver.value.disable();
+            transitionTriggerAfterWsm.value.disable();
+            transitionTriggerBeforeWsd.value.disable();
+            transitionTriggerAfterWsd.value.disable();
+            transitionTriggerBeforeWsl.value.enable();
         },
     }
 ]
@@ -335,6 +341,13 @@ onMounted(() =>
 {
     if (process.client)
     {
+        console.log("===== onMounted web =====")
+        intentObserverTop.value?.kill();
+        pinScrollTrigger1Top.value?.kill();
+        transitionTriggerBeforeBnTop.value?.kill();
+        transitionTriggerAfterBnTop.value?.kill();
+        transitionTriggerBeforeIlTop.value?.kill();
+
         lottie.loadAnimation({
             container: loadingAnimation.value,
             renderer: 'svg',
@@ -359,7 +372,8 @@ onMounted(() =>
         })
 
         // wsmセクションの出口で状態遷移するためのトリガー
-        transitionTriggerAfterWsm = $ScrollTrigger.create({
+        transitionTriggerAfterWsm.value?.kill();
+        transitionTriggerAfterWsm.value = $ScrollTrigger.create({
             id: "transitionTriggerAfterWsm",
             trigger: "#wsm",
             start: "bottom-=10px bottom-=1",
@@ -379,10 +393,11 @@ onMounted(() =>
             {
             },
         });
-        transitionTriggerAfterWsm.disable();
+        transitionTriggerAfterWsm.value.disable();
 
         // wsdセクションの入口で状態遷移するためのトリガー
-        transitionTriggerBeforeWsd = $ScrollTrigger.create({
+        transitionTriggerBeforeWsd.value?.kill();
+        transitionTriggerBeforeWsd.value = $ScrollTrigger.create({
             id: "transitionTriggerBeforeWsd",
             trigger: "#wsd",
             start: "top top-=1",
@@ -402,9 +417,10 @@ onMounted(() =>
                 gotoPanel(currentIndex - 1, false);
             },
         })
-        transitionTriggerBeforeWsd.disable();
+        transitionTriggerBeforeWsd.value.disable();
         // wsdセクションの出口で状態遷移するためのトリガー
-        transitionTriggerAfterWsd = $ScrollTrigger.create({
+        transitionTriggerAfterWsd.value?.kill();
+        transitionTriggerAfterWsd.value = $ScrollTrigger.create({
             id: "transitionTriggerAfterWsd",
             trigger: "#wsd",
             start: "bottom bottom+=1",
@@ -424,9 +440,10 @@ onMounted(() =>
             {
             },
         })
-        transitionTriggerAfterWsd.disable();
+        transitionTriggerAfterWsd.value.disable();
         // wslセクションの入口で状態遷移するためのトリガー
-        transitionTriggerBeforeWsl = $ScrollTrigger.create({
+        transitionTriggerBeforeWsl.value?.kill();
+        transitionTriggerBeforeWsl.value = $ScrollTrigger.create({
             id: "transitionTriggerBeforeWsl",
             trigger: "#wsl",
             start: "top top+=1",
@@ -446,9 +463,10 @@ onMounted(() =>
                 gotoPanel(currentIndex - 1, false);
             },
         })
-        transitionTriggerBeforeWsl.disable();
+        transitionTriggerBeforeWsl.value.disable();
 
-        pinBgTrigger = $ScrollTrigger.create({
+        pinBgTrigger.value?.kill();
+        pinBgTrigger.value = $ScrollTrigger.create({
             id: "pinBgTrigger",
             trigger: "#wsd-bg",
             pin: true,
@@ -456,9 +474,11 @@ onMounted(() =>
             endTrigger: "#wsd",
             end: "bottom bottom"
         })
-        pinBgTrigger.enable();
+        pinBgTrigger.value.enable();
 
-        intentObserver = $ScrollTrigger.observe({
+        intentObserver.value?.kill();
+        intentObserver.value = $ScrollTrigger.observe({
+            id: "intentObserverWeb",
             type: "wheel,touch",
             onUp: () =>
             {
@@ -480,22 +500,24 @@ onMounted(() =>
                 $ScrollTrigger.isTouch && self.event.preventDefault()
             }
         })
-        intentObserver.enable();
+        intentObserver.value.enable();
         // gotoPanel(currentIndex + 1, true);
     }
 });
 
 onUnmounted(() =>
 {
+    console.log("===== onUnmounted web =====")
+    dark.value = false
+    darkGrad.value = false
+    showModal.value = false
+    showProfileModal.value = false
     isCoolDownForDown = false;
     currentIndex = 0;
     animating = false;
-    intentObserver?.kill();
-    pinBgTrigger?.kill();
-    transitionTriggerAfterWsm?.kill();
-    transitionTriggerBeforeWsd?.kill();
-    transitionTriggerAfterWsd?.kill();
-    transitionTriggerBeforeWsl?.kill();
+    mouseStalkerText.value = ""
+    textLoaded.value = false
+    imgLoaded.value = false
 });
 
 watch(imgLoaded, () =>
