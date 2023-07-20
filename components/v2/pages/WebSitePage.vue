@@ -86,7 +86,7 @@ const transitions = [
                 transitionTriggerAfterWsd.value.disable();
                 transitionTriggerBeforeWsl.value.disable();
             })
-            .set('#section-group', { autoAlpha: 1, maxHeight: window.document.getElementById('wsm').offsetHeight + 'px' })
+            .set('#section-group', { autoAlpha: 1 })
             .set('#wsm', { y: 0, autoAlpha: 1 })
             .set('#wsd', { marginTop: "-" + window.document.getElementById('wsm').offsetHeight + 'px' })
             .fromTo('#wsm-mock', { autoAlpha: 0, y: "3rem" }, { duration: 1, autoAlpha: 1, y: 0, ease: 'power2.inOut', })
@@ -111,6 +111,7 @@ const transitions = [
             .fromTo('#wsm-bgtext', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs }, "<"),
         enterCallBack: () =>
         {
+            window.document.getElementById('section-group').style.maxHeight = window.document.getElementById('wsm').offsetHeight + 'px'
             intentObserver.value.disable();
             transitionTriggerAfterWsm.value.enable();
             transitionTriggerBeforeWsd.value.disable();
