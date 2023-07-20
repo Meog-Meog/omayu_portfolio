@@ -10,10 +10,13 @@
         </div>
     </div>
     <div class="container">
+        <img id="wsd-bgtext" data-speed="0.1" :src="textImg" />
         <div id="wsd-design" class="wsd-design-size">
-            <img v-for="url of capUrls" :key="url"
-                :class="{ 'web-site__design--pc': device === 'pc', 'web-site__design--sp': device === 'sp' }" :src="url"
-                @load="$ScrollTrigger.refresh()" />
+            <div v-show="!capUrlsLoading">
+                <img v-for="url of capUrlsToShow" :key="url"
+                    :class="{ 'web-site__design--pc': device === 'pc', 'web-site__design--sp': device === 'sp' }" :src="url"
+                    @load="capUrlsLoading = false" />
+            </div>
         </div>
     </div>
 </template>
@@ -48,6 +51,7 @@ interface Props
 {
     captures: Array<Capture>;
     contents: Contents;
+    textImg: string;
 }
 const Props = withDefaults(defineProps<Props>(), {
     captures: () =>
@@ -67,13 +71,26 @@ const Props = withDefaults(defineProps<Props>(), {
             design: [""],
             awards: []
         }
-    }
+    },
+    textImg: ""
 });
 
 const { $ScrollSmoother, $ScrollTrigger } = useNuxtApp();
 const capUrls = useState('capUrls', () => [])
 const device = useState('device', () => 'pc')
+const capUrlsToShow = useState('capUrlsToShow', () => [])
+const capUrlsLoading = useState('capUrlsLoading', () => false)
+const capUrlsLoaded = useState('capUrlsLoaded', () => false)
 
+onMounted(() =>
+{
+    if (process.client)
+    {
+        var element = document.getElementById("wsd-desc-container");
+        var rightX = element?.getBoundingClientRect()?.right || 0
+        document.getElementById("wsd-desc")?.style.setProperty("width", `${window.innerWidth - rightX - 100}px`)
+    }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -97,12 +114,25 @@ const device = useState('device', () => 'pc')
     background-size: cover;
 }
 
+#wsd-bgtext {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1001;
+}
+
 #wsd-design {
     z-index: 1001;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: flex-start;
+
+    div {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
 
     img.web-site__design--pc {
         width: 100%;

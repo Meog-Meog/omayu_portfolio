@@ -1,5 +1,5 @@
 <template>
-    <div id="website-links" style="padding: 150px 100px">
+    <div id="website-links" style="padding: 60px 100px 150px 100px">
         <hr />
         <template v-for="(item, i) of items">
             <div class="row-with-hr" @click="router.push(item.id)">

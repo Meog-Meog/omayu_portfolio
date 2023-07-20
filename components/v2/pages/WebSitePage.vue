@@ -1,12 +1,15 @@
 <template>
     <div id="section-groups-wrapper">
         <div id="section-group" class="swipe-section" style="z-index: 2;">
-            <img id="wsm-bgtext" data-speed="0.1" :src="textImg" />
-            <section id="wsm" class="fullscreen-panel">
+            <section id="init"
+                style="height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 80px;" ref="loadingAnimation"></div>
+            </section>
+            <section id="wsm" class="panel" style="margin-top: -100vh;">
                 <web-site-mock-panel :text-img="textImg" :mock-img="mockImg" />
             </section>
             <section id="wsd" class="panel">
-                <web-site-desc-panel :captures="captures" :contents="contents" />
+                <web-site-desc-panel :text-img="textImgDark" :captures="captures" :contents="contents" />
             </section>
         </div>
         <div id="section-group-2" class="swipe-section" style="z-index: 1">
@@ -19,32 +22,37 @@
 </template>
 
 <script setup>
-const Props = defineProps(["textImg", "mockImg", "captures", "contents"]);
+import lottie from 'lottie-web';
+const loadingAnimation = ref(null);
+
+const Props = defineProps(["textImg", "textImgDark", "mockImg", "captures", "contents"]);
 const mouseStalkerText = useState('mouseStalkerText', () => '')
 const smoother = useState('smoother')
-smoother.value?.kill();
 
+const loaded = false;
+const textLoaded = useState('textLoaded', () => false)
 const imgLoaded = useState('imgLoaded', () => false)
 const showModal = useState('showModal', () => false)
 const showProfileModal = useState('showProfileModal', () => false)
 const dark = useState('dark', () => false)
 const darkGrad = useState('darkGrad', () => false)
-imgLoaded.value = false
-dark.value = false
-darkGrad.value = false
-showModal.value = false
-showProfileModal.value = false
 
+const intentObserverTop = useState('intentObserver', () => null)
+const pinScrollTrigger1Top = useState('pinScrollTrigger1', () => null)
+const transitionTriggerBeforeBnTop = useState('transitionTriggerBeforeBn', () => null)
+const transitionTriggerAfterBnTop = useState('transitionTriggerAfterBn', () => null)
+const transitionTriggerBeforeIlTop = useState('transitionTriggerBeforeIl', () => null)
+const intentObserver = useState('intentObserverWeb', () => null)
+const pinBgTrigger = useState('pinBgTriggerWeb', () => null)
+const transitionTriggerAfterWsm = useState('transitionTriggerAfterWsmWeb', () => null)
+const transitionTriggerBeforeWsd = useState('transitionTriggerBeforeWsdWeb', () => null)
+const transitionTriggerAfterWsd = useState('transitionTriggerAfterWsdWeb', () => null)
+const transitionTriggerBeforeWsl = useState('transitionTriggerBeforeWslWeb', () => null)
 const { $gsap, $ScrollTrigger, $ScrollSmoother } = useNuxtApp();
 
+let animating = false;
 let isCoolDownForDown = false;
 let currentIndex = 0;
-let animating;
-let intentObserver;
-let pinBgTrigger;
-let transitionTriggerBeforeWsd;
-let transitionTriggerAfterWsd;
-let transitionTriggerBeforeWsl;
 const defaultTsArgs = {
     duration: 0.5, ease: 'power3'
 }
@@ -54,14 +62,15 @@ const transitions = [
         id: "init",
         noEnterBack: true,
         enter: () => $gsap.timeline(),
-        leave: () => $gsap.timeline(),
+        leave: () => $gsap.timeline().to("#init", { autoAlpha: 0, ...defaultTsArgs }),
         enterBack: () => $gsap.timeline(),
         enterCallBack: () =>
         {
             intentObserver.enable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.disable();
+            transitionTriggerAfterWsm.value.disable();
+            transitionTriggerBeforeWsd.value.disable();
+            transitionTriggerAfterWsd.value.disable();
+            transitionTriggerBeforeWsl.value.disable();
         },
     },
     // 1: wsm
@@ -69,28 +78,45 @@ const transitions = [
         id: "wsm",
         leaveBack: () => $gsap.timeline(),
         enter: () => $gsap.timeline()
-            .set('#section-group', { autoAlpha: 1, maxHeight: "100vh" })
+            .add(() =>
+            {
+                intentObserver.value.disable();
+                transitionTriggerAfterWsm.value.enable();
+                transitionTriggerBeforeWsd.value.disable();
+                transitionTriggerAfterWsd.value.disable();
+                transitionTriggerBeforeWsl.value.disable();
+            })
+            .set('#section-group', { autoAlpha: 1, maxHeight: window.document.getElementById('wsm').offsetHeight + 'px' })
             .set('#wsm', { y: 0, autoAlpha: 1 })
+            .set('#wsd', { marginTop: "-" + window.document.getElementById('wsm').offsetHeight + 'px' })
             .fromTo('#wsm-mock', { autoAlpha: 0, y: "3rem" }, { duration: 1, autoAlpha: 1, y: 0, ease: 'power2.inOut', })
             .fromTo('#wsm-bgtext', { autoAlpha: 0 }, { duration: 2, autoAlpha: 1, ease: 'power2.inOut', }, "<+50%"),
+        leave: () => $gsap.timeline()
+            .add(() => transitionTriggerAfterWsm.value.disable())
+            .fromTo('#wsm-mock', { autoAlpha: 1, y: 0, }, { y: "-3rem", autoAlpha: 0, ...defaultTsArgs })
+            .fromTo('#wsm-bgtext', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs }, "<"),
+        enterBack: () => $gsap.timeline()
+            .set('#section-group', { autoAlpha: 1, maxHeight: window.document.getElementById('wsm').offsetHeight + 'px' })
+            .add(() => smoother.value?.scrollTo("#wsm", false, "bottom-=10px bottom"))
+            .add(() =>
+            {
+                $ScrollTrigger.refresh();
+                intentObserver.value.disable();
+                transitionTriggerAfterWsm.value.enable();
+                transitionTriggerBeforeWsd.value.disable();
+                transitionTriggerAfterWsd.value.disable();
+                transitionTriggerBeforeWsl.value.disable();
+            })
+            .fromTo('#wsm-mock', { y: "-3rem", autoAlpha: 0, }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
+            .fromTo('#wsm-bgtext', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs }, "<"),
         enterCallBack: () =>
         {
-            intentObserver.enable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.disable();
-        },
-        leave: () => $gsap.timeline()
-            .fromTo('#wsm-mock', { autoAlpha: 1, y: 0, }, { y: "-3rem", autoAlpha: 0, ...defaultTsArgs }),
-        enterBack: () => $gsap.timeline()
-            .set('#section-group', { maxHeight: "100vh" })
-            .fromTo('#wsm-mock', { y: "-3rem", autoAlpha: 0, }, { autoAlpha: 1, y: 0, ...defaultTsArgs }),
-        enterBackCallBack: () =>
-        {
-            intentObserver.enable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.disable();
+            window.document.getElementById('section-group').style.maxHeight = window.document.getElementById('wsm').offsetHeight + 'px'
+            intentObserver.value.disable();
+            transitionTriggerAfterWsm.value.enable();
+            transitionTriggerBeforeWsd.value.disable();
+            transitionTriggerAfterWsd.value.disable();
+            transitionTriggerBeforeWsl.value.disable();
         },
     },
     // 2: wsd(head)
@@ -98,139 +124,161 @@ const transitions = [
         id: "wsd(head)",
         leaveBack: () => $gsap.timeline()
             .add(() => dark.value = false)
-            .fromTo('#wsd', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs })
+            .fromTo(['#wsd', '#wsd-bgtext'], { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs })
             .fromTo(['#wsd-design', '#wsd-desc'], { y: 0, autoAlpha: 1 }, { y: "3rem", autoAlpha: 0 }, "<"),
         enter: () => $gsap.timeline()
             .add(() => dark.value = true)
-            .set('#section-group', { maxHeight: "1000vh" })
-            .fromTo('#wsd', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
-            .fromTo(['#wsd-design', '#wsd-desc'], { autoAlpha: 0, y: "3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs }),
+            .set('#wsd', { marginTop: "-" + window.document.getElementById('wsm').offsetHeight + 'px' })
+            .set("#section-group", { maxHeight: window.document.getElementById('wsd').offsetHeight + 'px' })
+            .add(() => $ScrollTrigger.refresh())
+            .add(() => smoother.value.scrollTo("#wsd", false, "top top"))
+            .add(() =>
+            {
+                intentObserver.value.enable();
+                transitionTriggerAfterWsm.value.disable();
+                transitionTriggerBeforeWsd.value.disable();
+                transitionTriggerAfterWsd.value.disable();
+                transitionTriggerBeforeWsl.value.disable();
+            })
+            .fromTo(['#wsd', '#wsd-bgtext'], { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
+            .fromTo(['#wsd-design', '#wsd-desc'], { autoAlpha: 0, y: "3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
+            .add(() => document.body.style.position = 'static'),
+        leave: () => $gsap.timeline(),
+        enterBack: () => $gsap.timeline()
+            .add(() =>
+            {
+                intentObserver.value.enable();
+                transitionTriggerAfterWsm.value.disable();
+                transitionTriggerBeforeWsd.value.disable();
+                transitionTriggerAfterWsd.value.disable();
+                transitionTriggerBeforeWsl.value.disable();
+            }),
         enterCallBack: () =>
         {
-            pinBgTrigger.enable();
-            intentObserver.enable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.disable();
-        },
-        leave: () => $gsap.timeline(),
-        enterBack: () => $gsap.timeline().add(() => dark.value = true),
-        enterBackCallBack: () =>
-        {
-            intentObserver.enable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.disable();
+            intentObserver.value.enable();
+            transitionTriggerAfterWsm.value.disable();
+            transitionTriggerBeforeWsd.value.disable();
+            transitionTriggerAfterWsd.value.disable();
+            transitionTriggerBeforeWsl.value.disable();
         },
     },
-    // 3: wsd(body)
+    // 2: wsd
     {
-        id: "wsd(body)",
+        id: "wsd",
         leaveBack: () => $gsap.timeline(),
-        enter: () => $gsap.timeline().set("#section-group-2", { maxHeight: "100vh" }).add(() => dark.value = true),
+        enter: () => $gsap.timeline()
+            .add(() =>
+            {
+                intentObserver.value.disable();
+                transitionTriggerAfterWsm.value.disable();
+                transitionTriggerBeforeWsd.value.enable();
+                transitionTriggerAfterWsd.value.enable();
+                transitionTriggerBeforeWsl.value.disable();
+            }),
+        leave: () => $gsap.timeline(),
+        enterBack: () => $gsap.timeline()
+            .add(() =>
+            {
+                intentObserver.value.disable();
+                transitionTriggerAfterWsm.value.disable();
+                transitionTriggerBeforeWsd.value.enable();
+                transitionTriggerAfterWsd.value.enable();
+                transitionTriggerBeforeWsl.value.disable();
+            }),
         enterCallBack: () =>
         {
-            intentObserver.disable();
-            transitionTriggerBeforeWsd.enable();
-            transitionTriggerAfterWsd.enable();
-            transitionTriggerBeforeWsl.disable();
-        },
-        leave: () => $gsap.timeline(),
-        enterBack: () => $gsap.timeline().add(() => dark.value = true),
-        enterBackCallBack: () =>
-        {
-            intentObserver.disable();
-            transitionTriggerBeforeWsd.enable();
-            transitionTriggerAfterWsd.enable();
-            transitionTriggerBeforeWsl.disable();
+            intentObserver.value.disable();
+            transitionTriggerAfterWsm.value.disable();
+            transitionTriggerBeforeWsd.value.enable();
+            transitionTriggerAfterWsd.value.enable();
+            transitionTriggerBeforeWsl.value.disable();
         },
     },
-    // 4: wsd(tail)
+    // 2: wsd(tail)
     {
         id: "wsd(tail)",
         leaveBack: () => $gsap.timeline(),
-        enter: () => $gsap.timeline().set("#section-group-2", { maxHeight: "100vh" }).add(() => dark.value = true),
-        enterCallBack: () =>
-        {
-            intentObserver.enable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.disable();
-        },
+        enter: () => $gsap.timeline()
+            .add(() =>
+            {
+                intentObserver.value.enable();
+                transitionTriggerAfterWsm.value.disable();
+                transitionTriggerBeforeWsd.value.disable();
+                transitionTriggerAfterWsd.value.disable();
+                transitionTriggerBeforeWsl.value.disable();
+            }),
         leave: () => $gsap.timeline()
             .add(() => dark.value = false)
             .fromTo(['#wsd-design', '#wsd-desc'], { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: "-3rem", ...defaultTsArgs }, "<")
-            .fromTo('#wsm-bgtext', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs }, "<")
+            .fromTo('#wsd-bgtext', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs }, "<")
             .fromTo('#wsd', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs })
             .set('#section-group', { autoAlpha: 0 }),
         enterBack: () => $gsap.timeline()
             .add(() => dark.value = true)
-            .add(() => window.scrollBy(0, document.body.scrollHeight))
             .set("#section-group-2", { maxHeight: "100vh" })
-            .set('#section-group', { autoAlpha: 1 })
+            .set('#section-group', { autoAlpha: 1, maxHeight: window.document.getElementById('wsd').offsetHeight + 'px' })
             .fromTo('#wsd', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
-            .fromTo('#wsm-bgtext', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
-            .fromTo(['#wsd-design', '#wsd-desc'], { autoAlpha: 0, y: "-3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs }, "<+50%"),
-        enterBackCallBack: () =>
+            .add(() => smoother.value.scrollTo("#wsd", false, "bottom bottom"))
+            .add(() => $ScrollTrigger.refresh())
+            .fromTo('#wsd-bgtext', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
+            .fromTo(['#wsd-design', '#wsd-desc'], { autoAlpha: 0, y: "-3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs }, "<+50%")
+            .add(() =>
+            {
+                intentObserver.value.enable();
+                transitionTriggerAfterWsm.value.disable();
+                transitionTriggerBeforeWsd.value.disable();
+                transitionTriggerAfterWsd.value.disable();
+                transitionTriggerBeforeWsl.value.disable();
+            }),
+        enterCallBack: () =>
         {
-            intentObserver.enable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.disable();
+            intentObserver.value.enable();
+            transitionTriggerAfterWsm.value.disable();
+            transitionTriggerBeforeWsd.value.disable();
+            transitionTriggerAfterWsd.value.disable();
+            transitionTriggerBeforeWsl.value.disable();
         },
     },
-    // 5: wsl(head)
+    // 5: wsl
     {
-        id: "wsl(head)",
+        id: "wsl",
         leaveBack: () => $gsap.timeline()
-            .set("#section-groups-wrapper", { clearProps: "height" })
             .fromTo('#wsl', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: "3rem", ...defaultTsArgs })
-            .set("#section-group-2", { autoAlpha: 0 }),
+            .set("#section-group-2", { autoAlpha: 0, maxHeight: "100vh" }),
         enter: () => $gsap.timeline()
-            .add(() => smoother.value?.scrollTop(0))
-            .set("#section-group-2", { autoAlpha: 1, maxHeight: "500vh" })
-            .add(() => window.document.getElementById('section-groups-wrapper').style.height = window.document.getElementById('section-group-2').offsetHeight + 'px')
-            .fromTo('#wsl', { autoAlpha: 0, y: "3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs }),
+            .add(() => smoother.value.scrollTo("#wsd", false, "top+=10 top"))
+            .set("#section-group", { maxHeight: "100vh", autoAlpha: 0 })
+            .set("#section-group-2", { autoAlpha: 1, maxHeight: "10000vh" })
+            .fromTo('#wsl', { autoAlpha: 0, y: "3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
+            .add(() =>
+            {
+                intentObserver.value.disable();
+                transitionTriggerAfterWsm.value.disable();
+                transitionTriggerBeforeWsd.value.disable();
+                transitionTriggerAfterWsd.value.disable();
+                transitionTriggerBeforeWsl.value.enable();
+            }),
+        leave: () => $gsap.timeline(),
+        enterBack: () => $gsap.timeline()
+            .add(() =>
+            {
+                intentObserver.value.disable();
+                transitionTriggerAfterWsm.value.disable();
+                transitionTriggerBeforeWsd.value.disable();
+                transitionTriggerAfterWsd.value.disable();
+                transitionTriggerBeforeWsl.value.enable();
+            }),
         enterCallBack: () =>
         {
-            intentObserver.enable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.disable();
+            intentObserver.value.disable();
+            transitionTriggerAfterWsm.value.disable();
+            transitionTriggerBeforeWsd.value.disable();
+            transitionTriggerAfterWsd.value.disable();
+            transitionTriggerBeforeWsl.value.enable();
         },
-        leave: () => $gsap.timeline(),
-        enterBack: () => $gsap.timeline(),
-        enterBackCallBack: () =>
-        {
-            intentObserver.enable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.disable();
-        },
-    },
-    // 6: wsl(body)
-    {
-        id: "wsl(body)",
-        leaveBack: () => $gsap.timeline(),
-        enter: () => $gsap.timeline(),
-        enterCallBack: () =>
-        {
-            intentObserver.disable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.enable();
-        },
-        leave: () => $gsap.timeline(),
-        enterBack: () => $gsap.timeline(),
-        enterBackCallBack: () =>
-        {
-            intentObserver.disable();
-            transitionTriggerBeforeWsd.disable();
-            transitionTriggerAfterWsd.disable();
-            transitionTriggerBeforeWsl.enable();
-        },
-    },
+    }
 ]
+
 // handle the panel swipe animations
 function gotoPanel(index, isScrollingDown)
 {
@@ -293,31 +341,78 @@ onMounted(() =>
 {
     if (process.client)
     {
+        console.log("===== onMounted web =====")
+        intentObserverTop.value?.kill();
+        pinScrollTrigger1Top.value?.kill();
+        transitionTriggerBeforeBnTop.value?.kill();
+        transitionTriggerAfterBnTop.value?.kill();
+        transitionTriggerBeforeIlTop.value?.kill();
+
+        imgLoaded.value = false;
+        textLoaded.value = false;
+
+        lottie.loadAnimation({
+            container: loadingAnimation.value,
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: '/circles-menu-1.json'
+        });
+        $gsap.timeline().set('#init', { autoAlpha: 1 })
+
+        imgLoaded.value = false
+        dark.value = false
+        darkGrad.value = false
+        showModal.value = false
+        showProfileModal.value = false
+
+        setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }), 200)
         mouseStalkerText.value = ""
-        smoother.value = $ScrollSmoother.create({
+        smoother.value = smoother.value || $ScrollSmoother.create({
             smooth: 1,
             effects: true,
             normalizeScroll: true,
         })
 
+        // wsmセクションの出口で状態遷移するためのトリガー
+        transitionTriggerAfterWsm.value?.kill();
+        transitionTriggerAfterWsm.value = $ScrollTrigger.create({
+            id: "transitionTriggerAfterWsm",
+            trigger: "#wsm",
+            start: "bottom-=10px bottom-=1",
+            end: "bottom-=1 bottom+=1",
+            onLeaveBack: () =>
+            {
+            },
+            onEnter: () =>
+            {
+                gotoPanel(currentIndex + 1, true);
+                console.log(`transitionTriggerAfterWsm: onEnter`)
+            },
+            onLeave: () =>
+            {
+            },
+            onEnterBack: () =>
+            {
+            },
+        });
+        transitionTriggerAfterWsm.value.disable();
 
         // wsdセクションの入口で状態遷移するためのトリガー
-        transitionTriggerBeforeWsd = $ScrollTrigger.create({
+        transitionTriggerBeforeWsd.value?.kill();
+        transitionTriggerBeforeWsd.value = $ScrollTrigger.create({
             id: "transitionTriggerBeforeWsd",
             trigger: "#wsd",
             start: "top top-=1",
             end: "top top+=1",
             onLeaveBack: () =>
             {
-                console.log(`transitionTriggerBeforeWsd: onLeaveBack`)
             },
             onEnter: () =>
             {
-                console.log(`transitionTriggerBeforeWsd: onEnter`)
             },
             onLeave: () =>
             {
-                console.log(`transitionTriggerBeforeWsd: onLeave`)
             },
             onEnterBack: () =>
             {
@@ -325,16 +420,16 @@ onMounted(() =>
                 gotoPanel(currentIndex - 1, false);
             },
         })
-        transitionTriggerBeforeWsd.disable();
+        transitionTriggerBeforeWsd.value.disable();
         // wsdセクションの出口で状態遷移するためのトリガー
-        transitionTriggerAfterWsd = $ScrollTrigger.create({
+        transitionTriggerAfterWsd.value?.kill();
+        transitionTriggerAfterWsd.value = $ScrollTrigger.create({
             id: "transitionTriggerAfterWsd",
             trigger: "#wsd",
             start: "bottom bottom+=1",
             end: "bottom bottom-=1",
             onLeaveBack: () =>
             {
-                console.log(`transitionTriggerAfterWsd: onLeaveBack`)
             },
             onEnter: () =>
             {
@@ -343,32 +438,27 @@ onMounted(() =>
             },
             onLeave: () =>
             {
-                console.log(`transitionTriggerAfterWsd: onLeave`)
             },
             onEnterBack: () =>
             {
-                console.log(`transitionTriggerAfterWsd: onEnterBack`)
             },
-            markers: false,
         })
-        transitionTriggerAfterWsd.disable();
+        transitionTriggerAfterWsd.value.disable();
         // wslセクションの入口で状態遷移するためのトリガー
-        transitionTriggerBeforeWsl = $ScrollTrigger.create({
+        transitionTriggerBeforeWsl.value?.kill();
+        transitionTriggerBeforeWsl.value = $ScrollTrigger.create({
             id: "transitionTriggerBeforeWsl",
             trigger: "#wsl",
             start: "top top+=1",
             end: "top top-=1",
             onLeaveBack: () =>
             {
-                console.log(`transitionTriggerBeforeWsl: onLeaveBack`)
             },
             onEnter: () =>
             {
-                console.log(`transitionTriggerBeforeWsl: onEnter`)
             },
             onLeave: () =>
             {
-                console.log(`transitionTriggerBeforeWsl: onLeave`)
             },
             onEnterBack: () =>
             {
@@ -376,49 +466,32 @@ onMounted(() =>
                 gotoPanel(currentIndex - 1, false);
             },
         })
-        transitionTriggerBeforeWsl.disable();
+        transitionTriggerBeforeWsl.value.disable();
 
-        pinBgTrigger = $ScrollTrigger.create({
+        pinBgTrigger.value?.kill();
+        pinBgTrigger.value = $ScrollTrigger.create({
             id: "pinBgTrigger",
             trigger: "#wsd-bg",
             pin: true,
             start: "top top",
             endTrigger: "#wsd",
-            end: "bottom bottom",
-            onLeaveBack: () =>
-            {
-                console.log(`pinBgTrigger: onLeaveBack`)
-            },
-            onEnter: () =>
-            {
-                console.log(`pinBgTrigger: onEnter`)
-            },
-            onLeave: () =>
-            {
-                console.log(`pinBgTrigger: onLeave`)
-            },
-            onEnterBack: () =>
-            {
-                console.log(`pinBgTrigger: onEnterBack`)
-            },
-            markers: false,
+            end: "bottom bottom"
         })
-        pinBgTrigger.enable();
+        pinBgTrigger.value.enable();
 
-        // create an observer and disable it to start
-        intentObserver = $ScrollTrigger.observe({
+        intentObserver.value?.kill();
+        intentObserver.value = $ScrollTrigger.observe({
+            id: "intentObserverWeb",
             type: "wheel,touch",
             onUp: () =>
             {
                 if (!isCoolDownForDown)
                 {
-                    console.log('onUp - intentObserver');
                     !animating && gotoPanel(currentIndex + 1, true);
                 }
             },
             onDown: () =>
             {
-                console.log('onDown - intentObserver');
                 !animating && gotoPanel(currentIndex - 1, false);
             },
             wheelSpeed: -1,
@@ -430,52 +503,80 @@ onMounted(() =>
                 $ScrollTrigger.isTouch && self.event.preventDefault()
             }
         })
-        intentObserver.enable();
+        intentObserver.value.enable();
         // gotoPanel(currentIndex + 1, true);
     }
 });
 
 onUnmounted(() =>
 {
+    console.log("===== onUnmounted web =====")
+    dark.value = false
+    darkGrad.value = false
+    showModal.value = false
+    showProfileModal.value = false
     isCoolDownForDown = false;
     currentIndex = 0;
     animating = false;
-    intentObserver?.kill();
-    pinBgTrigger?.kill();
-    transitionTriggerBeforeWsd?.kill();
-    transitionTriggerAfterWsd?.kill();
-    transitionTriggerBeforeWsl?.kill();
+    mouseStalkerText.value = ""
 });
-
-watch(imgLoaded, () =>
+const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
+watch(imgLoaded, async () =>
 {
-    if (imgLoaded)
+    if (imgLoaded && textLoaded && currentIndex === 0)
     {
+        await sleep(500);
+        gotoPanel(1, true);
+    }
+});
+watch(textLoaded, async () =>
+{
+    if (imgLoaded && textLoaded && currentIndex === 0)
+    {
+        await sleep(500);
         gotoPanel(1, true);
     }
 });
 const capUrls = useState('capUrls', () => [])
-watch(capUrls, () =>
+const capUrlsToShow = useState('capUrlsToShow', () => [])
+const capUrlsLoading = useState('capUrlsLoading', () => false)
+watch(capUrlsLoading, () =>
 {
-    if (currentIndex >= 2)
+    if (capUrlsLoading.value && currentIndex >= 2)
     {
-        currentIndex = 2;
-        pinBgTrigger.enable();
-        intentObserver.enable();
-        transitionTriggerBeforeWsd.disable();
-        transitionTriggerAfterWsd.disable();
-        transitionTriggerBeforeWsl.disable();
+        console.log("capUrls changed")
+        $gsap.timeline()
+            .fromTo(["#wsd-bgtext", "#wsd-design"], { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "power2.out" })
+            .add(() => smoother.value.scrollTo("#wsd", false, "top+=10 top"))
+            .add(() => capUrlsToShow.value = capUrls.value, ">")
+    }
+    if (!capUrlsLoading.value)
+    {
+        console.log("capUrls loaded")
+        $gsap.timeline()
+            .fromTo(["#wsd-bgtext", "#wsd-design"], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" })
+            .add(() =>
+            {
+                if (currentIndex >= 2)
+                {
+                    currentIndex = 3
+                    gotoPanel(3, true);
+                    $gsap.set('#section-group', { autoAlpha: 1, maxHeight: window.document.getElementById('wsd').offsetHeight + 'px' })
+                    $ScrollTrigger.refresh()
+                }
+            })
     }
 });
 watch(showModal, () =>
 {
     if (showModal.value)
     {
-        intentObserver.disable();
+        console.log("showModal.value = true")
         smoother.value?.paused(true);
         document.body.style.overflow = 'hidden';
     } else
     {
+        console.log("showModal.value = false")
         smoother.value?.paused(false);
         transitions[currentIndex].enterCallBack();
         document.body.style.overflow = 'auto';
@@ -485,11 +586,13 @@ watch(showProfileModal, () =>
 {
     if (showProfileModal.value)
     {
-        intentObserver.disable();
+        console.log("showProfileModal.value = true")
         smoother.value?.paused(true);
         document.body.style.overflow = 'hidden';
     } else
     {
+        console.log("showProfileModal.value = false")
+        dark.value = false
         smoother.value?.paused(false);
         transitions[currentIndex].enterCallBack();
         document.body.style.overflow = 'auto';
@@ -514,24 +617,17 @@ watch(showProfileModal, () =>
 #section-group-2 {
     opacity: 0;
     max-height: 100vh;
+    margin-top: -100vh;
     overflow: hidden;
-    position: absolute;
-    top: 0;
-}
-
-.swipe-section .fullscreen-panel {
-    position: absolute;
-    opacity: 0;
 }
 
 .swipe-section .panel {
     opacity: 0;
+    width: 100%;
 }
 
-#wsm-bgtext {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1001;
+.loading-animation {
+    opacity: 0;
+    transition: opacity 1s;
 }
 </style>
