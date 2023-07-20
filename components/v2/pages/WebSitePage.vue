@@ -348,6 +348,9 @@ onMounted(() =>
         transitionTriggerAfterBnTop.value?.kill();
         transitionTriggerBeforeIlTop.value?.kill();
 
+        imgLoaded.value = false;
+        textLoaded.value = false;
+
         lottie.loadAnimation({
             container: loadingAnimation.value,
             renderer: 'svg',
@@ -516,8 +519,6 @@ onUnmounted(() =>
     currentIndex = 0;
     animating = false;
     mouseStalkerText.value = ""
-    textLoaded.value = false
-    imgLoaded.value = false
 });
 
 watch(imgLoaded, () =>
