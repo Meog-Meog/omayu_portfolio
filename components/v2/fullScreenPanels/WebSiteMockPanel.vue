@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <img id="wsm-bgtext" data-speed="0.1" :src="textImg" @load="textLoaded = true" />
     <img id="wsm-mock" :src="mockImg" @load="onLoad" />
   </div>
 </template>
@@ -8,12 +9,15 @@
 interface Props
 {
   mockImg: string;
+  textImg: string;
 }
 const Props = withDefaults(defineProps<Props>(), {
   mockImg: "",
+  textImg: ""
 });
 
 const { $ScrollTrigger } = useNuxtApp();
+const textLoaded = useState('textLoaded', () => false)
 const imgLoaded = useState('imgLoaded', () => false)
 const onLoad = () =>
 {
@@ -29,7 +33,6 @@ const onLoad = () =>
 
 <style lang="scss" scoped>
 .container {
-  height: 100vh;
   width: 100vw;
   position: relative;
   display: flex;
@@ -38,7 +41,16 @@ const onLoad = () =>
   overflow: hidden;
 }
 
+#wsm-bgtext {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+}
+
 #wsm-mock {
   width: 100%;
+  margin-top: 30px;
+  margin-bottom: 155px;
 }
 </style>

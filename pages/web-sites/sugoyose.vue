@@ -1,5 +1,6 @@
 <template>
-    <web-site-page :text-img="textImg" :mock-img="mockImg" :captures="captures" :contents="contents" />
+    <web-site-page :text-img="textImg" :text-img-dark="textImgDark" :mock-img="mockImg" :captures="captures"
+        :contents="contents" />
 </template>
 
 <script setup lang="ts">
@@ -7,7 +8,8 @@ definePageMeta({
     layout: "v2",
 })
 
-const textImg = "/image/cap/01_sugoyose/sugoyose_text_2c2c2c.svg"
+const textImg = "/image/cap/01_sugoyose/sugoyose_text_101010.svg"
+const textImgDark = "/image/cap/01_sugoyose/sugoyose_text_2c2c2c.svg"
 const mockImg = "/image/mock/sugoyose_mock.webp"
 const captures = [
     {

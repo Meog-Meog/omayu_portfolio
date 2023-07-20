@@ -22,6 +22,7 @@
 .wrapper {
   display: flex;
   align-items: center;
+  padding-top: 70px;
   padding-left: 100px;
   margin-bottom: 86px;
 }

@@ -114,12 +114,14 @@ const Props = withDefaults(defineProps<Props>(), {
     }
 });
 
-const { $ScrollSmoother, $ScrollTrigger } = useNuxtApp();
+const { $gsap, $ScrollSmoother, $ScrollTrigger } = useNuxtApp();
 
 const smoother = useState<ScrollSmoother>('smoother')
 const device = useState('device', () => 'pc')
 const pageIdx = useState('pageIdx', () => 0)
 const capUrls = useState<String[]>('capUrls', () => [])
+const capUrlsToShow = useState<String[]>('capUrlsToShow', () => [])
+const capUrlsLoading = useState('capUrlsLoading', () => false)
 
 const showPageLink = Props.captures.length > 1
 const hasPcPage = Props.captures.some(c => c.cap.pc.length > 0)
@@ -133,38 +135,37 @@ onMounted(() =>
         device.value = 'pc'
         pageIdx.value = 0
         changeCaps()
+        capUrlsToShow.value = capUrls.value
     }
 })
 
 const changeCaps = () =>
 {
+    capUrlsLoading.value = true
     capUrls.value = Props.captures[pageIdx.value].cap[device.value === 'pc' ? 'pc' : 'sp']
-    if (smoother.value)
-    {
-        // smoother.value.scrollTo('.web-site__design', false, "top top");
-    }
-    nextTick(() =>
-    {
-        smoother.value?.scrollTop(0)
-        $ScrollTrigger.refresh()
-    })
 }
 const changeDevice = (d: string) =>
 {
-    device.value = d
-    changeCaps()
+    if (device.value !== d)
+    {
+        device.value = d
+        changeCaps()
+    }
 }
 const changePage = (idx: number) =>
 {
-    if (device.value === 'pc' && Props.captures[idx].cap.pc.length === 0)
+    if (pageIdx.value !== idx)
     {
-        device.value = 'sp'
-    } else if (device.value === 'sp' && Props.captures[idx].cap.sp.length === 0)
-    {
-        device.value = 'pc'
+        if (device.value === 'pc' && Props.captures[idx].cap.pc.length === 0)
+        {
+            device.value = 'sp'
+        } else if (device.value === 'sp' && Props.captures[idx].cap.sp.length === 0)
+        {
+            device.value = 'pc'
+        }
+        pageIdx.value = idx
+        changeCaps()
     }
-    pageIdx.value = idx
-    changeCaps()
 }
 </script>
 
