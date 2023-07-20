@@ -352,7 +352,6 @@ const transitions = [
         {
             smoother.value?.kill();
             smoother.value = null;
-            $ScrollTrigger.refresh();
             pinScrollTrigger1.disable();
             intentObserver.enable();
             transitionTriggerBeforeBn.disable();
@@ -372,7 +371,6 @@ const transitions = [
                 effects: true,
                 normalizeScroll: true,
             })
-            $ScrollTrigger.refresh();
             pinScrollTrigger1.disable();
             intentObserver.disable();
             transitionTriggerBeforeBn.enable();
@@ -386,7 +384,6 @@ const transitions = [
             .to(['#section-group-1', '#bn'], { autoAlpha: 0, ...defaultTsArgs }),
         enterBackCallBack: () =>
         {
-            $ScrollTrigger.refresh();
             pinScrollTrigger1.disable();
             intentObserver.disable();
             transitionTriggerBeforeBn.enable();
@@ -401,7 +398,7 @@ const transitions = [
         enter: () => $gsap.timeline().add(() => dark.value = true).set("#section-group-2", { maxHeight: "100vh" }),
         enterCallBack: () =>
         {
-            coolDownForDown(500);
+            coolDownForDown(100);
             pinScrollTrigger1.disable();
             intentObserver.enable();
             transitionTriggerBeforeBn.disable();
@@ -417,6 +414,7 @@ const transitions = [
         enterBack: () => $gsap.timeline()
             .add(() => dark.value = true)
             .add(() => smoother.value?.scrollTo('#bn', false, "bottom bottom"))
+            .add(() => $ScrollTrigger.refresh())
             .set("#section-group-2", { maxHeight: "100vh" })
             .set("#section-group-1", { autoAlpha: 1 })
             .to('#bn', { autoAlpha: 1, ...defaultTsArgs })
