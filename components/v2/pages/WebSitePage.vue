@@ -401,7 +401,7 @@ onMounted(() =>
             },
             onEnterBack: () =>
             {
-            }, markers: true
+            },
         });
         transitionTriggerAfterWsm.value.disable();
 
