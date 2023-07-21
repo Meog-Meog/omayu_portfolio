@@ -37,6 +37,8 @@ const showProfileModal = useState('showProfileModal', () => false)
 const dark = useState('dark', () => false)
 const darkGrad = useState('darkGrad', () => false)
 
+const timeline = useState('timeline', () => null)
+
 const intentObserverTop = useState('intentObserver', () => null)
 const pinScrollTrigger1Top = useState('pinScrollTrigger1', () => null)
 const transitionTriggerBeforeBnTop = useState('transitionTriggerBeforeBn', () => null)
@@ -297,6 +299,7 @@ function gotoPanel(index, isScrollingDown)
     }
 
     console.log(`${transitions[currentIndex].id} -> ${transitions[index].id}`)
+    timeline.value?.kill();
     const tl = $gsap.timeline()
     const callBacks = []
     if (isScrollingDown)
@@ -333,6 +336,7 @@ function gotoPanel(index, isScrollingDown)
         callBacks.forEach(cb => cb && cb())
         animating = false;
     })
+    timeline.value = tl
     currentIndex = index;
     console.log("===== /gotoPanel =====")
 }
@@ -342,6 +346,8 @@ onMounted(() =>
     if (process.client)
     {
         console.log("===== onMounted web =====")
+        timeline.value?.kill();
+
         intentObserverTop.value?.kill();
         pinScrollTrigger1Top.value?.kill();
         transitionTriggerBeforeBnTop.value?.kill();

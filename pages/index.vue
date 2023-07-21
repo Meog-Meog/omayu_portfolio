@@ -39,6 +39,8 @@ const showProfileModal = useState('showProfileModal', () => false)
 const dark = useState('dark', () => false)
 const darkGrad = useState('darkGrad', () => false)
 
+const timeline = useState('timeline', () => null)
+
 let currentIndex = 0;
 let animating;
 const intentObserver = useState('intentObserver', () => null)
@@ -523,6 +525,7 @@ function gotoPanel(index, isScrollingDown, isJump = false)
 
     console.log(`${transitions[currentIndex].id} -> ${transitions[index].id}`)
     // smoother.value?.paused(true);
+    timeline.value?.kill();
     const tl = $gsap.timeline()
     const callBacks = []
     if (isScrollingDown)
@@ -581,6 +584,7 @@ function gotoPanel(index, isScrollingDown, isJump = false)
         currentIndex = index;
         smoother.value?.paused(false);
     })
+    timeline.value = tl
     console.log("===== /gotoPanel =====")
 }
 
