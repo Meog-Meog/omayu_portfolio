@@ -86,7 +86,7 @@ const transitions = [
                 transitionTriggerAfterWsd.value.disable();
                 transitionTriggerBeforeWsl.value.disable();
             })
-            .set('#section-group', { autoAlpha: 1, maxHeight: window.document.getElementById('wsm').offsetHeight + 'px' })
+            .set('#section-group', { autoAlpha: 1, height: window.document.getElementById('wsm').offsetHeight + 'px' })
             .set('#wsm', { y: 0, autoAlpha: 1 })
             .set('#wsd', { marginTop: "-" + window.document.getElementById('wsm').offsetHeight + 'px' })
             .fromTo('#wsm-mock', { autoAlpha: 0, y: "3rem" }, { duration: 1, autoAlpha: 1, y: 0, ease: 'power2.inOut', })
@@ -96,7 +96,7 @@ const transitions = [
             .fromTo('#wsm-mock', { autoAlpha: 1, y: 0, }, { y: "-3rem", autoAlpha: 0, ...defaultTsArgs })
             .fromTo('#wsm-bgtext', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs }, "<"),
         enterBack: () => $gsap.timeline()
-            .set('#section-group', { autoAlpha: 1, maxHeight: window.document.getElementById('wsm').offsetHeight + 'px' })
+            .set('#section-group', { autoAlpha: 1, height: window.document.getElementById('wsm').offsetHeight + 'px' })
             .add(() => smoother.value?.scrollTo("#wsm", false, "bottom-=10px bottom"))
             .add(() =>
             {
@@ -111,7 +111,7 @@ const transitions = [
             .fromTo('#wsm-bgtext', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs }, "<"),
         enterCallBack: () =>
         {
-            window.document.getElementById('section-group').style.maxHeight = window.document.getElementById('wsm').offsetHeight + 'px'
+            $ScrollTrigger.refresh();
             intentObserver.value.disable();
             transitionTriggerAfterWsm.value.enable();
             transitionTriggerBeforeWsd.value.disable();
@@ -129,7 +129,7 @@ const transitions = [
         enter: () => $gsap.timeline()
             .add(() => dark.value = true)
             .set('#wsd', { marginTop: "-" + window.document.getElementById('wsm').offsetHeight + 'px' })
-            .set("#section-group", { maxHeight: window.document.getElementById('wsd').offsetHeight + 'px' })
+            .set("#section-group", { height: window.document.getElementById('wsd').offsetHeight + 'px' })
             .add(() => $ScrollTrigger.refresh())
             .add(() => smoother.value.scrollTo("#wsd", false, "top top"))
             .add(() =>
@@ -215,8 +215,8 @@ const transitions = [
             .set('#section-group', { autoAlpha: 0 }),
         enterBack: () => $gsap.timeline()
             .add(() => dark.value = true)
-            .set("#section-group-2", { maxHeight: "100vh" })
-            .set('#section-group', { autoAlpha: 1, maxHeight: window.document.getElementById('wsd').offsetHeight + 'px' })
+            .set("#section-group-2", { height: "100vh" })
+            .set('#section-group', { autoAlpha: 1, height: window.document.getElementById('wsd').offsetHeight + 'px' })
             .fromTo('#wsd', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
             .add(() => smoother.value.scrollTo("#wsd", false, "bottom bottom"))
             .add(() => $ScrollTrigger.refresh())
@@ -244,10 +244,10 @@ const transitions = [
         id: "wsl",
         leaveBack: () => $gsap.timeline()
             .fromTo('#wsl', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: "3rem", ...defaultTsArgs })
-            .set("#section-group-2", { autoAlpha: 0, maxHeight: "100vh" }),
+            .set("#section-group-2", { autoAlpha: 0, height: "100vh" }),
         enter: () => $gsap.timeline()
             .add(() => smoother.value.scrollTo("#wsd", false, "top+=10 top"))
-            .set("#section-group", { maxHeight: "100vh", autoAlpha: 0 })
+            .set("#section-group", { height: "100vh", autoAlpha: 0 })
             .set("#section-group-2", { autoAlpha: 1, maxHeight: "10000vh" })
             .fromTo('#wsl', { autoAlpha: 0, y: "3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
             .add(() =>
@@ -394,7 +394,7 @@ onMounted(() =>
             },
             onEnterBack: () =>
             {
-            },
+            }, markers: true
         });
         transitionTriggerAfterWsm.value.disable();
 
