@@ -366,7 +366,7 @@ onMounted(() =>
         showModal.value = false
         showProfileModal.value = false
 
-        setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }), 200)
+        setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }), 1)
         mouseStalkerText.value = ""
         smoother.value = smoother.value || $ScrollSmoother.create({
             smooth: 1,

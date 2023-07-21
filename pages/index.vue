@@ -17,7 +17,7 @@
         <div id="section-group-2" class="swipe-section" style="z-index: 1;">
             <section id="il" class="panel">
                 <illustration-panel />
-                <footer-view />
+                <footer-view style="margin-top: 120px;" />
             </section>
         </div>
     </div>
