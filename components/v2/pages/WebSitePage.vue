@@ -354,6 +354,12 @@ onMounted(() =>
         transitionTriggerAfterBnTop.value?.kill();
         transitionTriggerBeforeIlTop.value?.kill();
 
+        smoother.value = smoother.value || $ScrollSmoother.create({
+            smooth: 1,
+            effects: true,
+            normalizeScroll: true,
+        })
+
         imgLoaded.value = false;
         textLoaded.value = false;
 
@@ -374,11 +380,6 @@ onMounted(() =>
 
         setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }), 1)
         mouseStalkerText.value = ""
-        smoother.value = smoother.value || $ScrollSmoother.create({
-            smooth: 1,
-            effects: true,
-            normalizeScroll: true,
-        })
 
         // wsmセクションの出口で状態遷移するためのトリガー
         transitionTriggerAfterWsm.value?.kill();
