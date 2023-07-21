@@ -564,7 +564,7 @@ watch(capUrlsLoading, () =>
                 {
                     currentIndex = 3
                     gotoPanel(3, true);
-                    $gsap.set('#section-group', { autoAlpha: 1, maxHeight: window.document.getElementById('wsd').offsetHeight + 'px' })
+                    $gsap.set('#section-group', { autoAlpha: 1, height: window.document.getElementById('wsd').offsetHeight + 'px' })
                     $ScrollTrigger.refresh()
                 }
             })
