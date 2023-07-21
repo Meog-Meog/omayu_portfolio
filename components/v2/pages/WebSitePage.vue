@@ -521,18 +521,21 @@ onUnmounted(() =>
     mouseStalkerText.value = ""
 });
 const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
+let mockLoading = false
 watch(imgLoaded, async () =>
 {
-    if (imgLoaded && textLoaded && currentIndex === 0)
+    if (!mockLoading && imgLoaded && textLoaded && currentIndex === 0)
     {
+        mockLoading = true
         await sleep(500);
         gotoPanel(1, true);
     }
 });
 watch(textLoaded, async () =>
 {
-    if (imgLoaded && textLoaded && currentIndex === 0)
+    if (!mockLoading && imgLoaded && textLoaded && currentIndex === 0)
     {
+        mockLoading = true
         await sleep(500);
         gotoPanel(1, true);
     }
