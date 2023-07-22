@@ -124,8 +124,8 @@ const capUrlsToShow = useState<String[]>('capUrlsToShow', () => [])
 const capUrlsLoading = useState('capUrlsLoading', () => false)
 
 const showPageLink = Props.captures.length > 1
-const hasPcPage = Props.captures.some(c => c.cap.pc.length > 0)
-const hasSpPage = Props.captures.some(c => c.cap.sp.length > 0)
+const hasPcPage = Props.captures.some(c => c?.cap?.pc?.length > 0)
+const hasSpPage = Props.captures.some(c => c?.cap?.sp?.length > 0)
 const showDeviceLink = hasPcPage && hasSpPage
 
 onMounted(() =>
@@ -156,10 +156,10 @@ const changePage = (idx: number) =>
 {
     if (pageIdx.value !== idx)
     {
-        if (device.value === 'pc' && Props.captures[idx].cap.pc.length === 0)
+        if (device.value === 'pc' && Props.captures[idx]?.cap?.pc?.length === 0)
         {
             device.value = 'sp'
-        } else if (device.value === 'sp' && Props.captures[idx].cap.sp.length === 0)
+        } else if (device.value === 'sp' && Props.captures[idx]?.cap?.sp?.length === 0)
         {
             device.value = 'pc'
         }
