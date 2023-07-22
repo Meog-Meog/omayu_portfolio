@@ -22,6 +22,7 @@ const captures = [
 ]
 const contents = {
     title: "COVERMARK FLAWLESS FIT",
+    titleLetterSpacihg: "2px",
     url: "",
     period: "2019年 / 約10日間",
     area: "ワイヤーフレーム作成, デザインを担当",

@@ -34,6 +34,7 @@ interface Award
 interface Contents
 {
     title: string,
+    titleLetterSpacihg: string,
     url: string,
     period: string,
     area: string,
@@ -68,6 +69,7 @@ const Props = withDefaults(defineProps<Props>(), {
     {
         return {
             title: "",
+            titleLetterSpacihg: "1px",
             url: "",
             period: "",
             area: "",

@@ -46,7 +46,7 @@ const year: number = new Date().getFullYear();
   }
 
   &__desc {
-    margin-bottom: 30px;
+    margin-bottom: 34px;
     display: flex;
     align-items: center;
 
@@ -66,10 +66,10 @@ const year: number = new Date().getFullYear();
 
   &__text {
     text-align: left;
-    font: normal normal normal 14px/26px ZenKakuGothicNew;
+    font: normal normal normal 14px/29px ZenKakuGothicNew;
     letter-spacing: 0;
     width: 100%;
-    @include xd-line-spacing(14px, 26px, 4px, 3px);
+    @include xd-line-spacing(14px, 29px, 4px, 3px);
   }
 
   &__picture {
