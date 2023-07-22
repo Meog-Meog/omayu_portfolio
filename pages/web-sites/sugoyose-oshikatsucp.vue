@@ -22,6 +22,7 @@ const captures = [
 ]
 const contents = {
     title: "スゴヨセ 推し活応援キャンペーン",
+    titleLetterSpacihg: "1px",
     url: "https://sugoyose.jp/2022oshikatsu_campaign",
     period: "2022年 / 約7日間",
     area: "デザインを担当",

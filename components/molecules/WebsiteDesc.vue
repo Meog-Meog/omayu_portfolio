@@ -1,8 +1,8 @@
 <template>
     <div style="text-align: left;">
-        <external-text-link :style="{ 'margin-bottom': contents.overview ? '25px' : '30px' }" :label="contents.title"
-            :url="contents.url" large />
-        <div v-if="contents.overview" style="margin-bottom: 30px;">
+        <external-text-link :style="{ 'margin-bottom': contents.overview ? '30px' : '30px' }" :label="contents.title"
+            :url="contents.url" large :letter-spacing="contents.titleLetterSpacihg" />
+        <div v-if="contents.overview" style="margin-bottom: px;">
             <p>
                 {{ contents.overview }}
             </p>
@@ -18,20 +18,20 @@
                 {{ contents.area }}
             </p>
         </div>
-        <div style="margin-bottom: 30px;">
-            <p>
+        <div style="margin-bottom: 32px;">
+            <p class="desc">
                 <template v-for="d of contents.design">
                     {{ d }}
                     <br>
                 </template>
             </p>
         </div>
-        <div v-if="contents.awards.length > 0" style="margin-bottom: 30px;">
+        <div v-if="contents.awards.length > 0" style="margin-bottom: 34px;">
             <external-text-link v-for="(award, i) of contents.awards" :key="i" :label="award.name" :url="award.url"
                 style="margin-bottom: 10px;" />
         </div>
         <template v-if="showDeviceLink || showPageLink">
-            <hr style="margin-bottom: 35px;" />
+            <hr style="margin-bottom: 30px;" />
             <div class="device-link">
                 <p>
                     ページ切り替え
@@ -71,6 +71,7 @@ interface Award
 interface Contents
 {
     title: string,
+    titleLetterSpacihg: string,
     url: string,
     period: string,
     area: string,
@@ -104,6 +105,7 @@ const Props = withDefaults(defineProps<Props>(), {
     {
         return {
             title: "",
+            titleLetterSpacihg: "0px",
             url: "",
             period: "",
             area: "",
@@ -195,6 +197,11 @@ p {
     @include xd-line-spacing(13px, 26px, 4px, 3px);
     letter-spacing: 0px;
     color: #EEEEEE;
+}
+
+.desc {
+    font: normal normal normal 13px/28px ZenKakuGothicNew;
+    @include xd-line-spacing(13px, 28px, 4px, 3px);
 }
 
 button {

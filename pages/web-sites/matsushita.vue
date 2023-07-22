@@ -22,6 +22,7 @@ const captures = [
 ]
 const contents = {
     title: "松下記念病院",
+    titleLetterSpacihg: "1px",
     url: "",
     period: "2020年 / 約10日間",
     area: "ワイヤーフレーム作成, デザインを担当",

@@ -29,6 +29,7 @@ const captures = [
 ]
 const contents = {
     title: "CO.nnect",
+    titleLetterSpacihg: "1px",
     url: "",
     period: "2019年 / 約1ヶ月間",
     area: "ワイヤーフレーム作成, デザインを担当",

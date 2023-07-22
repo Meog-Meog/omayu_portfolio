@@ -36,6 +36,7 @@ const captures = [
 ]
 const contents = {
     title: "羽衣学園 中学校・高等学校",
+    titleLetterSpacihg: "1px",
     url: "https://hagoromogakuen.ed.jp/",
     period: "2020年 / 約6ヶ月間",
     area: "ワイヤーフレーム作成, トップ・下層ページデザインを担当",

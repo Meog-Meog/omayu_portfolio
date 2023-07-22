@@ -22,6 +22,7 @@ const captures = [
 ]
 const contents = {
     title: "スゴヨセ 2023年春の卒業・送別キャンペーン",
+    titleLetterSpacihg: "1px",
     url: "https://sugoyose.jp/2023wakare_campaign",
     period: "2023年 / 約4日間",
     area: "デザインを担当",

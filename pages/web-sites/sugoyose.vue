@@ -44,13 +44,14 @@ const captures = [
 ]
 const contents = {
     title: "スゴヨセ",
+    titleLetterSpacihg: "1px",
     url: "https://sugoyose.jp/",
     period: "2021~2023年",
     area: "UIデザイン, 仕様提案などを担当",
-    overview: "オンライン上で寄せ書きブックの作成・注文ができる",
+    overview: "Web上で寄せ書きブックの作成・注文ができるサービスサイト",
     design: [
         "全ての画面において「無駄のない直感的なUI」を意識して設計。",
-        "また、競合との差別化を図るため、ブックのビジュアルデザインにも力を入れている。"
+        "競合との差別化を図るため、ブックのビジュアルデザインにも力を入れた。"
     ],
     awards: [
         {
