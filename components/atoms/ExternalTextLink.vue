@@ -6,7 +6,7 @@
                 <span>{{ label }}</span>
                 <img v-if="large" class="external-text__icon" style="margin-left: 12px;"
                     src="~/assets/image/icon/icon_tab_l.svg?url" />
-                <img v-else class="external-text__icon" style="margin-left: 8px;"
+                <img v-else class="external-text__icon" style="margin-left: 8px; margin-bottom: -2px;"
                     src="~/assets/image/icon/icon_tab_s.svg?url" />
             </div>
         </div>

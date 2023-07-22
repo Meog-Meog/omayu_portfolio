@@ -100,7 +100,7 @@ onMounted(() =>
                 renderer: 'svg',
                 loop: true,
                 autoplay: true,
-                path: '/circles-menu-1.json'
+                path: '/loading-light.json'
             });
         }
         var element = document.getElementById("wsd-desc-container");
