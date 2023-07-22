@@ -37,6 +37,8 @@ const showProfileModal = useState('showProfileModal', () => false)
 const dark = useState('dark', () => false)
 const darkGrad = useState('darkGrad', () => false)
 
+const timeline = useState('timeline', () => null)
+
 const intentObserverTop = useState('intentObserver', () => null)
 const pinScrollTrigger1Top = useState('pinScrollTrigger1', () => null)
 const transitionTriggerBeforeBnTop = useState('transitionTriggerBeforeBn', () => null)
@@ -66,7 +68,7 @@ const transitions = [
         enterBack: () => $gsap.timeline(),
         enterCallBack: () =>
         {
-            intentObserver.enable();
+            intentObserver.value.enable();
             transitionTriggerAfterWsm.value.disable();
             transitionTriggerBeforeWsd.value.disable();
             transitionTriggerAfterWsd.value.disable();
@@ -86,17 +88,18 @@ const transitions = [
                 transitionTriggerAfterWsd.value.disable();
                 transitionTriggerBeforeWsl.value.disable();
             })
-            .set('#section-group', { autoAlpha: 1, maxHeight: window.document.getElementById('wsm').offsetHeight + 'px' })
+            .set('#section-group', { autoAlpha: 1, height: window.document.getElementById('wsm').offsetHeight + 'px' })
             .set('#wsm', { y: 0, autoAlpha: 1 })
             .set('#wsd', { marginTop: "-" + window.document.getElementById('wsm').offsetHeight + 'px' })
             .fromTo('#wsm-mock', { autoAlpha: 0, y: "3rem" }, { duration: 1, autoAlpha: 1, y: 0, ease: 'power2.inOut', })
-            .fromTo('#wsm-bgtext', { autoAlpha: 0 }, { duration: 2, autoAlpha: 1, ease: 'power2.inOut', }, "<+50%"),
+            .fromTo('#wsm-bgtext', { autoAlpha: 0, y: "+=1.75rem" }, { duration: 1, autoAlpha: 1, y: "-=1.75rem", ease: 'power2.inOut', }, "<+50%")
+            .set("#section-groups-wrapper", { clearProps: "height" }),
         leave: () => $gsap.timeline()
             .add(() => transitionTriggerAfterWsm.value.disable())
             .fromTo('#wsm-mock', { autoAlpha: 1, y: 0, }, { y: "-3rem", autoAlpha: 0, ...defaultTsArgs })
             .fromTo('#wsm-bgtext', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs }, "<"),
         enterBack: () => $gsap.timeline()
-            .set('#section-group', { autoAlpha: 1, maxHeight: window.document.getElementById('wsm').offsetHeight + 'px' })
+            .set('#section-group', { autoAlpha: 1, height: window.document.getElementById('wsm').offsetHeight + 'px' })
             .add(() => smoother.value?.scrollTo("#wsm", false, "bottom-=10px bottom"))
             .add(() =>
             {
@@ -111,7 +114,7 @@ const transitions = [
             .fromTo('#wsm-bgtext', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs }, "<"),
         enterCallBack: () =>
         {
-            window.document.getElementById('section-group').style.maxHeight = window.document.getElementById('wsm').offsetHeight + 'px'
+            $ScrollTrigger.refresh();
             intentObserver.value.disable();
             transitionTriggerAfterWsm.value.enable();
             transitionTriggerBeforeWsd.value.disable();
@@ -129,7 +132,7 @@ const transitions = [
         enter: () => $gsap.timeline()
             .add(() => dark.value = true)
             .set('#wsd', { marginTop: "-" + window.document.getElementById('wsm').offsetHeight + 'px' })
-            .set("#section-group", { maxHeight: window.document.getElementById('wsd').offsetHeight + 'px' })
+            .set("#section-group", { height: window.document.getElementById('wsd').offsetHeight + 'px' })
             .add(() => $ScrollTrigger.refresh())
             .add(() => smoother.value.scrollTo("#wsd", false, "top top"))
             .add(() =>
@@ -165,7 +168,9 @@ const transitions = [
     // 2: wsd
     {
         id: "wsd",
-        leaveBack: () => $gsap.timeline(),
+        leaveBack: () => $gsap.timeline()
+            .add(() => transitionTriggerBeforeWsd.value.disable())
+            .add(() => transitionTriggerAfterWsd.value.disable()),
         enter: () => $gsap.timeline()
             .add(() =>
             {
@@ -175,7 +180,9 @@ const transitions = [
                 transitionTriggerAfterWsd.value.enable();
                 transitionTriggerBeforeWsl.value.disable();
             }),
-        leave: () => $gsap.timeline(),
+        leave: () => $gsap.timeline()
+            .add(() => transitionTriggerBeforeWsd.value.disable())
+            .add(() => transitionTriggerAfterWsd.value.disable()),
         enterBack: () => $gsap.timeline()
             .add(() =>
             {
@@ -215,8 +222,8 @@ const transitions = [
             .set('#section-group', { autoAlpha: 0 }),
         enterBack: () => $gsap.timeline()
             .add(() => dark.value = true)
-            .set("#section-group-2", { maxHeight: "100vh" })
-            .set('#section-group', { autoAlpha: 1, maxHeight: window.document.getElementById('wsd').offsetHeight + 'px' })
+            .set("#section-group-2", { height: "100vh" })
+            .set('#section-group', { autoAlpha: 1, height: window.document.getElementById('wsd').offsetHeight + 'px' })
             .fromTo('#wsd', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
             .add(() => smoother.value.scrollTo("#wsd", false, "bottom bottom"))
             .add(() => $ScrollTrigger.refresh())
@@ -243,12 +250,13 @@ const transitions = [
     {
         id: "wsl",
         leaveBack: () => $gsap.timeline()
+            .add(() => transitionTriggerBeforeWsl.value.disable())
             .fromTo('#wsl', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: "3rem", ...defaultTsArgs })
-            .set("#section-group-2", { autoAlpha: 0, maxHeight: "100vh" }),
+            .set("#section-group-2", { autoAlpha: 0, height: "100vh" }),
         enter: () => $gsap.timeline()
             .add(() => smoother.value.scrollTo("#wsd", false, "top+=10 top"))
-            .set("#section-group", { maxHeight: "100vh", autoAlpha: 0 })
-            .set("#section-group-2", { autoAlpha: 1, maxHeight: "10000vh" })
+            .set("#section-group", { height: "100vh", autoAlpha: 0 })
+            .set("#section-group-2", { autoAlpha: 1, maxHeight: "10000vh", clearProps: "height" })
             .fromTo('#wsl', { autoAlpha: 0, y: "3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
             .add(() =>
             {
@@ -297,6 +305,7 @@ function gotoPanel(index, isScrollingDown)
     }
 
     console.log(`${transitions[currentIndex].id} -> ${transitions[index].id}`)
+    timeline.value?.kill();
     const tl = $gsap.timeline()
     const callBacks = []
     if (isScrollingDown)
@@ -333,6 +342,7 @@ function gotoPanel(index, isScrollingDown)
         callBacks.forEach(cb => cb && cb())
         animating = false;
     })
+    timeline.value = tl
     currentIndex = index;
     console.log("===== /gotoPanel =====")
 }
@@ -342,11 +352,23 @@ onMounted(() =>
     if (process.client)
     {
         console.log("===== onMounted web =====")
+        timeline.value?.kill();
+
+        $gsap.set("#section-groups-wrapper", { height: "100vh" })
+
         intentObserverTop.value?.kill();
         pinScrollTrigger1Top.value?.kill();
         transitionTriggerBeforeBnTop.value?.kill();
         transitionTriggerAfterBnTop.value?.kill();
         transitionTriggerBeforeIlTop.value?.kill();
+
+        smoother.value = smoother.value || $ScrollSmoother.create({
+            smooth: 1,
+            effects: true,
+            normalizeScroll: true,
+        })
+        smoother.value.effects("#wsm-bgtext", { speed: 0.1 });
+        smoother.value.effects("#wsd-bgtext", { speed: 0.1 });
 
         imgLoaded.value = false;
         textLoaded.value = false;
@@ -366,13 +388,8 @@ onMounted(() =>
         showModal.value = false
         showProfileModal.value = false
 
-        setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }), 200)
+        setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }), 1)
         mouseStalkerText.value = ""
-        smoother.value = smoother.value || $ScrollSmoother.create({
-            smooth: 1,
-            effects: true,
-            normalizeScroll: true,
-        })
 
         // wsmセクションの出口で状態遷移するためのトリガー
         transitionTriggerAfterWsm.value?.kill();
@@ -475,7 +492,8 @@ onMounted(() =>
             pin: true,
             start: "top top",
             endTrigger: "#wsd",
-            end: "bottom bottom"
+            end: "bottom+=99999vh bottom",
+            anticipatePin: 1,
         })
         pinBgTrigger.value.enable();
 
@@ -521,18 +539,30 @@ onUnmounted(() =>
     mouseStalkerText.value = ""
 });
 const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
+let mockLoading = false
 watch(imgLoaded, async () =>
 {
-    if (imgLoaded && textLoaded && currentIndex === 0)
+    if (!mockLoading && imgLoaded.value && textLoaded.value && smoother.value && currentIndex === 0)
     {
+        mockLoading = true
         await sleep(500);
         gotoPanel(1, true);
     }
 });
 watch(textLoaded, async () =>
 {
-    if (imgLoaded && textLoaded && currentIndex === 0)
+    if (!mockLoading && imgLoaded.value && textLoaded.value && smoother.value && currentIndex === 0)
     {
+        mockLoading = true
+        await sleep(500);
+        gotoPanel(1, true);
+    }
+});
+watch(smoother, async () =>
+{
+    if (!mockLoading && imgLoaded.value && textLoaded.value && smoother.value && currentIndex === 0)
+    {
+        mockLoading = true
         await sleep(500);
         gotoPanel(1, true);
     }
@@ -540,29 +570,38 @@ watch(textLoaded, async () =>
 const capUrls = useState('capUrls', () => [])
 const capUrlsToShow = useState('capUrlsToShow', () => [])
 const capUrlsLoading = useState('capUrlsLoading', () => false)
+const device = useState('device', () => 'pc')
+const deviceToShow = useState('deviceToShow', () => 'pc')
 watch(capUrlsLoading, () =>
 {
     if (capUrlsLoading.value && currentIndex >= 2)
     {
         console.log("capUrls changed")
         $gsap.timeline()
-            .fromTo(["#wsd-bgtext", "#wsd-design"], { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "power2.out" })
+            .fromTo(["#wsd-bgtext", "#wsd-caps"], { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "power2.out" })
             .add(() => smoother.value.scrollTo("#wsd", false, "top+=10 top"))
+            .add(() => deviceToShow.value = device.value)
+            .fromTo(["#wsd-loading"], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" })
             .add(() => capUrlsToShow.value = capUrls.value, ">")
     }
     if (!capUrlsLoading.value)
     {
         console.log("capUrls loaded")
         $gsap.timeline()
-            .fromTo(["#wsd-bgtext", "#wsd-design"], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" })
+            .fromTo(["#wsd-loading"], { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "power2.out" })
+            .fromTo(["#wsd-bgtext", "#wsd-caps"], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" })
             .add(() =>
             {
                 if (currentIndex >= 2)
                 {
                     currentIndex = 3
                     gotoPanel(3, true);
-                    $gsap.set('#section-group', { autoAlpha: 1, maxHeight: window.document.getElementById('wsd').offsetHeight + 'px' })
-                    $ScrollTrigger.refresh()
+                    $gsap.set('#section-group', { autoAlpha: 1, height: window.document.getElementById('wsd').offsetHeight + 'px' })
+                    nextTick(() =>
+                    {
+                        transitionTriggerAfterWsd.value?.refresh();
+                        transitionTriggerBeforeWsl.value?.refresh();
+                    })
                 }
             })
     }
@@ -604,6 +643,7 @@ watch(showProfileModal, () =>
 #section-groups-wrapper {
     position: relative;
     width: 100%;
+    overflow: hidden;
 }
 
 .swipe-section {

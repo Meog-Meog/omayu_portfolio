@@ -17,7 +17,7 @@
         <div id="section-group-2" class="swipe-section" style="z-index: 1;">
             <section id="il" class="panel">
                 <illustration-panel />
-                <footer-view />
+                <footer-view style="margin-top: 120px;" />
             </section>
         </div>
     </div>
@@ -38,6 +38,8 @@ const showModal = useState('showModal', () => false)
 const showProfileModal = useState('showProfileModal', () => false)
 const dark = useState('dark', () => false)
 const darkGrad = useState('darkGrad', () => false)
+
+const timeline = useState('timeline', () => null)
 
 let currentIndex = 0;
 let animating;
@@ -98,6 +100,7 @@ const cpCallback = () =>
 {
     smoother.value?.kill();
     smoother.value = null;
+    smoother.value?.paused(true)
     $ScrollTrigger.refresh();
     transitionTriggerBeforeBn.value.disable();
     transitionTriggerAfterBn.value.disable();
@@ -141,9 +144,9 @@ const transitions = [
             kvCallback();
         },
     },
-    // 2: ws(title)
+    // 2: ws(title,1,2)
     {
-        id: "ws(title)",
+        id: "ws(title,1,2)",
         leaveBack: () => $gsap.timeline()
             .to('#ws', { y: "3rem", autoAlpha: 0, ...defaultTsArgs }),
         enter: () => $gsap.timeline()
@@ -151,18 +154,22 @@ const transitions = [
             .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
             .set(['#ws-thumbnails1', '#ws-thumbnails2'], { autoAlpha: 0, y: 0 })
             .fromTo('#ws', { y: "3rem", autoAlpha: 0 }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
+            .fromTo('#ws-thumbnails1', { y: "3rem", autoAlpha: 0, zIndex: 1 }, { y: 0, autoAlpha: 1, ...defaultTsArgs })
             .add(() => wsCallback()),
-        leave: () => $gsap.timeline(),
+        leave: () => $gsap.timeline()
+            .to('#ws-thumbnails1', { y: "-3rem", autoAlpha: 0, ...defaultTsArgs }),
         enterBack: () => $gsap.timeline()
             .add(() => wsCallback())
             .set("#section-groups-wrapper", { clearProps: "height" })
-            .set(['#ws-thumbnails1', '#ws-thumbnails2'], { autoAlpha: 0 })
-            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" }),
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .set('#ws-thumbnails2', { autoAlpha: 0, zIndex: -1 })
+            .fromTo('#ws-thumbnails1', { y: "-3rem", autoAlpha: 0, zIndex: 1 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
         enterBackByJump: () => $gsap.timeline()
             .set("#section-groups-wrapper", { clearProps: "height" })
             .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
             .set(['#ws-thumbnails1', '#ws-thumbnails2'], { autoAlpha: 0, y: 0 })
             .fromTo('#ws', { y: "3rem", autoAlpha: 0 }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
+            .fromTo('#ws-thumbnails1', { y: "3rem", autoAlpha: 0, zIndex: 1 }, { y: 0, autoAlpha: 1, ...defaultTsArgs })
             .add(() => wsCallback()),
         fadeOut: () => $gsap.timeline()
             .to(['#section-group-1', '#ws'], { autoAlpha: 0, ...defaultTsArgs }),
@@ -171,31 +178,7 @@ const transitions = [
             wsCallback();
         },
     },
-    // 3: ws(1,2)
-    {
-        id: "ws(1,2)",
-        leaveBack: () => $gsap.timeline()
-            .to('#ws-thumbnails1', { y: "3rem", autoAlpha: 0, ...defaultTsArgs }),
-        enter: () => $gsap.timeline()
-            .add(() => wsCallback())
-            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
-            .set('#ws-thumbnails2', { autoAlpha: 0, zIndex: -1 })
-            .fromTo('#ws-thumbnails1', { y: "3rem", autoAlpha: 0, zIndex: 1 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
-        leave: () => $gsap.timeline()
-            .to('#ws-thumbnails1', { y: "-3rem", autoAlpha: 0, ...defaultTsArgs }),
-        enterBack: () => $gsap.timeline()
-            .add(() => wsCallback())
-            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
-            .set('#ws-thumbnails2', { autoAlpha: 0, zIndex: -1 })
-            .fromTo('#ws-thumbnails1', { y: "-3rem", autoAlpha: 0, zIndex: 1 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
-        fadeOut: () => $gsap.timeline()
-            .to(['#section-group-1', '#ws'], { autoAlpha: 0, ...defaultTsArgs }),
-        enterCallBack: () =>
-        {
-            wsCallback();
-        },
-    },
-    // 4: ws(3,4)
+    // 3: ws(3,4)
     {
         id: "ws(3,4)",
         leaveBack: () => $gsap.timeline()
@@ -345,8 +328,11 @@ const transitions = [
             .to(['#section-group-1', '#bn'], { autoAlpha: 0, ...defaultTsArgs }),
         enterCallBack: () =>
         {
-            smoother.value?.kill();
-            smoother.value = null;
+            smoother.value = smoother.value || $ScrollSmoother.create({
+                smooth: 1,
+                effects: true,
+                normalizeScroll: true,
+            })
             $ScrollTrigger.refresh();
             pinScrollTrigger1.value.disable();
             intentObserver.value.enable();
@@ -356,8 +342,11 @@ const transitions = [
         },
         enterBackCallBack: () =>
         {
-            smoother.value?.kill();
-            smoother.value = null;
+            smoother.value = smoother.value || $ScrollSmoother.create({
+                smooth: 1,
+                effects: true,
+                normalizeScroll: true,
+            })
             pinScrollTrigger1.value.disable();
             intentObserver.value.enable();
             transitionTriggerBeforeBn.value.disable();
@@ -372,11 +361,6 @@ const transitions = [
         enter: () => $gsap.timeline().add(() => dark.value = true).set("#section-group-2", { maxHeight: "100vh" }),
         enterCallBack: () =>
         {
-            smoother.value = $ScrollSmoother.create({
-                smooth: 1,
-                effects: true,
-                normalizeScroll: true,
-            })
             pinScrollTrigger1.value.disable();
             intentObserver.value.disable();
             transitionTriggerBeforeBn.value.enable();
@@ -541,6 +525,7 @@ function gotoPanel(index, isScrollingDown, isJump = false)
 
     console.log(`${transitions[currentIndex].id} -> ${transitions[index].id}`)
     // smoother.value?.paused(true);
+    timeline.value?.kill();
     const tl = $gsap.timeline()
     const callBacks = []
     if (isScrollingDown)
@@ -599,6 +584,7 @@ function gotoPanel(index, isScrollingDown, isJump = false)
         currentIndex = index;
         smoother.value?.paused(false);
     })
+    timeline.value = tl
     console.log("===== /gotoPanel =====")
 }
 

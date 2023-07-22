@@ -12,16 +12,20 @@
     <div class="container">
         <img id="wsd-bgtext" data-speed="0.1" :src="textImg" />
         <div id="wsd-design" class="wsd-design-size">
-            <div v-show="!capUrlsLoading">
+            <div id="wsd-loading" class="loading" ref="loadingAnimation"></div>
+            <div id="wsd-caps">
                 <img v-for="url of capUrlsToShow" :key="url"
-                    :class="{ 'web-site__design--pc': device === 'pc', 'web-site__design--sp': device === 'sp' }" :src="url"
-                    @load="capUrlsLoading = false" />
+                    :class="{ 'web-site__design--pc': deviceToShow === 'pc', 'web-site__design--sp': deviceToShow === 'sp' }"
+                    :src="url" @load="capUrlsLoading = false" />
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import lottie from 'lottie-web';
+const loadingAnimation = ref(null);
+
 interface Award
 {
     name: string;
@@ -81,11 +85,22 @@ const device = useState('device', () => 'pc')
 const capUrlsToShow = useState('capUrlsToShow', () => [])
 const capUrlsLoading = useState('capUrlsLoading', () => false)
 const capUrlsLoaded = useState('capUrlsLoaded', () => false)
+const deviceToShow = useState('deviceToShow', () => 'pc')
 
 onMounted(() =>
 {
     if (process.client)
     {
+        if (loadingAnimation.value)
+        {
+            lottie.loadAnimation({
+                container: loadingAnimation.value,
+                renderer: 'svg',
+                loop: true,
+                autoplay: true,
+                path: '/circles-menu-1.json'
+            });
+        }
         var element = document.getElementById("wsd-desc-container");
         var rightX = element?.getBoundingClientRect()?.right || 0
         document.getElementById("wsd-desc")?.style.setProperty("width", `${window.innerWidth - rightX - 100}px`)
@@ -162,5 +177,11 @@ onMounted(() =>
     position: fixed;
     top: 50%;
     transform: translateY(-50%);
+}
+
+.loading {
+    width: 80px;
+    margin-top: calc((100vh - 300px)/2 - 40px);
+    position: absolute;
 }
 </style>
