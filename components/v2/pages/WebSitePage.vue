@@ -92,7 +92,8 @@ const transitions = [
             .set('#wsm', { y: 0, autoAlpha: 1 })
             .set('#wsd', { marginTop: "-" + window.document.getElementById('wsm').offsetHeight + 'px' })
             .fromTo('#wsm-mock', { autoAlpha: 0, y: "3rem" }, { duration: 1, autoAlpha: 1, y: 0, ease: 'power2.inOut', })
-            .fromTo('#wsm-bgtext', { autoAlpha: 0 }, { duration: 2, autoAlpha: 1, ease: 'power2.inOut', }, "<+50%"),
+            .fromTo('#wsm-bgtext', { autoAlpha: 0, y: "+=3rem" }, { duration: 2, autoAlpha: 1, y: "-=3rem", ease: 'power2.inOut', }, "<+50%")
+            .set("#section-groups-wrapper", { clearProps: "height" }),
         leave: () => $gsap.timeline()
             .add(() => transitionTriggerAfterWsm.value.disable())
             .fromTo('#wsm-mock', { autoAlpha: 1, y: 0, }, { y: "-3rem", autoAlpha: 0, ...defaultTsArgs })
@@ -353,6 +354,8 @@ onMounted(() =>
         console.log("===== onMounted web =====")
         timeline.value?.kill();
 
+        $gsap.set("#section-groups-wrapper", { height: "100vh" })
+
         intentObserverTop.value?.kill();
         pinScrollTrigger1Top.value?.kill();
         transitionTriggerBeforeBnTop.value?.kill();
@@ -364,6 +367,8 @@ onMounted(() =>
             effects: true,
             normalizeScroll: true,
         })
+        smoother.value.effects("#wsm-bgtext", { speed: 0.1 });
+        smoother.value.effects("#wsd-bgtext", { speed: 0.1 });
 
         imgLoaded.value = false;
         textLoaded.value = false;
@@ -537,7 +542,7 @@ const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
 let mockLoading = false
 watch(imgLoaded, async () =>
 {
-    if (!mockLoading && imgLoaded && textLoaded && currentIndex === 0)
+    if (!mockLoading && imgLoaded.value && textLoaded.value && smoother.value && currentIndex === 0)
     {
         mockLoading = true
         await sleep(500);
@@ -546,7 +551,16 @@ watch(imgLoaded, async () =>
 });
 watch(textLoaded, async () =>
 {
-    if (!mockLoading && imgLoaded && textLoaded && currentIndex === 0)
+    if (!mockLoading && imgLoaded.value && textLoaded.value && smoother.value && currentIndex === 0)
+    {
+        mockLoading = true
+        await sleep(500);
+        gotoPanel(1, true);
+    }
+});
+watch(smoother, async () =>
+{
+    if (!mockLoading && imgLoaded.value && textLoaded.value && smoother.value && currentIndex === 0)
     {
         mockLoading = true
         await sleep(500);
@@ -629,6 +643,7 @@ watch(showProfileModal, () =>
 #section-groups-wrapper {
     position: relative;
     width: 100%;
+    overflow: hidden;
 }
 
 .swipe-section {

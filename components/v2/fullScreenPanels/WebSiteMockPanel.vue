@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <img id="wsm-bgtext" data-speed="0.1" :src="textImg" @load="textLoaded = true" />
+    <img id="wsm-bgtext" :src="textImg" @load="textLoaded = true" />
     <img id="wsm-mock" :src="mockImg" @load="onLoad" />
   </div>
 </template>
