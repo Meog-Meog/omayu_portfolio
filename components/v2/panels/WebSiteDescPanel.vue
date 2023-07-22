@@ -12,12 +12,12 @@
     <div class="container">
         <img id="wsd-bgtext" data-speed="0.1" :src="textImg" />
         <div id="wsd-design" class="wsd-design-size">
-            <div v-show="!capUrlsLoading">
+            <div id="wsd-loading" class="loading" ref="loadingAnimation"></div>
+            <div id="wsd-caps">
                 <img v-for="url of capUrlsToShow" :key="url"
-                    :class="{ 'web-site__design--pc': device === 'pc', 'web-site__design--sp': device === 'sp' }" :src="url"
-                    @load="capUrlsLoading = false" />
+                    :class="{ 'web-site__design--pc': deviceToShow === 'pc', 'web-site__design--sp': deviceToShow === 'sp' }"
+                    :src="url" @load="capUrlsLoading = false" />
             </div>
-            <div v-show="capUrlsLoading" class="loading" ref="loadingAnimation"></div>
         </div>
     </div>
 </template>
@@ -85,6 +85,7 @@ const device = useState('device', () => 'pc')
 const capUrlsToShow = useState('capUrlsToShow', () => [])
 const capUrlsLoading = useState('capUrlsLoading', () => false)
 const capUrlsLoaded = useState('capUrlsLoaded', () => false)
+const deviceToShow = useState('deviceToShow', () => 'pc')
 
 onMounted(() =>
 {
@@ -181,5 +182,6 @@ onMounted(() =>
 .loading {
     width: 80px;
     margin-top: calc((100vh - 300px)/2 - 40px);
+    position: absolute;
 }
 </style>

@@ -68,7 +68,7 @@ const transitions = [
         enterBack: () => $gsap.timeline(),
         enterCallBack: () =>
         {
-            intentObserver.enable();
+            intentObserver.value.enable();
             transitionTriggerAfterWsm.value.disable();
             transitionTriggerBeforeWsd.value.disable();
             transitionTriggerAfterWsd.value.disable();
@@ -167,7 +167,9 @@ const transitions = [
     // 2: wsd
     {
         id: "wsd",
-        leaveBack: () => $gsap.timeline(),
+        leaveBack: () => $gsap.timeline()
+            .add(() => transitionTriggerBeforeWsd.value.disable())
+            .add(() => transitionTriggerAfterWsd.value.disable()),
         enter: () => $gsap.timeline()
             .add(() =>
             {
@@ -177,7 +179,9 @@ const transitions = [
                 transitionTriggerAfterWsd.value.enable();
                 transitionTriggerBeforeWsl.value.disable();
             }),
-        leave: () => $gsap.timeline(),
+        leave: () => $gsap.timeline()
+            .add(() => transitionTriggerBeforeWsd.value.disable())
+            .add(() => transitionTriggerAfterWsd.value.disable()),
         enterBack: () => $gsap.timeline()
             .add(() =>
             {
@@ -245,12 +249,13 @@ const transitions = [
     {
         id: "wsl",
         leaveBack: () => $gsap.timeline()
+            .add(() => transitionTriggerBeforeWsl.value.disable())
             .fromTo('#wsl', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: "3rem", ...defaultTsArgs })
             .set("#section-group-2", { autoAlpha: 0, height: "100vh" }),
         enter: () => $gsap.timeline()
             .add(() => smoother.value.scrollTo("#wsd", false, "top+=10 top"))
             .set("#section-group", { height: "100vh", autoAlpha: 0 })
-            .set("#section-group-2", { autoAlpha: 1, maxHeight: "10000vh" })
+            .set("#section-group-2", { autoAlpha: 1, maxHeight: "10000vh", clearProps: "height" })
             .fromTo('#wsl', { autoAlpha: 0, y: "3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
             .add(() =>
             {
@@ -482,7 +487,8 @@ onMounted(() =>
             pin: true,
             start: "top top",
             endTrigger: "#wsd",
-            end: "bottom bottom"
+            end: "bottom+=99999vh bottom",
+            anticipatePin: 1,
         })
         pinBgTrigger.value.enable();
 
@@ -550,21 +556,26 @@ watch(textLoaded, async () =>
 const capUrls = useState('capUrls', () => [])
 const capUrlsToShow = useState('capUrlsToShow', () => [])
 const capUrlsLoading = useState('capUrlsLoading', () => false)
+const device = useState('device', () => 'pc')
+const deviceToShow = useState('deviceToShow', () => 'pc')
 watch(capUrlsLoading, () =>
 {
     if (capUrlsLoading.value && currentIndex >= 2)
     {
         console.log("capUrls changed")
         $gsap.timeline()
-            .fromTo(["#wsd-bgtext", "#wsd-design"], { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "power2.out" })
+            .fromTo(["#wsd-bgtext", "#wsd-caps"], { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "power2.out" })
             .add(() => smoother.value.scrollTo("#wsd", false, "top+=10 top"))
+            .add(() => deviceToShow.value = device.value)
+            .fromTo(["#wsd-loading"], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" })
             .add(() => capUrlsToShow.value = capUrls.value, ">")
     }
     if (!capUrlsLoading.value)
     {
         console.log("capUrls loaded")
         $gsap.timeline()
-            .fromTo(["#wsd-bgtext", "#wsd-design"], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" })
+            .fromTo(["#wsd-loading"], { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "power2.out" })
+            .fromTo(["#wsd-bgtext", "#wsd-caps"], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" })
             .add(() =>
             {
                 if (currentIndex >= 2)
@@ -572,7 +583,11 @@ watch(capUrlsLoading, () =>
                     currentIndex = 3
                     gotoPanel(3, true);
                     $gsap.set('#section-group', { autoAlpha: 1, height: window.document.getElementById('wsd').offsetHeight + 'px' })
-                    $ScrollTrigger.refresh()
+                    nextTick(() =>
+                    {
+                        transitionTriggerAfterWsd.value?.refresh();
+                        transitionTriggerBeforeWsl.value?.refresh();
+                    })
                 }
             })
     }
