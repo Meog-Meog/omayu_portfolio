@@ -2,7 +2,7 @@
     <div style="text-align: left;">
         <external-text-link :style="{ 'margin-bottom': contents.overview ? '30px' : '30px' }" :label="contents.title"
             :url="contents.url" large :letter-spacing="contents.titleLetterSpacihg" />
-        <div v-if="contents.overview" style="margin-bottom: px;">
+        <div v-if="contents.overview" style="margin-bottom: 30px;">
             <p>
                 {{ contents.overview }}
             </p>
@@ -120,6 +120,7 @@ const { $gsap, $ScrollSmoother, $ScrollTrigger } = useNuxtApp();
 
 const smoother = useState<ScrollSmoother>('smoother')
 const device = useState('device', () => 'pc')
+const deviceToShow = useState('deviceToShow', () => 'pc')
 const pageIdx = useState('pageIdx', () => 0)
 const capUrls = useState<String[]>('capUrls', () => [])
 const capUrlsToShow = useState<String[]>('capUrlsToShow', () => [])
@@ -135,6 +136,7 @@ onMounted(() =>
     if (process.client)
     {
         device.value = 'pc'
+        deviceToShow.value = 'pc'
         pageIdx.value = 0
         changeCaps()
         capUrlsToShow.value = capUrls.value
