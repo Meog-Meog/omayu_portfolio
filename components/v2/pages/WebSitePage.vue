@@ -92,7 +92,7 @@ const transitions = [
             .set('#wsm', { y: 0, autoAlpha: 1 })
             .set('#wsd', { marginTop: "-" + window.document.getElementById('wsm').offsetHeight + 'px' })
             .fromTo('#wsm-mock', { autoAlpha: 0, y: "3rem" }, { duration: 1, autoAlpha: 1, y: 0, ease: 'power2.inOut', })
-            .fromTo('#wsm-bgtext', { autoAlpha: 0, y: "+=3rem" }, { duration: 2, autoAlpha: 1, y: "-=3rem", ease: 'power2.inOut', }, "<+50%")
+            .fromTo('#wsm-bgtext', { autoAlpha: 0, y: "+=1.75rem" }, { duration: 1, autoAlpha: 1, y: "-=1.75rem", ease: 'power2.inOut', }, "<+50%")
             .set("#section-groups-wrapper", { clearProps: "height" }),
         leave: () => $gsap.timeline()
             .add(() => transitionTriggerAfterWsm.value.disable())
