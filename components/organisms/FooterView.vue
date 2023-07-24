@@ -78,7 +78,7 @@ const competition = {
   ],
   scrollTo: async (payload: MouseEvent) =>
   {
-    scrollTo.value = 5;
+    scrollTo.value = 4;
     if (router.currentRoute.value.path !== "/")
     {
       await router.push("/");
@@ -91,7 +91,7 @@ const banner = {
   contents: [],
   scrollTo: async (payload: MouseEvent) =>
   {
-    scrollTo.value = 8;
+    scrollTo.value = 7;
     if (router.currentRoute.value.path !== "/")
     {
       await router.push("/");
@@ -104,7 +104,7 @@ const illustration = {
   contents: [],
   scrollTo: async (payload: MouseEvent) =>
   {
-    scrollTo.value = 11;
+    scrollTo.value = 10;
     if (router.currentRoute.value.path !== "/")
     {
       await router.push("/");

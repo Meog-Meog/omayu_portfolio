@@ -102,7 +102,7 @@ const competition = {
     showModal.value = false
     dark.value = false
     darkGrad.value = false
-    scrollTo.value = 5;
+    scrollTo.value = 4;
     if (router.currentRoute.value.path !== "/")
     {
       await router.push("/");
@@ -117,7 +117,7 @@ const banner = {
   {
     showModal.value = false
     darkGrad.value = false
-    scrollTo.value = 8;
+    scrollTo.value = 7;
     if (router.currentRoute.value.path !== "/")
     {
       await router.push("/");
@@ -133,7 +133,7 @@ const illustration = {
     showModal.value = false
     dark.value = false
     darkGrad.value = false
-    scrollTo.value = 11;
+    scrollTo.value = 10;
     if (router.currentRoute.value.path !== "/")
     {
       await router.push("/");
