@@ -237,7 +237,7 @@ const transitions = [
             cpCallback();
         },
     },
-    // 6: cp(2)
+    // 5: cp(2)
     {
         id: "cp(2)",
         leaveBack: () => $gsap.timeline()
@@ -463,7 +463,7 @@ const transitions = [
             intentObserver.value.enable();
         },
     },
-    // 10: il(body)
+    // 11: il(body)
     {
         id: "il(body)",
         leaveBack: () => $gsap.timeline(),
