@@ -764,7 +764,7 @@ onMounted(() =>
             goToPanelByJump()
         } else
         {
-            //gotoPanel(currentIndex + 1, true);
+            // gotoPanel(10, true);
             gotoPanel(1, true);
         }
     }
