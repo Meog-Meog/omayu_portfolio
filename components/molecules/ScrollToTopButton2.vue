@@ -1,5 +1,15 @@
 <template>
-    <img alt="back_to_top" src="~/assets/image/footer/logo_ft.svg?url" class="scroll-to-top-btn" @click.native="scrollTo" />
+    <div>
+        <img alt="back_to_top" src="~/assets/image/footer/logo.svg?url" class="scroll-to-top-btn"
+            @click.native="scrollTo" />
+        <p class="created-by-meog-meog">
+            Created<br />
+            by
+            <a class="text-link" href="https://github.com/orgs/Meog-Meog/people" rel="noopener" target="_blank">
+                Meog Meog
+            </a>
+        </p>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -38,8 +48,20 @@ onMounted(() =>
 </script>
 
 <style lang="scss" scoped>
+a {
+    text-decoration: none;
+    color: #101010;
+}
+
 .scroll-to-top-btn {
     width: 147px;
-    height: 187px;
+    height: 149px;
+    margin-bottom: 33px;
+}
+
+.created-by-meog-meog {
+    font: normal normal normal 16px/30px ZenKakuGothicNew;
+    @include xd-line-spacing(16px, 30px, 4px, 3px);
+    letter-spacing: 0.64px;
 }
 </style>
