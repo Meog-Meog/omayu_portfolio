@@ -14,7 +14,7 @@
             </p>
         </div>
         <div style="margin-bottom: 30px;">
-            <p>
+            <p class="desc">
                 {{ contents.area }}
             </p>
         </div>
