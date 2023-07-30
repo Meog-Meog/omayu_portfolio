@@ -10,7 +10,7 @@
           <div id="wsp-contents" style="position: relative;">
             <div v-if="contentIdx === 0">
               <div>
-                <p style="margin-bottom: 6px;">
+                <p style="margin-bottom: 10px;">
                   チーム構成
                 </p>
                 <p>
@@ -29,9 +29,8 @@
             <div v-if="contentIdx === 1">
               <div>
                 <p>
-                  チームミーティングでディレクターから各種要件が共有される。<br>
-                  要件は、ワイヤーフレームとともに詳細が提供される場合と、口頭での説明を基に相談しながら依頼が行われる場合もある。<br>
-                  私たちデザイナーは、それぞれが異なる案件を担当する形で業務を進めていく。
+                  ワイヤーフレームが与えられた場合は、その通りのデザインと提案要素を含む2つの案を作成。なければ、設計からデザインまでを行い、各案に対してデザイン案を準備する。<br>
+                  アートディレクターの確認を経て全体に共有し、その際はプロトタイプを用いて動きを示しながら説明する。
                 </p>
               </div>
               <hr />
@@ -193,8 +192,8 @@ function next()
 }
 
 p {
-  font: normal normal normal 13px/26px ZenKakuGothicNew;
-  @include xd-line-spacing(13px, 26px, 4px, 3px);
+  font: normal normal normal 13px/28px ZenKakuGothicNew;
+  @include xd-line-spacing(13px, 28px, 4px, 3px);
   letter-spacing: 0px;
 }
 
@@ -265,14 +264,13 @@ p {
 .number-container {
   display: flex;
   align-items: center;
-  font: normal normal 300 16px/20px Roboto;
-  @include xd-line-spacing(16px, 20px, 4px, 3px);
+  font: normal normal 300 14px/14px Roboto;
   letter-spacing: 0.8px;
   opacity: 1;
   margin-left: auto;
 
   div:nth-of-type(1) {
-    color: #FFFFFF;
+    color: #909090;
   }
 
   div:nth-of-type(3) {
