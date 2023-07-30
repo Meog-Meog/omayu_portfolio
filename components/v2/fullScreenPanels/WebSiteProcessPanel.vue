@@ -9,34 +9,30 @@
         <div style="z-index: 100;">
           <div id="wsp-contents" style="position: relative;">
             <div v-if="contentIdx === 0">
-              <div>
-                <p style="margin-bottom: 10px;">
-                  チーム構成
-                </p>
-                <p>
-                  ディレクター 1名, アートディレクター 1名, デザイナー 2名, エンジニア 4名
-                </p>
-              </div>
-              <hr />
               <div style="margin-bottom: 45px;">
+                <h5 style="margin-bottom: 25px;">
+                  チーム構成・役割
+                </h5>
                 <p>
-                  チームミーティングでディレクターから各種要件が共有される。<br>
-                  要件は、ワイヤーフレームとともに詳細が提供される場合と、口頭での説明を基に相談しながら依頼が行われる場合もある。<br>
-                  私たちデザイナーは、それぞれが異なる案件を担当する形で業務を進めていく。
+                  私たちのチームは、ディレクター1名、アートディレクター1名、デザイナー2名、エンジニア4名で構成されていました。デザイナーは各自が異なる案件を担当して業務を進行します。<br>
+                  デザインルールの決定においては、アートディレクターとデザイナーが主導し、協議を通じて行います。
                 </p>
               </div>
             </div>
             <div v-if="contentIdx === 1">
               <div>
+                <h5 style="margin-bottom: 25px;">
+                  デザイン作成から共有まで
+                </h5>
                 <p>
-                  ワイヤーフレームが与えられた場合は、その通りのデザインと提案要素を含む2つの案を作成。なければ、設計からデザインまでを行い、各案に対してデザイン案を準備する。<br>
-                  アートディレクターの確認を経て全体に共有し、その際はプロトタイプを用いて動きを示しながら説明する。
+                  ワイヤーフレームが与えられた場合は、その通りのデザインと提案要素を含む2つの案を作成。なければ、設計からデザインまでを行い、各案に対してデザイン案を準備します。<br>
+                  アートディレクターの確認を経て全体に共有し、その際はプロトタイプを用いて動きを示しながら説明します。
                 </p>
               </div>
-              <hr />
+              <hr style="margin: 28px 0 25px 0" />
               <div style="margin-bottom: 45px;">
                 <p style="display: flex; align-self: center;">
-                  プロトタイプ
+                  スゴヨセ全体のプロトタイプ
                   <button class="icon-btn"
                     @click="externalLink('https://xd.adobe.com/view/82222005-0011-4021-a4df-4c9238396f71-d771/')"
                     style="margin-left: 25px; display: flex; align-self: center;">
@@ -52,9 +48,13 @@
             </div>
             <div v-if="contentIdx === 2">
               <div style="margin-bottom: 45px;">
+                <h5 style="margin-bottom: 25px;">
+                  デザイン修正から公開まで
+                </h5>
                 <p>
-                  ディレクターやエンジニアからのフィードバックを元に懸念や修正点を解消し、デザインを更新。チーム全体の承認が得られたら、実装用の仕様書を作成し共有。複雑な仕様では、オンライン通話を通じて何度も説明する。<br>
-                  実装後はデバッグを行い、業務を完了する。
+                  ディレクターやエンジニアからのフィードバックを元に懸念や修正点を解消し、デザインを更新。<br>
+                  チーム全体の承認が得られたら、実装用の仕様書を作成し共有。複雑な仕様では、オンライン通話を通じて何度も説明します。<br>
+                  実装後はデバッグを行い、業務を完了します。
                 </p>
               </div>
             </div>
@@ -191,6 +191,12 @@ function next()
   z-index: 100;
 }
 
+h5 {
+  font: bold normal normal 13px/28px ZenKakuGothicNew;
+  @include xd-line-spacing(13px, 28px, 4px, 3px);
+  letter-spacing: 0px;
+}
+
 p {
   font: normal normal normal 13px/28px ZenKakuGothicNew;
   @include xd-line-spacing(13px, 28px, 4px, 3px);
@@ -270,18 +276,18 @@ p {
   margin-left: auto;
 
   div:nth-of-type(1) {
-    color: #909090;
+    color: #ccc;
   }
 
   div:nth-of-type(3) {
-    color: #909090;
+    color: #ccc;
   }
 }
 
 .number-separator {
   width: 0.5px;
   height: 10px;
-  background: #909090 0% 0% no-repeat padding-box;
+  background: #ccc 0% 0% no-repeat padding-box;
   margin: 0 15px;
 }
 
