@@ -68,7 +68,7 @@
       </div>
       <div id="wsp-images-wrapper">
         <div v-show="idx > 0" id="wsp-images-back" class="clickable-back" @click="back" />
-        <div v-show="idx < 3" id="wsp-images-next" class="clickable-next" @click="next" />
+        <div v-show="idx < 2" id="wsp-images-next" class="clickable-next" @click="next" />
         <ul id="wsp-images">
           <li style="display: flex; align-self: center;">
             <img src="~/assets/image/process/process_01.webp" />
