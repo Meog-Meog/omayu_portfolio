@@ -1,6 +1,6 @@
 <template>
     <web-site-page :text-img="textImg" :text-img-dark="textImgDark" :mock-img="mockImg" :captures="captures"
-        :contents="contents" />
+        :contents="contents" :show-process="true" />
 </template>
 
 <script setup lang="ts">
@@ -47,7 +47,7 @@ const contents = {
     titleLetterSpacihg: "1px",
     url: "https://sugoyose.jp/",
     period: "2021~2023年",
-    area: "UIデザイン, 仕様提案などを担当",
+    area: "デザインルール作成, 仕様提案, UI設計~デザイン, デザイン業務のタスク管理を担当",
     overview: "Web上で寄せ書きブックの作成・注文ができるサービスサイト",
     design: [
         "全ての画面において「無駄のない直感的なUI」を意識して設計。",

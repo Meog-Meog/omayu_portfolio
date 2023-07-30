@@ -1,6 +1,6 @@
 <template>
     <web-site-page :text-img="textImg" :text-img-dark="textImgDark" :mock-img="mockImg" :captures="captures"
-        :contents="contents" />
+        :contents="contents" :show-process="false" />
 </template>
 
 <script setup lang="ts">
