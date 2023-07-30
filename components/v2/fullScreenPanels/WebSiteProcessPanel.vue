@@ -194,7 +194,7 @@ function next()
 h5 {
   font: bold normal normal 13px/28px ZenKakuGothicNew;
   @include xd-line-spacing(13px, 28px, 4px, 3px);
-  letter-spacing: 0px;
+  letter-spacing: 1px;
 }
 
 p {
