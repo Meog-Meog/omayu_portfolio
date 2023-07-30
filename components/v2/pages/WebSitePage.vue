@@ -11,6 +11,9 @@
             <section id="wsd" class="panel">
                 <web-site-desc-panel :text-img="textImgDark" :captures="captures" :contents="contents" />
             </section>
+            <section id="wsp" style="height: 100vh; width: 100%; opacity: 0;">
+                <web-site-process-panel />
+            </section>
         </div>
         <div id="section-group-2" class="swipe-section" style="z-index: 1">
             <section id="wsl" class="panel">
@@ -25,7 +28,7 @@
 import lottie from 'lottie-web';
 const loadingAnimation = ref(null);
 
-const Props = defineProps(["textImg", "textImgDark", "mockImg", "captures", "contents"]);
+const Props = defineProps(["textImg", "textImgDark", "mockImg", "captures", "contents", "showProcess"]);
 const mouseStalkerText = useState('mouseStalkerText', () => '')
 const smoother = useState('smoother')
 
@@ -128,7 +131,8 @@ const transitions = [
         leaveBack: () => $gsap.timeline()
             .add(() => dark.value = false)
             .fromTo(['#wsd', '#wsd-bgtext'], { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs })
-            .fromTo(['#wsd-design', '#wsd-desc'], { y: 0, autoAlpha: 1 }, { y: "3rem", autoAlpha: 0 }, "<"),
+            .fromTo(['#wsd-design', '#wsd-desc'], { y: 0, autoAlpha: 1 }, { y: "3rem", autoAlpha: 0 }, "<")
+            .set(['#wsp'], { autoAlpha: 0 }),
         enter: () => $gsap.timeline()
             .add(() => dark.value = true)
             .set('#wsd', { marginTop: "-" + window.document.getElementById('wsm').offsetHeight + 'px' })
@@ -217,18 +221,62 @@ const transitions = [
         leave: () => $gsap.timeline()
             .add(() => dark.value = false)
             .fromTo(['#wsd-design', '#wsd-desc'], { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: "-3rem", ...defaultTsArgs }, "<")
-            .fromTo('#wsd-bgtext', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs }, "<")
-            .fromTo('#wsd', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs })
-            .set('#section-group', { autoAlpha: 0 }),
+            .fromTo('#wsd-bgtext', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs }, "<"),
+        //.fromTo('#wsd', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs })
+        //.set('#section-group', { autoAlpha: 0 }),
         enterBack: () => $gsap.timeline()
             .add(() => dark.value = true)
             .set("#section-group-2", { height: "100vh" })
             .set('#section-group', { autoAlpha: 1, height: window.document.getElementById('wsd').offsetHeight + 'px' })
-            .fromTo('#wsd', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
-            .add(() => smoother.value.scrollTo("#wsd", false, "bottom bottom"))
+            .set('#wsd', { autoAlpha: 1 })
+            .set('#wsp', { autoAlpha: 0 })
+            .add(() => setTimeout(() => smoother.value.scrollTo("#wsd", false, "bottom bottom"), 1))
             .add(() => $ScrollTrigger.refresh())
             .fromTo('#wsd-bgtext', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
             .fromTo(['#wsd-design', '#wsd-desc'], { autoAlpha: 0, y: "-3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs }, "<+50%")
+            .add(() =>
+            {
+                intentObserver.value.enable();
+                transitionTriggerAfterWsm.value.disable();
+                transitionTriggerBeforeWsd.value.disable();
+                transitionTriggerAfterWsd.value.disable();
+                transitionTriggerBeforeWsl.value.disable();
+            }),
+        enterCallBack: () =>
+        {
+            intentObserver.value.enable();
+            transitionTriggerAfterWsm.value.disable();
+            transitionTriggerBeforeWsd.value.disable();
+            transitionTriggerAfterWsd.value.disable();
+            transitionTriggerBeforeWsl.value.disable();
+        },
+    },
+    // 5: wsp
+    {
+        id: "wsp",
+        leaveBack: () => $gsap.timeline()
+            .fromTo(['#wsp-container'], { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: "3rem", ...defaultTsArgs }),
+        enter: () => $gsap.timeline()
+            .add(() => dark.value = true)
+            .set('#wsp', { autoAlpha: 1, marginTop: "-" + window.document.getElementById('wsd').offsetHeight + 'px' })
+            .set("#section-group", { height: "100vh", autoAlpha: 1 })
+            .set('#wsd', { autoAlpha: 0 })
+            .fromTo(['#wsp-container'], { autoAlpha: 0, y: "3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
+            .add(() =>
+            {
+                intentObserver.value.enable();
+                transitionTriggerAfterWsm.value.disable();
+                transitionTriggerBeforeWsd.value.disable();
+                transitionTriggerAfterWsd.value.disable();
+                transitionTriggerBeforeWsl.value.disable();
+            }),
+        leave: () => $gsap.timeline()
+            .add(() => dark.value = false)
+            .fromTo(['#wsp-container'], { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: "-3rem", ...defaultTsArgs }),
+        enterBack: () => $gsap.timeline()
+            .add(() => dark.value = true)
+            // .fromTo('#wsp', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
+            .fromTo(['#wsp-container'], { autoAlpha: 0, y: "-3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
             .add(() =>
             {
                 intentObserver.value.enable();
@@ -252,11 +300,15 @@ const transitions = [
         leaveBack: () => $gsap.timeline()
             .add(() => transitionTriggerBeforeWsl.value.disable())
             .fromTo('#wsl', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: "3rem", ...defaultTsArgs })
-            .set("#section-group-2", { autoAlpha: 0, height: "100vh" }),
+            .set("#section-group-2", { autoAlpha: 0, height: "100vh" })
+            .set('#section-group', { autoAlpha: 1, height: "100vh" })
+            .set('#wsp', { marginTop: "-" + window.document.getElementById('wsd').offsetHeight + 'px' })
+            .fromTo(['#section-group'], { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs },),
         enter: () => $gsap.timeline()
-            .add(() => smoother.value.scrollTo("#wsd", false, "top+=10 top"))
-            .set("#section-group", { height: "100vh", autoAlpha: 0 })
+            .fromTo(['#section-group'], { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs },)
+            .set("#section-group", { height: "100vh" })
             .set("#section-group-2", { autoAlpha: 1, maxHeight: "10000vh", clearProps: "height" })
+            .add(() => setTimeout(() => smoother.value.scrollTo("#section-group-2", false, "top+=10 top"), 1))
             .fromTo('#wsl', { autoAlpha: 0, y: "3rem" }, { autoAlpha: 1, y: 0, ...defaultTsArgs })
             .add(() =>
             {
@@ -302,6 +354,11 @@ function gotoPanel(index, isScrollingDown)
     {
         animating = false;
         return
+    }
+
+    if (index === 5 && !Props.showProcess)
+    {
+        index = isScrollingDown ? 6 : 4
     }
 
     console.log(`${transitions[currentIndex].id} -> ${transitions[index].id}`)
