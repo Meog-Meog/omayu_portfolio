@@ -81,7 +81,7 @@ const kvCallback = () =>
     transitionTriggerAfterBn.value.disable();
     transitionTriggerBeforeIl.value.disable();
     setTimeout(() => window.scrollTo(0, 0), 200)
-    pinScrollTrigger1.value.enable();
+    pinScrollTrigger1.value.disable();
     intentObserver.value.enable();
 }
 const wsCallback = () =>
@@ -92,7 +92,7 @@ const wsCallback = () =>
     transitionTriggerBeforeBn.value.disable();
     transitionTriggerAfterBn.value.disable();
     transitionTriggerBeforeIl.value.disable();
-    pinScrollTrigger1.value.enable();
+    pinScrollTrigger1.value.disable();
     intentObserver.value.enable();
     $ScrollTrigger.refresh();
 }
@@ -106,7 +106,7 @@ const cpCallback = () =>
     transitionTriggerAfterBn.value.disable();
     transitionTriggerBeforeIl.value.disable();
     setTimeout(() => window.scrollTo(0, 0), 200)
-    pinScrollTrigger1.value.enable();
+    pinScrollTrigger1.value.disable();
     intentObserver.value.enable();
 }
 
