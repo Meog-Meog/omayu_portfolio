@@ -2,7 +2,7 @@
   <div class="container">
     <div style="position: relative; width: 100%;">
       <img id="kv-fullname" src="~/assets/image/kv/mayuteramoto.svg?url" alt="Mayu Teramoto">
-      <div id="kv-menu" style="position: absolute; top:10px; right: 50px; text-align: right;">
+      <div id="kv-menu" style="position: absolute; top:0px; right: 50px; text-align: right;">
         <p class="text-link">
           <a :class="{ dark: dark }" @click="scrollToWebSite">Web Site</a>
         </p>
@@ -91,13 +91,15 @@ const scrollToIllustration = () =>
 
 p {
   margin: 0;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  letter-spacing: 1.4px;
+  color: #101010;
 }
 
 span {
   font: normal normal normal 16px/24px ZenKakuGothicNew;
   @include xd-line-spacing(16px, 24px, 4px, 3px);
-  letter-spacing: 0.64px;
+  letter-spacing: 1.4px;
   color: #101010;
 }
 </style>
