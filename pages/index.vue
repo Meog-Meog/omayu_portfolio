@@ -1,5 +1,5 @@
 <template>
-    <div id="section-groups-wrapper">
+    <div id="section-groups-wrapper" style="overflow: hidden;">
         <div id="section-group-1" class="swipe-section" style="z-index: 2;">
             <section id="kv" class="fullscreen-panel">
                 <key-visual-panel />
