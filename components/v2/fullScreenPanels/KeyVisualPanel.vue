@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div style="position: relative;">
+    <div style="position: relative; width: 100%;">
       <img id="kv-fullname" src="~/assets/image/kv/mayuteramoto.svg?url" alt="Mayu Teramoto">
       <div id="kv-menu" style="position: absolute; top:10px; right: 50px; text-align: right;">
         <p class="text-link">
