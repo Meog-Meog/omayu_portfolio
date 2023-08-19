@@ -129,13 +129,13 @@ const transitions = [
             .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
             .set('#kv', { y: 0, autoAlpha: 1 })
             .fromTo('#kv-fullname', { autoAlpha: 0, }, { duration: 1, autoAlpha: 1, ease: 'power2.inOut' })
-            .fromTo('#kv-scrolling-hint', { autoAlpha: 0, }, { duration: 1, autoAlpha: 1, ease: 'power2.inOut' }),
+            .fromTo(['#kv-scrolling-hint', '#kv-menu'], { autoAlpha: 0, }, { duration: 1, autoAlpha: 1, ease: 'power2.inOut' }),
         leave: () => $gsap.timeline()
             .to('#kv', { y: "-3rem", autoAlpha: 0, ...defaultTsArgs }),
         enterBack: () => $gsap.timeline()
             .add(() => kvCallback())
             .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
-            .set(['#kv-fullname', '#kv-scrolling-hint'], { autoAlpha: 1 })
+            .set(['#kv-fullname', '#kv-scrolling-hint', '#kv-menu'], { autoAlpha: 1 })
             .fromTo('#kv', { y: "-3rem", autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
         fadeOut: () => $gsap.timeline()
             .to(['#section-group-1', '#kv'], { autoAlpha: 0, ...defaultTsArgs }),
