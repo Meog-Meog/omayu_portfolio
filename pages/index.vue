@@ -1,5 +1,5 @@
 <template>
-    <div id="section-groups-wrapper">
+    <div id="section-groups-wrapper" style="overflow: hidden;">
         <div id="section-group-1" class="swipe-section" style="z-index: 2;">
             <section id="kv" class="fullscreen-panel">
                 <key-visual-panel />
@@ -81,7 +81,7 @@ const kvCallback = () =>
     transitionTriggerAfterBn.value.disable();
     transitionTriggerBeforeIl.value.disable();
     setTimeout(() => window.scrollTo(0, 0), 200)
-    pinScrollTrigger1.value.enable();
+    pinScrollTrigger1.value.disable();
     intentObserver.value.enable();
 }
 const wsCallback = () =>
@@ -92,7 +92,7 @@ const wsCallback = () =>
     transitionTriggerBeforeBn.value.disable();
     transitionTriggerAfterBn.value.disable();
     transitionTriggerBeforeIl.value.disable();
-    pinScrollTrigger1.value.enable();
+    pinScrollTrigger1.value.disable();
     intentObserver.value.enable();
     $ScrollTrigger.refresh();
 }
@@ -106,7 +106,7 @@ const cpCallback = () =>
     transitionTriggerAfterBn.value.disable();
     transitionTriggerBeforeIl.value.disable();
     setTimeout(() => window.scrollTo(0, 0), 200)
-    pinScrollTrigger1.value.enable();
+    pinScrollTrigger1.value.disable();
     intentObserver.value.enable();
 }
 
@@ -129,13 +129,13 @@ const transitions = [
             .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
             .set('#kv', { y: 0, autoAlpha: 1 })
             .fromTo('#kv-fullname', { autoAlpha: 0, }, { duration: 1, autoAlpha: 1, ease: 'power2.inOut' })
-            .fromTo('#kv-scrolling-hint', { autoAlpha: 0, }, { duration: 1, autoAlpha: 1, ease: 'power2.inOut' }),
+            .fromTo(['#kv-scrolling-hint', '#kv-menu'], { autoAlpha: 0, }, { duration: 1, autoAlpha: 1, ease: 'power2.inOut' }),
         leave: () => $gsap.timeline()
             .to('#kv', { y: "-3rem", autoAlpha: 0, ...defaultTsArgs }),
         enterBack: () => $gsap.timeline()
             .add(() => kvCallback())
             .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
-            .set(['#kv-fullname', '#kv-scrolling-hint'], { autoAlpha: 1 })
+            .set(['#kv-fullname', '#kv-scrolling-hint', '#kv-menu'], { autoAlpha: 1 })
             .fromTo('#kv', { y: "-3rem", autoAlpha: 0 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
         fadeOut: () => $gsap.timeline()
             .to(['#section-group-1', '#kv'], { autoAlpha: 0, ...defaultTsArgs }),
