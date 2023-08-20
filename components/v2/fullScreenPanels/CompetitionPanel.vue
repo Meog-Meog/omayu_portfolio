@@ -1,19 +1,21 @@
 <template>
   <div class="container">
-    <div id="cp-title">
-      <img src="~/assets/image/competition/competition.svg?url" alt="Competition" />
-    </div>
-    <div class="number-container">
-      <div>0{{ competitionIdx }}</div>
-      <div class="number-separator" />
-      <div>0{{ items.length }}</div>
-    </div>
-    <div id="cp-thumbnails-wrapper">
-      <ul id="cp-thumbnails">
-        <li v-for="(item, i) in items" :key="i" class="clickable-view" @click="router.push('/web-sites/' + item.id)">
-          <img :alt="item.alt" :src="item.image" />
-        </li>
-      </ul>
+    <div id="cp-contents">
+      <div id="cp-title">
+        <img src="~/assets/image/competition/competition.svg?url" alt="Competition" />
+      </div>
+      <div class="number-container">
+        <div>0{{ competitionIdx }}</div>
+        <div class="number-separator" />
+        <div>0{{ items.length }}</div>
+      </div>
+      <div id="cp-thumbnails-wrapper">
+        <ul id="cp-thumbnails">
+          <li v-for="(item, i) in items" :key="i" class="clickable-view" @click="router.push('/web-sites/' + item.id)">
+            <img :alt="item.alt" :src="item.image" />
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -48,12 +50,24 @@ onMounted(() =>
 .container {
   height: 100vh;
   width: 100%;
-  padding: 0 100px;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #fff;
+  background-image: url('~/assets/image/bg03.webp');
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#cp-contents {
+  width: 100%;
+  padding: 0 100px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .wrapper {
@@ -106,7 +120,7 @@ onMounted(() =>
 .number-container {
   position: absolute;
   left: 100px;
-  top: calc(50vh + 530px / 2 - 16px);
+  bottom: 0;
   display: flex;
   align-items: center;
   justify-content: end;
