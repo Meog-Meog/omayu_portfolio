@@ -81,7 +81,6 @@ const kvCallback = () =>
     transitionTriggerAfterBn.value.disable();
     transitionTriggerBeforeIl.value.disable();
     setTimeout(() => window.scrollTo(0, 0), 200)
-    pinScrollTrigger1.value.disable();
     intentObserver.value.enable();
 }
 const wsCallback = () =>
@@ -92,7 +91,6 @@ const wsCallback = () =>
     transitionTriggerBeforeBn.value.disable();
     transitionTriggerAfterBn.value.disable();
     transitionTriggerBeforeIl.value.disable();
-    pinScrollTrigger1.value.disable();
     intentObserver.value.enable();
     $ScrollTrigger.refresh();
 }
@@ -106,7 +104,6 @@ const cpCallback = () =>
     transitionTriggerAfterBn.value.disable();
     transitionTriggerBeforeIl.value.disable();
     setTimeout(() => window.scrollTo(0, 0), 200)
-    pinScrollTrigger1.value.disable();
     intentObserver.value.enable();
 }
 
@@ -334,7 +331,6 @@ const transitions = [
                 normalizeScroll: true,
             })
             $ScrollTrigger.refresh();
-            pinScrollTrigger1.value.disable();
             intentObserver.value.enable();
             transitionTriggerBeforeBn.value.disable();
             transitionTriggerAfterBn.value.disable();
@@ -347,7 +343,6 @@ const transitions = [
                 effects: true,
                 normalizeScroll: true,
             })
-            pinScrollTrigger1.value.disable();
             intentObserver.value.enable();
             transitionTriggerBeforeBn.value.disable();
             transitionTriggerAfterBn.value.disable();
@@ -361,7 +356,6 @@ const transitions = [
         enter: () => $gsap.timeline().add(() => dark.value = true).set("#section-group-2", { maxHeight: "100vh" }),
         enterCallBack: () =>
         {
-            pinScrollTrigger1.value.disable();
             intentObserver.value.disable();
             transitionTriggerBeforeBn.value.enable();
             transitionTriggerAfterBn.value.enable();
@@ -374,7 +368,6 @@ const transitions = [
             .to(['#section-group-1', '#bn'], { autoAlpha: 0, ...defaultTsArgs }),
         enterBackCallBack: () =>
         {
-            pinScrollTrigger1.value.disable();
             intentObserver.value.disable();
             transitionTriggerBeforeBn.value.enable();
             transitionTriggerAfterBn.value.enable();
@@ -389,7 +382,6 @@ const transitions = [
         enterCallBack: () =>
         {
             coolDownForDown(100);
-            pinScrollTrigger1.value.disable();
             intentObserver.value.enable();
             transitionTriggerBeforeBn.value.disable();
             transitionTriggerAfterBn.value.disable();
@@ -414,7 +406,6 @@ const transitions = [
             .to(['#section-group-1', '#bn'], { autoAlpha: 0, ...defaultTsArgs }),
         enterBackCallBack: () =>
         {
-            pinScrollTrigger1.value.disable();
             intentObserver.value.enable();
             transitionTriggerBeforeBn.value.disable();
             transitionTriggerAfterBn.value.disable();
@@ -448,7 +439,6 @@ const transitions = [
             .to(['#section-group-2', '#il'], { autoAlpha: 0, ...defaultTsArgs }),
         enterCallBack: () =>
         {
-            pinScrollTrigger1.value.disable();
             transitionTriggerBeforeBn.value.disable();
             transitionTriggerAfterBn.value.disable();
             transitionTriggerBeforeIl.value.disable();
@@ -456,7 +446,6 @@ const transitions = [
         },
         enterBackCallBack: () =>
         {
-            pinScrollTrigger1.value.disable();
             transitionTriggerBeforeBn.value.disable();
             transitionTriggerAfterBn.value.disable();
             transitionTriggerBeforeIl.value.disable();
@@ -470,7 +459,6 @@ const transitions = [
         enter: () => $gsap.timeline(),
         enterCallBack: () =>
         {
-            pinScrollTrigger1.value.disable();
             intentObserver.value.disable();
             transitionTriggerBeforeBn.value.disable();
             transitionTriggerAfterBn.value.disable();
@@ -486,7 +474,6 @@ const transitions = [
         enterBack: () => $gsap.timeline(),
         enterBackCallBack: () =>
         {
-            pinScrollTrigger1.value.disable();
             intentObserver.value.disable();
             transitionTriggerBeforeBn.value.disable();
             transitionTriggerAfterBn.value.disable();
@@ -725,39 +712,6 @@ onMounted(() =>
         })
         transitionTriggerBeforeIl.value.disable();
 
-
-        // pin swipe section and initiate observer
-        pinScrollTrigger1.value?.kill();
-        pinScrollTrigger1.value = $ScrollTrigger.create({
-            id: "pinScrollTrigger1",
-            trigger: "#section-group-1",
-            pin: true,
-            start: "top top",
-            onLeaveBack: () =>
-            {
-                console.log(`pinScrollTrigger1: onLeaveBack`)
-                intentObserver.value.disable();
-            },
-            onEnter: () =>
-            {
-                console.log(`pinScrollTrigger1: onEnter`)
-                intentObserver.value.enable();
-                // gotoPanel(currentIndex + 1, true);
-            },
-            onLeave: () =>
-            {
-                console.log(`pinScrollTrigger1: onLeave`)
-                intentObserver.value.disable();
-            },
-            onEnterBack: () =>
-            {
-                console.log(`pinScrollTrigger1: onEnterBack`)
-                intentObserver.value.enable();
-                // gotoPanel(currentIndex - 1, false);
-            },
-            markers: false,
-        })
-
         if (scrollTo.value > 0)
         {
             currentIndex = 0;
@@ -806,7 +760,6 @@ watch(showModal, () =>
     {
         console.log("showModal.value = true")
         intentObserver.value.disable();
-        pinScrollTrigger1.value.disable();
         transitionTriggerBeforeBn.value.disable();
         transitionTriggerAfterBn.value.disable();
         transitionTriggerBeforeIl.value.disable();
@@ -826,7 +779,6 @@ watch(showProfileModal, () =>
     {
         console.log("showProfileModal.value = true")
         intentObserver.value.disable();
-        pinScrollTrigger1.value.disable();
         transitionTriggerBeforeBn.value.disable();
         transitionTriggerAfterBn.value.disable();
         transitionTriggerBeforeIl.value.disable();
