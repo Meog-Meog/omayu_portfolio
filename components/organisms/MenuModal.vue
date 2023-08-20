@@ -157,6 +157,15 @@ onMounted(() =>
   width: 633px;
 }
 
+.menu-modal__contents {
+  padding: 0 150px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
 .menu-modal {
   cursor: none;
   position: fixed;
@@ -186,10 +195,6 @@ onMounted(() =>
       opacity: 1;
       filter: blur(0);
     }
-  }
-
-  &__contents {
-    padding: 95px 150px;
   }
 
   &__menu {
