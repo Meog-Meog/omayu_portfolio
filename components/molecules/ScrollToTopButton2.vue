@@ -1,15 +1,7 @@
 <template>
-    <div>
-        <img alt="back_to_top" src="~/assets/image/footer/logo.svg?url" class="scroll-to-top-btn"
-            @click.native="scrollTo" />
-        <p class="created-by-meog-meog">
-            Created<br />
-            by
-            <a class="text-link" href="https://github.com/orgs/Meog-Meog/people" rel="noopener" target="_blank">
-                Meog Meog
-            </a>
-        </p>
-    </div>
+    <button @click.native="scrollTo">
+        <img alt="Back to top" src="~/assets/image/icon_arrow.svg?url" />
+    </button>
 </template>
 
 <script setup lang="ts">
@@ -19,49 +11,57 @@ const mouseStalkerText = useState('mouseStalkerText', () => '')
 const smoother = useState<ScrollSmoother>('smoother')
 const scrollTo = async () =>
 {
-    if (router.currentRoute.value.path !== "/")
-    {
-        await router.push({ path: "/" });
-    } else
-    {
-        location.reload();
-    }
+    location.reload();
 }
-
-onMounted(() =>
-{
-    if (process.client)
-    {
-        for (const clickable of document.getElementsByClassName('scroll-to-top-btn'))
-        {
-            clickable.addEventListener('mouseover', () =>
-            {
-                mouseStalkerText.value = 'Home'
-            }, false)
-            clickable.addEventListener('mouseout', () =>
-            {
-                mouseStalkerText.value = ''
-            }, false)
-        }
-    }
-})
 </script>
 
 <style lang="scss" scoped>
-a {
-    text-decoration: none;
-    color: #101010;
+button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 70px;
+    border: 1px solid #CCCCCC;
+    border-radius: 50%;
+    overflow: hidden;
+    transition: background-color 1s;
+    cursor: none;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background-color: black;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.4s, height 0.4s;
+        z-index: 1;
+    }
+
+    &:hover {
+        &::before {
+            width: 110%;
+            height: 110%;
+        }
+
+        img {
+            filter: invert(100%);
+        }
+    }
+}
+
+img {
+    filter: 0.4s;
+    z-index: 2;
 }
 
 .scroll-to-top-btn {
-    width: 147px;
-    height: 149px;
-    margin-bottom: 33px;
-}
-
-.created-by-meog-meog {
-    font: normal normal normal 16px/30px ZenKakuGothicNew;
-    @include xd-line-spacing(16px, 30px, 4px, 3px);
-    letter-spacing: 0.64px;
+    width: 17px;
+    height: 17px;
 }
 </style>
