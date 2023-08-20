@@ -2,17 +2,9 @@
   <nav :class="{ 'menu-modal--open': showModal }" class="menu-modal">
     <div class="menu-modal__contents">
       <div style="display: flex; align-items: flex-end;">
-        <img class="scroll-to-top-btn" alt="Created by Meog Meog" src="~/assets/image/footer/logo_w.svg?url"
-          @click.native="scrollToTop" />
-        <p class="created-by-meog-meog">
-          Created<br />
-          by
-          <a class="text-link" href="https://github.com/orgs/Meog-Meog/people" rel="noopener" target="_blank">
-            Meog Meog
-          </a>
-        </p>
+        <img class="scroll-to-top-btn" alt="Created by Meog Meog" src="~/assets/image/mayuteramoto_hb.svg?url"
+          style="margin-bottom: 100px; margin-left: -5px;" @click.native="scrollToTop" />
       </div>
-      <hr />
       <div class="menu-modal__menu">
         <link-menu-column style="margin-right: 104px;" :heading="webSite.heading" :contents="webSite.contents"
           :scrollTo="webSite.scrollTo" dark />
@@ -161,22 +153,17 @@ onMounted(() =>
 </script>
 
 <style lang="scss" scoped>
-a {
-  text-decoration: none;
-  color: #EEEEEE;
-}
-
 .scroll-to-top-btn {
-  width: 147px;
-  height: 149px;
-  margin-right: 45px;
+  width: 633px;
 }
 
-.created-by-meog-meog {
-  font: normal normal normal 16px/30px ZenKakuGothicNew;
-  @include xd-line-spacing(16px, 30px, 4px, 3px);
-  letter-spacing: 0.64px;
-  color: #EEEEEE;
+.menu-modal__contents {
+  padding: 0 150px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .menu-modal {
@@ -192,7 +179,7 @@ a {
   z-index: 10;
   -webkit-overflow-scrolling: touch;
   opacity: 0;
-  overflow: scroll;
+  overflow: hidden;
 
   background-image: url('~/assets/image/bg01.webp');
   background-position: center;
@@ -207,17 +194,6 @@ a {
     .menu-modal__contents {
       opacity: 1;
       filter: blur(0);
-    }
-  }
-
-  &__contents {
-    padding: 90px 150px;
-
-    hr {
-      margin: 90px 0;
-      background-color: #3B3B3B;
-      height: 0.5px;
-      border: none;
     }
   }
 

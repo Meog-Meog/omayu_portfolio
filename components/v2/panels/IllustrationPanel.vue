@@ -17,6 +17,10 @@
   justify-content: center;
   height: 100vh;
   width: 100vw;
+  background-image: url('~/assets/image/bg04.webp');
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .wrapper {
