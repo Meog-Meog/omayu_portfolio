@@ -53,6 +53,10 @@ onMounted(() =>
   justify-content: center;
   height: 100vh;
   width: 100vw;
+  background-image: url('~/assets/image/bg03.webp');
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .wrapper {
