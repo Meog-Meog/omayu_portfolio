@@ -5,4 +5,3 @@
 ## Links
 
 - [Netlify](https://app.netlify.com/sites/mayuteramoto/overview)
-- [Adobe XD](https://xd.adobe.com/view/024d7cca-e254-4836-b43a-d300b5a1e919-571e/specs/)
