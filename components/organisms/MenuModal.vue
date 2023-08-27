@@ -159,7 +159,7 @@ const illustration = {
   right: 0;
   width: 0;
   height: 100vh;
-  background-image: url('~/assets/image/bg_hb.png');
+  background-image: url('~/assets/image/bg_hb.webp');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
