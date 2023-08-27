@@ -196,7 +196,7 @@ a {
   color: #101010;
   font: normal normal normal 16px/24px ZenKakuGothicNew;
   @include xd-line-spacing(16px, 24px, 4px, 3px);
-  letter-spacing: 1.4px;
+  letter-spacing: 0.8px;
   width: 100vw;
   height: calc(100vh - 110px);
   display: flex;
@@ -204,12 +204,12 @@ a {
 
 .footer__text {
   color: #101010;
-  letter-spacing: 1.4px;
+  letter-spacing: 0.8px;
 }
 
 .footer__menu-text {
   color: #101010;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
 }
 
 .footer__menu {
@@ -221,7 +221,7 @@ a {
   & p {
     margin: 0;
     margin-bottom: 20px;
-    letter-spacing: 1.4px;
+    letter-spacing: 0.8px;
     color: #101010;
   }
 }

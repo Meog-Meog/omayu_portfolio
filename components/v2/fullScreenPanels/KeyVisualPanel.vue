@@ -92,14 +92,14 @@ const scrollToIllustration = () =>
 p {
   margin: 0;
   margin-bottom: 20px;
-  letter-spacing: 1.4px;
+  letter-spacing: 0.8px;
   color: #101010;
 }
 
 span {
   font: normal normal normal 16px/24px ZenKakuGothicNew;
   @include xd-line-spacing(16px, 24px, 4px, 3px);
-  letter-spacing: 1.4px;
+  letter-spacing: 0.8px;
   color: #101010;
 }
 </style>
