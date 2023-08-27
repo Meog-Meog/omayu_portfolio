@@ -1,6 +1,6 @@
-import conpetition_covermark from 'assets/image/competition/competition_covermark.png'
-import conpetition_connect from 'assets/image/competition/competition_connect.png'
-import conpetition_matsushitakinenn from 'assets/image/competition/competition_matsushitakinenn.png'
+import conpetition_covermark from 'assets/image/competition/competition_covermark.webp'
+import conpetition_connect from 'assets/image/competition/competition_connect.webp'
+import conpetition_matsushitakinenn from 'assets/image/competition/competition_matsushitakinenn.webp'
 
 export default [
   {
