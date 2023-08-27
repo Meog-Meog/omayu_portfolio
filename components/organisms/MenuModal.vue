@@ -1,19 +1,15 @@
 <template>
   <nav :class="{ 'menu-modal--open': showModal }" class="menu-modal">
-    <div class="menu-modal__contents">
-      <div style="display: flex; align-items: flex-end;">
-        <img class="scroll-to-top-btn" alt="Created by Meog Meog" src="~/assets/image/mayuteramoto_hb.svg?url"
-          style="margin-bottom: 100px; margin-left: -5px;" @click.native="scrollToTop" />
-      </div>
-      <div class="menu-modal__menu">
-        <link-menu-column style="margin-right: 104px;" :heading="webSite.heading" :contents="webSite.contents"
-          :scrollTo="webSite.scrollTo" dark />
-        <link-menu-column style="margin-right: 100px;" :heading="competition.heading" :contents="competition.contents"
-          :scrollTo="competition.scrollTo" dark />
-        <link-menu-column style="margin-right: 130px;" :heading="banner.heading" :contents="banner.contents"
-          :scrollTo="banner.scrollTo" dark />
+    <div style="width: 100%; height: 100vh;" @click="close">
+    </div>
+    <div class="menu-modal__menu">
+      <div class="menu-modal__menu-items">
+        <link-menu-column :heading="webSite.heading" :contents="webSite.contents" :scrollTo="webSite.scrollTo" />
+        <link-menu-column :heading="competition.heading" :contents="competition.contents"
+          :scrollTo="competition.scrollTo" />
+        <link-menu-column :heading="banner.heading" :contents="banner.contents" :scrollTo="banner.scrollTo" />
         <link-menu-column :heading="illustration.heading" :contents="illustration.contents"
-          :scrollTo="illustration.scrollTo" dark />
+          :scrollTo="illustration.scrollTo" />
       </div>
     </div>
   </nav>
@@ -24,20 +20,15 @@ const router = useRouter()
 const showModal = useState('showModal', () => false)
 const dark = useState('dark', () => false)
 const darkGrad = useState('darkGrad', () => false)
+const beforeDark = useState('beforeDark', () => false)
 const smoother = useState<ScrollSmoother>('smoother')
 const mouseStalkerText = useState('mouseStalkerText', () => '')
 const scrollTo = useState<Number>('scrollTo', () => -1)
 
-const scrollToTop = async () =>
+function close()
 {
-  dark.value = false
-  darkGrad.value = false
   showModal.value = false
-  if (router.currentRoute.value.path !== "/")
-  {
-    await router.push({ path: "/" });
-  }
-  location.reload();
+  dark.value = beforeDark.value
 }
 
 const webSite = {
@@ -132,76 +123,54 @@ const illustration = {
     }
   }
 }
-
-onMounted(() =>
-{
-  if (process.client)
-  {
-    for (const clickable of document.getElementsByClassName('scroll-to-top-btn'))
-    {
-      clickable.addEventListener('mouseover', () =>
-      {
-        mouseStalkerText.value = 'Home'
-      }, false)
-      clickable.addEventListener('mouseout', () =>
-      {
-        mouseStalkerText.value = ''
-      }, false)
-    }
-  }
-})
 </script>
 
 <style lang="scss" scoped>
-.scroll-to-top-btn {
-  width: 633px;
-}
-
-.menu-modal__contents {
-  padding: 0 150px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-}
-
 .menu-modal {
   cursor: none;
   position: fixed;
   top: 0;
   right: 0;
-  bottom: 0;
-  left: 0;
   pointer-events: none;
   width: 100%;
+  height: 100vh;
   margin: 0;
   z-index: 10;
   -webkit-overflow-scrolling: touch;
-  opacity: 0;
   overflow: hidden;
 
-  background-image: url('~/assets/image/bg01.webp');
+  &--open {
+    pointer-events: auto;
+
+    .menu-modal__menu {
+      width: 230px;
+      padding-right: 50px;
+    }
+
+    .menu-modal__menu-items {
+      opacity: 1;
+    }
+  }
+}
+
+.menu-modal__menu {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 100vh;
+  background-image: url('~/assets/image/bg_hb.webp');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  text-align: right;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
 
-  &--open {
-    transition: .1s ease-out;
-    pointer-events: auto;
-    opacity: 1;
-
-    .menu-modal__contents {
-      opacity: 1;
-      filter: blur(0);
-    }
-  }
-
-  &__menu {
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-  }
-
+.menu-modal__menu-items {
+  opacity: 0;
+  transition: all 0.3s ease;
+  padding-top: 125px;
 }
 </style>
