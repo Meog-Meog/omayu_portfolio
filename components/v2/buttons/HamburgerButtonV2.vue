@@ -13,9 +13,9 @@ import { useState } from "nuxt/app";
 const showProfileModal = useState('showProfileModal', () => false)
 const showModal = useState('showModal', () => false)
 const dark = useState('dark', () => false)
+const beforeDark = useState('beforeDark', () => false)
 const mouseStalkerText = useState('mouseStalkerText')
 
-let beforeDark = false
 
 const toggle = (_) =>
 {
@@ -23,10 +23,10 @@ const toggle = (_) =>
   {
     showModal.value = false
     showProfileModal.value = false
-    dark.value = beforeDark
+    dark.value = beforeDark.value
   } else
   {
-    beforeDark = dark.value
+    beforeDark.value = dark.value
     showModal.value = true
     dark.value = true
   }
@@ -74,8 +74,8 @@ onMounted(() =>
 
   &--active &__line:nth-of-type(1) {
     width: 41px;
-    transform: translateY(6px) rotate(-15.376251248826deg);
-    height: 2px;
+    transform: translateY(5px) rotate(-15.376251248826deg);
+    height: 1px;
   }
 
   &--active &__line:nth-of-type(2) {
@@ -85,7 +85,7 @@ onMounted(() =>
   &--active &__line:nth-of-type(3) {
     width: 41px;
     transform: translateY(-7px) rotate(15.376251248826deg);
-    height: 2px;
+    height: 1px;
   }
 
   &__line {

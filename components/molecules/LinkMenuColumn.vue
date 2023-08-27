@@ -1,11 +1,11 @@
 <template>
     <div class="link-menu-column">
-        <p class="text-link"><a :class="{ dark: dark }" @click="scrollTo">{{ heading }}</a></p>
-        <p v-for="item of contents" class="text-link">
-            <a v-if="isCurrentUrl(item.url)" :class="{ dark: dark }" @click="closeModalsAndScrollToTop">
+        <p><a class="text-link dark" @click="scrollTo">{{ heading }}</a></p>
+        <p v-for="item of contents">
+            <a v-if="isCurrentUrl(item.url)" class="text-link dark" @click="closeModalsAndScrollToTop">
                 {{ item.label }}
             </a>
-            <NuxtLink v-else :class="{ dark: dark }" :to="item.url">
+            <NuxtLink v-else class="text-link dark" :to="item.url">
                 {{ item.label }}
             </NuxtLink>
         </p>
@@ -62,7 +62,7 @@ a {
     margin: 0;
 
     >:first-child {
-        margin-bottom: 30px;
+        margin-bottom: 20px;
 
         a {
             color: #101010;
@@ -74,7 +74,7 @@ a {
     }
 
     >*:not(:first-child) {
-        margin-bottom: 25px;
+        margin-bottom: 20px;
 
         a {
             color: #9F9F9F;
