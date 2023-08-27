@@ -120,7 +120,7 @@ const banner = {
   contents: [],
   scrollTo: async (payload: MouseEvent) =>
   {
-    scrollTo.value = 7;
+    scrollTo.value = 6;
     if (router.currentRoute.value.path !== "/")
     {
       await router.push("/");
@@ -133,7 +133,7 @@ const illustration = {
   contents: [],
   scrollTo: async (payload: MouseEvent) =>
   {
-    scrollTo.value = 10;
+    scrollTo.value = 9;
     if (router.currentRoute.value.path !== "/")
     {
       await router.push("/");

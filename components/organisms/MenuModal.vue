@@ -109,7 +109,7 @@ const banner = {
   {
     showModal.value = false
     darkGrad.value = false
-    scrollTo.value = 7;
+    scrollTo.value = 6;
     if (router.currentRoute.value.path !== "/")
     {
       await router.push("/");
@@ -125,7 +125,7 @@ const illustration = {
     showModal.value = false
     dark.value = false
     darkGrad.value = false
-    scrollTo.value = 10;
+    scrollTo.value = 9;
     if (router.currentRoute.value.path !== "/")
     {
       await router.push("/");

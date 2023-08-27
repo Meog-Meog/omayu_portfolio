@@ -52,11 +52,11 @@ const scrollToCompetition = () =>
 }
 const scrollToBanner = () =>
 {
-  scrollTo.value = 7;
+  scrollTo.value = 6;
 }
 const scrollToIllustration = () =>
 {
-  scrollTo.value = 10;
+  scrollTo.value = 9;
 }
 
 </script>
