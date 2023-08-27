@@ -207,33 +207,33 @@ const transitions = [
     },
     // 4: cp(1)
     {
-        id: "cp(1)",
+        id: "cp(title,1,2)",
         leaveBack: () => $gsap.timeline()
-            .fromTo(["#cp"], { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs })
-            .fromTo(["#cp-contents"], { y: 0 }, { y: "3rem", ...defaultTsArgs }, "<")
-            .set('#cp', { autoAlpha: 0 }),
+            .to('#cp', { autoAlpha: 0, ...defaultTsArgs })
+            .to(['#cp-title', '#cp-thumbnails1'], { y: "3rem", ...defaultTsArgs }, "<"),
         enter: () => $gsap.timeline()
-            .add(() => setTimeout(() => window.scrollTo(0, 0), 200))
-            .add(() => cpCallback())
             .set("#section-groups-wrapper", { clearProps: "height" })
-            .add(() => competitionIdx.value = 1)
             .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
-            .set(['#cp-thumbnails > li', '#cp-thumbnails'], { autoAlpha: 1, x: 0 })
-            .fromTo(["#cp"], { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
-            .fromTo(["#cp-contents"], { y: "3rem" }, { y: 0, ...defaultTsArgs }, "<"),
-        leave: () => $gsap.timeline(),
+            .set(['#cp-thumbnails1', '#cp-thumbnails2'], { autoAlpha: 0, y: 0 })
+            .fromTo('#cp', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
+            .fromTo('#cp-title', { y: "3rem" }, { y: 0, ...defaultTsArgs }, "<")
+            .fromTo('#cp-thumbnails1', { y: "3rem", autoAlpha: 0, zIndex: 1 }, { y: 0, autoAlpha: 1, ...defaultTsArgs })
+            .add(() => cpCallback()),
+        leave: () => $gsap.timeline()
+            .to('#cp-thumbnails1', { y: "-3rem", autoAlpha: 0, ...defaultTsArgs }),
         enterBack: () => $gsap.timeline()
             .add(() => cpCallback())
-            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
-            .add(() => competitionIdx.value = 1),
-        enterBackByJump: () => $gsap.timeline()
-            .add(() => setTimeout(() => window.scrollTo(0, 0), 200))
             .set("#section-groups-wrapper", { clearProps: "height" })
-            .add(() => competitionIdx.value = 1)
             .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
-            .set(['#cp-thumbnails > li', '#cp-thumbnails'], { autoAlpha: 1, x: 0 })
-            .fromTo(["#cp"], { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs })
-            .fromTo(["#cp-contents"], { y: 0 }, { y: "3rem", ...defaultTsArgs }, "<")
+            .set('#cp-thumbnails2', { autoAlpha: 0, zIndex: -1 })
+            .fromTo('#cp-thumbnails1', { y: "-3rem", autoAlpha: 0, zIndex: 1 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
+        enterBackByJump: () => $gsap.timeline()
+            .set("#section-groups-wrapper", { clearProps: "height" })
+            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
+            .set(['#cp-thumbnails1', '#cp-thumbnails2'], { autoAlpha: 0, y: 0 })
+            .fromTo('#cp', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
+            .fromTo('#cp-title', { y: "3rem" }, { y: 0, ...defaultTsArgs }, "<")
+            .fromTo('#cp-thumbnails1', { y: "3rem", autoAlpha: 0, zIndex: 1 }, { y: 0, autoAlpha: 1, ...defaultTsArgs })
             .add(() => cpCallback()),
         fadeOut: () => $gsap.timeline()
             .to(['#section-group-1', '#cp'], { autoAlpha: 0, ...defaultTsArgs }),
@@ -244,56 +244,24 @@ const transitions = [
     },
     // 5: cp(2)
     {
-        id: "cp(2)",
+        id: "cp(3,4)",
         leaveBack: () => $gsap.timeline()
-            //.fromTo("#cp-thumbnails", { x: -(window.innerWidth - 300) / 2 }, { x: 0, ...defaultTsArgs },),
-            .fromTo("#cp-thumbnails", { x: -483 }, { x: 0, ...defaultTsArgs })
-            .fromTo("#cp-thumbnails > :nth-child(1)", { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs }, "<"),
+            .to('#cp-thumbnails2', { y: "3rem", autoAlpha: 0, ...defaultTsArgs }),
         enter: () => $gsap.timeline()
             .add(() => cpCallback())
+            .set('#cp-thumbnails1', { autoAlpha: 0, zIndex: -1 })
             .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
-            .add(() => competitionIdx.value = 2)
-            //.fromTo("#cp-thumbnails", { x: 0 }, { x: -(window.innerWidth - 300) / 2, ...defaultTsArgs }),
-            .fromTo("#cp-thumbnails", { x: 0 }, { x: -483, ...defaultTsArgs })
-            .fromTo("#cp-thumbnails > :nth-child(1)", { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs }, "<"),
-        leave: () => $gsap.timeline(),
-        enterBack: () => $gsap.timeline()
-            .add(() => cpCallback())
-            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
-            .add(() => competitionIdx.value = 2)
-            .set('#cp', { autoAlpha: 1 }),
-        fadeOut: () => $gsap.timeline()
-            .to(['#section-group-1', '#cp'], { autoAlpha: 0, ...defaultTsArgs }),
-        enterCallBack: () =>
-        {
-            cpCallback();
-        },
-    },
-    // 6: cp(3)
-    {
-        id: "cp(3)",
-        leaveBack: () => $gsap.timeline()
-            //.fromTo("#cp-thumbnails", { x: -(window.innerWidth - 300) / 2 }, { x: 0, ...defaultTsArgs },),
-            .fromTo("#cp-thumbnails", { x: -483 * 2 }, { x: -483, ...defaultTsArgs })
-            .fromTo("#cp-thumbnails > :nth-child(2)", { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs }, "<"),
-        enter: () => $gsap.timeline()
-            .add(() => cpCallback())
-            .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
-            .add(() => competitionIdx.value = 3)
-            //.fromTo("#cp-thumbnails", { x: 0 }, { x: -(window.innerWidth - 300) / 2, ...defaultTsArgs }),
-            .fromTo("#cp-thumbnails", { x: -483 }, { x: -483 * 2, ...defaultTsArgs })
-            .fromTo("#cp-thumbnails > :nth-child(2)", { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs }, "<"),
+            .fromTo('#cp-thumbnails2', { y: "3rem", autoAlpha: 0, zIndex: 1 }, { y: 0, autoAlpha: 1, ...defaultTsArgs }),
         leave: () => $gsap.timeline()
-            .fromTo(["#cp"], { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs })
-            .fromTo(["#cp-contents"], { y: 0 }, { y: "-3rem", ...defaultTsArgs }, "<"),
+            .fromTo('#cp', { autoAlpha: 1 }, { autoAlpha: 0, ...defaultTsArgs })
+            .to(['#cp-title', '#cp-thumbnails2'], { y: "-3rem", ...defaultTsArgs }, "<"),
         enterBack: () => $gsap.timeline()
             .add(() => cpCallback())
+            .set('#cp-thumbnails1', { autoAlpha: 0, zIndex: -1 })
             .set('#section-group-1', { autoAlpha: 1, maxHeight: "100vh" })
-            .set("#cp-thumbnails", { x: -483 * 2, ...defaultTsArgs })
-            .set(["#cp-thumbnails > :nth-child(1)", "#cp-thumbnails > :nth-child(2)"], { autoAlpha: 0 })
-            .add(() => competitionIdx.value = 3)
-            .fromTo(["#cp"], { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
-            .fromTo(["#cp-contents"], { y: "-3rem" }, { y: 0, ...defaultTsArgs }, "<"),
+            .set('#cp-thumbnails2', { autoAlpha: 1, zIndex: 1 })
+            .fromTo('#cp', { autoAlpha: 0 }, { autoAlpha: 1, ...defaultTsArgs })
+            .fromTo(['#cp-title', '#cp-thumbnails2'], { y: "-3rem" }, { y: 0, ...defaultTsArgs }, "<"),
         fadeOut: () => $gsap.timeline()
             .to(['#section-group-1', '#cp'], { autoAlpha: 0, ...defaultTsArgs }),
         enterCallBack: () =>
