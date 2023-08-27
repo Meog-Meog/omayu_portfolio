@@ -1,7 +1,9 @@
 <template>
-    <button @click.native="scrollTo">
+    <div class="wrapper">
+        <button @click.native="scrollTo">
+        </button>
         <img alt="Back to top" src="~/assets/image/icon_arrow.svg?url" />
-    </button>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -16,8 +18,16 @@ const scrollTo = async () =>
 </script>
 
 <style lang="scss" scoped>
-button {
+.wrapper {
     position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+button {
+    position: absolute;
+    left: 15px;
+    top: 15px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -26,42 +36,23 @@ button {
     border: 1px solid #CCCCCC;
     border-radius: 50%;
     overflow: hidden;
-    transition: background-color 1s;
+    transition: all 0.3s;
     cursor: none;
-
-    &::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        background-color: black;
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-        transition: width 0.4s, height 0.4s;
-        z-index: 1;
-    }
+    z-index: 2;
 
     &:hover {
-        &::before {
-            width: 110%;
-            height: 110%;
-        }
-
-        img {
-            filter: invert(100%);
-        }
+        width: 100px;
+        height: 100px;
+        left: 0;
+        top: 0;
     }
 }
 
 img {
+    position: absolute;
+    left: 44px;
+    top: 42px;
     filter: 0.4s;
-    z-index: 2;
-}
-
-.scroll-to-top-btn {
-    width: 17px;
-    height: 17px;
+    z-index: 1;
 }
 </style>
