@@ -27,7 +27,7 @@
   display: flex;
   align-items: center;
   padding-top: 70px;
-  padding-left: 100px;
+  padding-left: 150px;
   margin-bottom: 86px;
 }
 
@@ -40,7 +40,7 @@
 #il__showcase-wrapper {
   position: relative;
   margin-right: 150px;
-  margin-left: 125px;
+  margin-left: 75px;
   width: 50vw;
   display: flex;
   justify-content: center;
