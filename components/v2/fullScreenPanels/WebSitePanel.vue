@@ -1,7 +1,6 @@
 <template>
   <div class="container">
-    <div class="wrapper">
-      <img id="ws-title" src="~/assets/image/website/website.svg?url" alt="Web Site" />
+    <div id="ws-title" class="wrapper">
     </div>
     <div class="wrapper">
       <div id="ws-thumbnails1" class="thumbnails">
@@ -45,6 +44,23 @@ onMounted(() =>
 </script>
 
 <style scoped lang="scss">
+$w: 832px; // 背景画像の幅
+$v: 40px; // 毎秒の移動速度
+$t: $w / $v; // アニメーションの期間
+
+#ws-title {
+  width: 100%;
+  background: url('~/assets/image/website/website.svg?url') repeat-x;
+  background-position: center center;
+  animation: scroll-anim #{$t}s linear infinite;
+}
+
+@keyframes scroll-anim {
+  100% {
+    background-position: -#{$w} center;
+  }
+}
+
 .container {
   position: relative;
   display: flex;
